@@ -79,7 +79,6 @@ get_next_version() {
 
 # 3. Déterminer la prochaine version
 read -r NEXT_VERSION VERSION_TYPE <<< $(get_next_version $VERSION)
-echo "DEBUG: NEXT_VERSION: $NEXT_VERSION, VERSION_TYPE: $VERSION_TYPE"
 echo "${ICON_INFO} La nouvelle version sera : ${NEXT_VERSION}"
 
 # --- Fonction pour générer le message du tag ---
