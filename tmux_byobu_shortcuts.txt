@@ -1,0 +1,41 @@
+⌨️ Raccourcis Clavier pour Tmux et Byobu :
+-----------------------------------------
+
+--- Raccourcis Byobu (Préfixe F9 par défaut) ---
+  F2      : Créer une nouvelle fenêtre
+  F3/F4   : Naviguer entre les fenêtres
+  F5      : Recharger le profil (utile après modification de .byoburc)
+  F6      : Détacher la session (vous pouvez la retrouver avec 'byobu attach')
+  F7      : Rechercher dans le scrollback
+  F8      : Renommer la fenêtre
+  F9      : Menu de configuration Byobu
+  Shift+F2: Diviser la fenêtre horizontalement
+  Ctrl+F2 : Diviser la fenêtre verticalement
+  Shift+F3/F4: Naviguer entre les panneaux
+  Shift+F6: Fermer le panneau actuel
+
+--- Raccourcis Tmux (Préfixe Ctrl+b par défaut) ---
+  Ctrl+b c  : Créer une nouvelle fenêtre
+  Ctrl+b n  : Fenêtre suivante
+  Ctrl+b p  : Fenêtre précédente
+  Ctrl+b l  : Dernière fenêtre sélectionnée
+  Ctrl+b w  : Lister les fenêtres
+  Ctrl+b ,  : Renommer la fenêtre
+  Ctrl+b %  : Diviser le panneau verticalement
+  Ctrl+b " : Diviser le panneau horizontalement
+  Ctrl+b flèche: Naviguer entre les panneaux
+  Ctrl+b z  : Zoomer/dézoomer le panneau actuel
+  Ctrl+b x  : Fermer le panneau actuel
+  Ctrl+b d  : Détacher la session
+  Ctrl+b [  : Mode copie (pour faire défiler l'historique)
+  Ctrl+b ]  : Coller (après avoir copié en mode copie)
+  Ctrl+b ?  : Afficher tous les raccourcis clavier de tmux
+
+--- Quitter / Détacher la session ---
+  F6 (Byobu) ou Ctrl+b d (Tmux) : Détacher la session et revenir au shell précédent.
+                                  La session continue de s'exécuter en arrière-plan.
+  exit (dans n'importe quel panneau) : Fermer le panneau actuel. Si c'est le dernier panneau,
+                                        la session tmux/byobu sera fermée.
+
+Note: Byobu utilise Tmux en arrière-plan. Les raccourcis Byobu sont des surcouches.
+Pour plus de détails sur les raccourcis Byobu, utilisez F9 dans une session Byobu.

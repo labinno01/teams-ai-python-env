@@ -1,0 +1,35 @@
+# Voici la fonction Manage-PythonEnvConfig, qui lit le fichier .python-env et retourne le chemin vers l’exécutable Python. # Elle est conçue pour être robuste, compatible avec Windows et WSL, et facilement intégrable dans ton projet.
+
+function Manage-PythonEnvConfig {
+    $configPath = "$HOME\OneDrive\projets\teams-ai-python-env\.python-env"
+
+    if (-not (Test-Path $configPath)) {
+        Write-Host "⚠️ Fichier .python-env introuvable." -ForegroundColor Yellow
+        return $null
+    }
+
+    $envPath = Get-Content $configPath | Select-Object -First 1
+    if (-not $envPath -or $envPath.Trim() -eq "") {
+        Write-Host "⚠️ Chemin Python vide dans .python-env." -ForegroundColor Yellow
+        return $null
+    }
+
+    # Vérification basique
+    if ($envPath.StartsWith("wsl:")) {
+        $wslPath = $envPath.Substring(4)
+        $checkCmd = "wsl $wslPath --version"
+        try {
+            Invoke-Expression $checkCmd | Out-Null
+            return $envPath
+        } catch {
+            Write-Host "❌ Chemin WSL invalide : $wslPath" -ForegroundColor Red
+            return $null
+        }
+    } else {
+        if (-not (Test-Path $envPath)) {
+            Write-Host "❌ Chemin Python invalide : $envPath" -ForegroundColor Red
+            return $null
+        }
+        return $envPath
+    }
+}

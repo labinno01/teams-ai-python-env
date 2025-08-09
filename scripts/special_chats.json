@@ -1,0 +1,23 @@
+[
+  {
+    "month": 8,
+    "day": 8,
+    "message_line1": "Aujourd'hui c'est le 8 aout, c'est ma fete !",
+    "cat_face": "( ^.^ )",
+    "anecdote_source": "chat.json"
+  },
+  {
+    "month": 12,
+    "day": 25,
+    "message_line1": "Joyeux Noel !",
+    "cat_face": "( ^o^ )",
+    "message_line2": "Le pere Noel est passe !"
+  },
+  {
+    "month": 1,
+    "day": 1,
+    "message_line1": "Bonne annee !",
+    "cat_face": "( ^w^ )",
+    "message_line2": "Que cette annee vous apporte joie et succes !"
+  }
+]

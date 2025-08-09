@@ -1,0 +1,378 @@
+🧠 Objectif
+Créer une fonction qui :
+- Détecte tous les environnements Python disponibles (Windows + WSL)
+- Ne fait cette détection complète qu’au premier lancement (ou sur demande)
+- Permet à l’utilisateur de choisir l’environnement
+- Stocke ce choix pour les lancements suivants
+- Vérifie si l’environnement choisi est toujours disponible
+- Permet de réinitialiser ou forcer une nouvelle détection
+
+🛠️ Structure proposée
+1. Stockage du choix
+Utilise un fichier de config (ex: JSON ou .ini) pour stocker :
+{
+  "selected_env": "C:\\Users\\Frédéric\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"
+}
+
+
+2. Détection des environnements
+Fonction detect_python_envs() :
+- Recherche les exécutables Python dans :
+- %PATH% sous Windows
+- where python
+- WSL via wsl which python ou wsl -e bash -c "compgen -c python"
+- Retourne une liste de chemins valides
+3. Choix utilisateur
+Fonction prompt_user_choice(env_list) :
+- Affiche les environnements détectés
+- Permet à l’utilisateur de choisir (via input ou interface)
+- Stocke le choix dans le fichier config
+4. Chargement au démarrage
+Fonction load_selected_env() :
+- Lit le fichier config
+- Si vide → relance détection
+- Si présent → vérifie que le chemin est encore valide (os.path.exists() ou test d’exécution python --version)
+- Si invalide → relance détection
+5. Réinitialisation / Forçage
+Fonction reset_env_choice() :
+- Supprime ou vide le fichier config
+- Relance la détection complète
+
+🔁 Cycle de vie
+| Étape | Action | 
+| Premier lancement | Détection complète → Choix utilisateur → Stockage | 
+| Lancement suivant | Chargement du choix → Vérification → Activation | 
+| Si invalide | Détection complète → Nouveau choix | 
+| Si reset forcé | Détection complète → Nouveau choix | 
+
+
+-----------------------------------------
+├── ps.ps1                  # Menu principal PowerShell
+├── aliases.ps1             # Fonctions utilitaires
+├── tmux-launch.sh          # Lance tmux + environnement WSL
+├── scripts/                # Scripts Python
+│   ├── launch_gemini.py    # Lance Gemini avec clé API
+│   ├── gemini_main.py      # Interaction avec Gemini
+│   └── ...                 # Autres scripts à venir
+1. env.ps1 – Détection et validation
+Contient :
+- Detect-PythonEnvs
+- Test-PythonPath
+- Validate-PythonEnv
+- Is-VirtualEnv
+- Get-PythonEnvType
+
+📁 2. config.ps1 – Gestion du fichier
+Contient :
+- Ensure-EnvStore
+- Show-PythonEnvConfig
+- Edit-PythonEnvConfig
+- Clear-PythonEnvConfig
+- Reset-PythonEnv
+- Manage-PythonEnvConfig
+
+📁 3. run.ps1 – Exécution
+Contient :
+- Show-PythonEnvDetails
+- Show-PipModules
+- Run-PythonScript
+
+📁 4. menu.ps1 – Interface
+Contient :
+- MainMenu
+
+🐧 5. wsl-env.sh – Transcription WSL
+Contient les équivalents bash/zsh :
+# ~/.wsl-env.sh
+
+CONFIG_PATH="/mnt/c/Users/frede/.config/ps/python_env.txt"
+
+if [ -f "$CONFIG_PATH" ]; then
+    PYTHON_ENV=$(cat "$CONFIG_PATH")
+    export PYTHON_ENV
+
+    if [[ "$PYTHON_ENV" == wsl:* ]]; then
+        PYTHON_ENV_TYPE="WSL"
+    elif [[ "$PYTHON_ENV" == *conda* ]]; then
+        PYTHON_ENV_TYPE="conda"
+    elif [[ "$PYTHON_ENV" == *venv* || "$PYTHON_ENV" == *bin/python* ]]; then
+        PYTHON_ENV_TYPE="venv"
+    else
+        PYTHON_ENV_TYPE="global"
+    fi
+
+    export PYTHON_ENV_TYPE
+    export PS1="[\$PYTHON_ENV_TYPE] \u@\h:\w\$ "
+fi
+
+À sourcer dans ~/.bashrc ou ~/.zshrc :
+source ~/.wsl-env.sh
+---------------------------------------
+Étape 4 : Ajout dans le menu PowerShell
+Dans ps.ps1, ajoute :
+-----------------------------------
+🧠 Script : gemini_main.py
+import os
+import sys
+import getpass
+import google.generativeai as genai
+
+# 📁 Fichier local pour stocker la clé
+KEY_FILE = os.path.join(os.path.expanduser("~"), ".gemini_api_key")
+
+def get_api_key():
+    # 🔍 Vérifie si la clé est déjà dans les variables d'environnement
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if api_key:
+        return api_key
+
+    # 📂 Sinon, vérifie si elle est stockée localement
+    if os.path.exists(KEY_FILE):
+        with open(KEY_FILE, "r") as f:
+            return f.read().strip()
+
+    # 🧑 Demande à l'utilisateur
+    print("🔐 Clé API Gemini non trouvée.")
+    api_key = getpass.getpass("👉 Entrez votre clé API Gemini : ").strip()
+
+    # 💾 Stocke dans le fichier local
+    with open(KEY_FILE, "w") as f:
+        f.write(api_key)
+
+    print(f"✅ Clé API enregistrée dans {KEY_FILE}")
+    return api_key
+
+def main():
+    api_key = get_api_key()
+
+    # 🔧 Configure Gemini
+    genai.configure(api_key=api_key)
+
+    # 🧠 Lance une génération simple
+    model = genai.GenerativeModel("gemini-pro")
+    response = model.generate_content("Explique-moi la mécanique quantique en 3 phrases.")
+    print("\n🧠 Réponse Gemini :\n")
+    print(response.text)
+
+if __name__ == "__main__":
+    main()
+
+
+
+🔐 Résumé du fonctionnement
+| Étape | Action | 
+| 1️⃣ | Cherche GEMINI_API_KEY dans les variables d’environnement | 
+| 2️⃣ | Si absente, cherche dans ~/.gemini_api_key | 
+| 3️⃣ | Si absente, demande à l’utilisateur | 
+| 4️⃣ | Stocke la clé dans le fichier pour les prochaines fois | 
+| 5️⃣ | Configure Gemini et lance une génération | 
+----------------------------------------------------------------------------
+
+🧩 Plan du gestionnaire d’alias
+📁 Fichier : aliases.ps1
+Contiendra :
+- 🔧 Définition des alias
+- 📜 Commande Show-Aliases pour les afficher avec explications
+- 🧠 Alias intelligents pour :
+- pipall → liste tous les modules
+- runenv → exécute un script dans l’environnement actif
+- editenv → modifie l’environnement Python
+- edittmux → modifie le script tmux
+- launchai → lance le script tmux dans WSL
+
+1/ alias.ps1
+----------
+function Define-Aliases {
+    Set-Alias pipall Show-PipModules
+    Set-Alias runenv Run-PythonScript
+    Set-Alias editenv Edit-PythonEnvConfig
+    Set-Alias edittmux Edit-TmuxScript
+    Set-Alias launchai Launch-TmuxWSL
+    Set-Alias showaliases Show-Aliases
+}
+
+function Show-Aliases {
+    Write-Host "`n📜 Alias disponibles :"
+    Write-Host "  pipall      → Affiche tous les modules pip installés"
+    Write-Host "  runenv      → Exécute un script Python dans l’environnement actif"
+    Write-Host "  editenv     → Modifie manuellement le chemin Python enregistré"
+    Write-Host "  edittmux    → Ouvre le script tmux pour édition"
+    Write-Host "  launchai    → Lance tmux avec gemini + shell annoté"
+    Write-Host "  showaliases → Affiche cette liste"
+}
+
+ Où et comment gérer le lancement de WSL
+✅ Option 1 : via un alias PowerShell (launchai)
+Déjà prévu dans aliases.ps1 :
+----------------------------------
+Fonction Create-PSMenuShortcut
+Ajoute cette fonction dans ton script :
+
+
+function Create-PSMenuShortcut {
+    $shortcutPath = "$HOME\Desktop\Launch-PS-Menu.lnk"
+    $target = "powershell.exe"
+    $scriptPath = "$HOME\OneDrive\projets\teams-ai-python-env\ps.ps1"
+    $arguments = "-ExecutionPolicy Bypass -File `"$scriptPath`""
+    $wshShell = New-Object -ComObject WScript.Shell
+    $shortcut = $wshShell.CreateShortcut($shortcutPath)
+    $shortcut.TargetPath = $target
+    $shortcut.Arguments = $arguments
+    $shortcut.WindowStyle = 1
+    $shortcut.Description = "Lance le menu PowerShell principal"
+    $shortcut.IconLocation = "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe"
+    $shortcut.Save()
+
+    Write-Host "✅ Raccourci créé sur le bureau : Launch-PS-Menu.lnk" -ForegroundColor Green
+}
+function Edit-TmuxScript {
+    notepad "$PSScriptRoot\tmux-launch.sh"
+}
+
+function Launch-TmuxWSL {
+    wsl bash "$PSScriptRoot/tmux-launch.sh"
+}
+
+Ce lance WSL avec ton script tmux-launch.sh qui :
+- Crée une session tmux
+- Lance gemini dans la première fenêtre
+- Lance un shell annoté dans la seconde
+----
+
+✅ Option 2 : depuis le menu principal
+# Ajoute une entrée dans MainMenu :
+'6' {
+    Launch-TmuxWSL
+}
+# Et dans l’affichage 
+Write-Host "  [6] 🐧 Lancer WSL avec tmux et environnement Python"
+--------
+🧭 Fonction Create-PSMenuShortcut
+Ajoute cette fonction dans ton script :
+function Create-PSMenuShortcut {
+    $shortcutPath = "$HOME\Desktop\Launch-PS-Menu.lnk"
+    $target = "powershell.exe"
+    $scriptPath = "$HOME\OneDrive\projets\teams-ai-python-env\ps.ps1"
+    $arguments = "-ExecutionPolicy Bypass -File `"$scriptPath`""
+    $wshShell = New-Object -ComObject WScript.Shell
+    $shortcut = $wshShell.CreateShortcut($shortcutPath)
+    $shortcut.TargetPath = $target
+    $shortcut.Arguments = $arguments
+    $shortcut.WindowStyle = 1
+    $shortcut.Description = "Lance le menu PowerShell principal"
+    $shortcut.IconLocation = "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe"
+    $shortcut.Save()
+
+    Write-Host "✅ Raccourci créé sur le bureau : Launch-PS-Menu.lnk" -ForegroundColor Green
+}
+🧭 Ajout dans ton menu
+Dans la liste :
+Write-Host "  [8] 🖥️ Créer un raccourci pour le menu PowerShell"
+Et dans le switch :
+'8' {
+    Create-PSMenuShortcut
+}
+--------------------------
+TMUX
+>>>>>------------
+- 📁 Scripts stockés dans ton répertoire projet
+- 🧠 Chargement intelligent des variables d’environnement
+- 🧰 Fonction tmux personnalisée qui :
+- Lance gemini dans la première fenêtre
+- Lance un shell dans la seconde
+- Affiche le nom + version de l’environnement Python
+
+✅ Plan d’action
+📁 1. Répertoire projet : teams-ai-python-env
+Tu y mets tous les scripts, y compris ceux pour WSL.
+
+🐧 2. Minimal .bashrc (ou .zshrc)
+Juste une ligne :
+source ~/OneDrive/projets/teams-ai-python-env/wsl-env.sh
+
+
+
+📜 3. wsl-env.sh – Chargement des variables
+#!/bin/bash
+
+CONFIG_PATH="/mnt/c/Users/frede/.config/ps/python_env.txt"
+
+if [ -f "$CONFIG_PATH" ]; then
+    PYTHON_ENV=$(cat "$CONFIG_PATH")
+    export PYTHON_ENV
+
+    if [[ "$PYTHON_ENV" == wsl:* ]]; then
+        PYTHON_BIN="${PYTHON_ENV#wsl:}"
+    else
+        PYTHON_BIN="$PYTHON_ENV"
+    fi
+
+    PYTHON_VERSION=$("$PYTHON_BIN" --version 2>/dev/null)
+    PYTHON_ENV_TYPE="global"
+
+    if [[ "$PYTHON_ENV" == *conda* ]]; then
+        PYTHON_ENV_TYPE="conda"
+    elif [[ "$PYTHON_ENV" == *venv* || "$PYTHON_ENV" == *bin/python* ]]; then
+        PYTHON_ENV_TYPE="venv"
+    elif [[ "$PYTHON_ENV" == wsl:* ]]; then
+        PYTHON_ENV_TYPE="WSL"
+    fi
+
+    export PYTHON_ENV_TYPE
+    export PYTHON_VERSION
+    export PS1="[\$PYTHON_ENV_TYPE | \$PYTHON_VERSION] \u@\h:\w\$ "
+fi
+
+
+
+🧰 4. tmux-launch.sh – Fonction personnalisée
+#!/bin/bash
+
+source ~/OneDrive/projets/teams-ai-python-env/wsl-env.sh
+
+SESSION="teams-ai"
+WINDOW1="gemini"
+WINDOW2="shell"
+
+tmux new-session -d -s "$SESSION" -n "$WINDOW1" "gemini"
+
+tmux new-window -t "$SESSION" -n "$WINDOW2"
+tmux send-keys -t "$SESSION:$WINDOW2" "echo '🐍 Environnement : $PYTHON_ENV_TYPE'" C-m
+tmux send-keys -t "$SESSION:$WINDOW2" "echo '📦 Version     : $PYTHON_VERSION'" C-m
+tmux send-keys -t "$SESSION:$WINDOW2" "bash" C-m
+
+tmux attach-session -t "$SESSION"
+
+
+
+🧠 5. Utilisation
+Dans WSL :
+bash ~/OneDrive/projets/teams-ai-python-env/tmux-launch.sh
+
+
+Ou crée un alias :
+alias ai-env="bash ~/OneDrive/projets/teams-ai-python-env/tmux-launch.sh"
+
+
+
+Tu veux que je t’ajoute une option dans le menu PowerShell pour lancer WSL avec cette commande automatiquement ?
+
+>>>>>------------
+pour lancer
+bash ~/OneDrive/projets/teams-ai-python-env/tmux-launch.sh
+ou créér un alias
+alias ai-env="bash ~/OneDrive/projets/teams-ai-python-env/tmux-launch.sh"
+-----------------------
+mise a jour 
+🐧 2. Minimal .bashrc (ou .zshrc)
+Juste une ligne :
+source ~/OneDrive/projets/teams-ai-python-env/wsl-env.sh
+--------------------
+>>>>>>>>>>>>>>>>>>>>>>>>>>>
+🧠 7. ps.ps1 – Script principa
+. "$PSScriptRoot\env.ps1"
+. "$PSScriptRoot\config.ps1"
+. "$PSScriptRoot\run.ps1"
+. "$PSScriptRoot\menu.ps1"
+
+MainMenu
