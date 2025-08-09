@@ -100,4 +100,27 @@ if [ "$CONFIRM_PUSH" = "oui" ]; then
 fi
 
 echo "${ICON_SUCCESS} Opération terminée."
+
+# ==============================================================================
+# Instructions manuelles en cas de problème avec le script
+# ==============================================================================
+# Si le script n'a pas pu commiter ou pousser vos changements, vous pouvez
+# le faire manuellement en suivant ces étapes :
+#
+# 1. Naviguez vers le répertoire de votre dépôt :
+#    cd /mnt/c/Users/frede/OneDrive/projets/teams-ai/dataset_kit
+#
+# 2. Indexez tous les changements (fichiers modifiés, supprimés et non suivis) :
+#    git add .
+#
+# 3. Créez le commit avec un message descriptif :
+#    git commit -m "Votre message de commit ici"
+#
+# 4. Poussez les changements vers GitHub (remplacez <votre_branche_actuelle> par le nom de votre branche) :
+#    git push origin <votre_branche_actuelle>
+#
+#    Exemple pour votre branche actuelle (feature/DS-T-25_robust_file_utils) :
+#    git push origin feature/DS-T-25_robust_file_utils
+# ==============================================================================
+
 exit 0
