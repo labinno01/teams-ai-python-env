@@ -23,7 +23,11 @@ echo "${ICON_KEY} Assistant de création de clé SSH pour projet"
 echo "-------------------------------------------------"
 
 # 1. Demander le nom de la clé
-read -p "Entrez un nom pour la clé (ex: github-monprojet): " KEY_NAME
+DEFAULT_KEY_NAME="github-$(basename "$(pwd)")"
+read -p "Entrez un nom pour la clé (par défaut: ${DEFAULT_KEY_NAME}): " KEY_NAME
+if [ -z "$KEY_NAME" ]; then
+    KEY_NAME="$DEFAULT_KEY_NAME"
+fi
 if [ -z "$KEY_NAME" ]; then
     echo "${ICON_ERROR} Le nom de la clé ne peut pas être vide."
     exit 1
