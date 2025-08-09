@@ -13,7 +13,7 @@
 # --- Configuration ---
 # Modifiez cette variable si vous forkez le projet ou si vous voulez utiliser
 # votre propre dépôt privé (assurez-vous d'utiliser l'URL SSH dans ce cas).
-REPO_URL="https://raw.githubusercontent.com/labinno01/teams-ai-python-env/main"
+REPO_URL="https://raw.githubusercontent.com/labinno01/teams-ai-python-env/master"
 
 # Nom du dossier où les scripts seront installés.
 INSTALL_DIR=".git-scripts"
