@@ -120,8 +120,8 @@ TAG_MESSAGE=$(get_tag_message $VERSION_TYPE $NEXT_VERSION)
 
 # 5. Confirmer la release
 echo ""
-_e_cho "${ICON_WARN} --- Résumé de la Release ---${NC}"
-echo "  Nouvelle version : ${GREEN}${NEXT_VERSION}${NC}"
+echo "${ICON_WARN} --- Résumé de la Release ---"
+echo "  Nouvelle version : ${NEXT_VERSION}"
 echo "  Message du tag   :"
 echo "${TAG_MESSAGE}"
 echo "---------------------------"
