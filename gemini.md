@@ -73,3 +73,22 @@ Ce fichier récapitule les modifications apportées au projet `teams-ai-python-e
 
 ### `special_chats.json`
 - **Centralisation des dates speciales :** Creation du fichier pour gerer les configurations des chats speciaux (Noel, Jour de l'An, etc.).
+
+### Planification du "Patrimoine" de Scripts Git
+- **Objectif :** Création d'un ensemble de scripts génériques pour la gestion de projets Git, destinés à être réutilisés.
+- **Analyse :** Le script `manage_git.sh` a été analysé pour servir de base. Sa logique sera répartie dans des scripts spécialisés.
+- **Plan d'action en 5 étapes :**
+    1.  **Inventaire et Conception :** Définition des scripts cibles et de leurs exigences.
+    2.  **Développement `setup-ssh.sh` :** Création d'un script pour gérer la génération des clés SSH.
+    3.  **Développement des scripts Git :** Création des autres scripts de workflow.
+    4.  **Structuration du Dépôt :** Mise en place du dépôt "patrimoine" avec les scripts et la documentation.
+    5.  **Validation et Qualité :** Tests de bout en bout, validation de la documentation et linting du code.
+- **Scripts Cibles Définis :**
+    - `setup-ssh.sh`
+    - `init-repository.sh`
+    - `commit-push.sh`
+    - `sync-remote.sh`
+    - `_common.sh` (utilitaire partagé)
+- **Exigences Techniques Clés :**
+    - **Documentation :** Un `README.md` général et une documentation détaillée par script dans un dossier `/docs`, générée avec `mkdocs`.
+    - **Qualité de Code :** Utilisation de `ruff` pour l'analyse de tout code Python.
