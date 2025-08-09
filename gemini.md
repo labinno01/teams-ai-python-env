@@ -33,7 +33,7 @@ Ce fichier récapitule les modifications apportées au projet `teams-ai-python-e
 - **Enregistrement du chemin WSL complet :** La fonction `Set-WSLProjectDirectory` enregistre désormais le chemin WSL complet du projet (ex: `~/projets/teams-ai-python-env`) au lieu de seulement le nom du projet.
 
 ### `scripts/python_menu.py` (Nouveau)
-- **Squelette de menu Python :** Création d'un nouveau script Python pour un menu interactif sous Debian, incluant la logique du chat et des options pour les futures améliorations de gestion d'environnement Python.
+- **Squelette de menu Python :** Création d'un nouveau script Python pour un menu interactif sous Debian, inclus la logique du chat et des options pour les futures améliorations de gestion d'environnement Python.
 - **Amélioration de l'aléatoire :** Ajout de `random.seed()` pour une meilleure distribution des anecdotes aléatoires.
 - **Word-wrapping pour anecdotes :** Implémentation du retour à la ligne pour les anecdotes trop longues.
 - **Message horaire combiné :** Affichage du message de salutation basé sur l'heure même pour le chat spécial du 8 août.
@@ -92,3 +92,34 @@ Ce fichier récapitule les modifications apportées au projet `teams-ai-python-e
 - **Exigences Techniques Clés :**
     - **Documentation :** Un `README.md` général et une documentation détaillée par script dans un dossier `/docs`, générée avec `mkdocs`.
     - **Qualité de Code :** Utilisation de `ruff` pour l'analyse de tout code Python.
+
+## 2025-08-09
+
+### Scripts Git (install.sh, init-repository.sh, commit-push.sh, sync-remote.sh, release-version.sh)
+
+- **`install.sh`:**
+  - Correction de l'URL de téléchargement de `version.json` (passé de la racine à `.git-scripts/`).
+  - Ajout d'un commentaire clarifiant que le script est conçu pour les dépôts publics et que l'accès aux dépôts privés nécessite une gestion des clés SSH.
+  - **Validation :** Le script s'exécute désormais correctement et télécharge les fichiers nécessaires.
+
+- **`init-repository.sh`:**
+  - **Amélioration de l'interactivité et de la robustesse :**
+    - **Sélection du chemin du dépôt :** Permet à l'utilisateur de choisir un emplacement, avec un chemin par défaut basé sur un nom de projet.
+    - **Gestion des répertoires non vides :** Propose des options (supprimer le contenu, initialiser en place/fusionner, annuler) avec un choix par défaut sécurisé (annuler).
+    - **Validation du nom de projet :** Interdit les espaces et caractères spéciaux.
+    - **Retries sur saisie invalide :** Permet à l'utilisateur de corriger les erreurs de saisie sans quitter le script.
+    - **Informations détaillées sur dépôt existant :** Affiche la branche actuelle, l'URL du remote 'origin', le premier et le dernier commit, et le statut du répertoire de travail.
+    - **Gestion du remote 'origin' existant :** Demande à l'utilisateur s'il souhaite mettre à jour l'URL du remote si 'origin' existe déjà.
+    - **Mise à jour systématique de `README.md` :** Assure qu'il y a toujours un changement à commiter lors de l'initialisation ou de la réinitialisation.
+  - **Validation :** Le script a été testé avec succès pour la création de nouveaux dépôts et la gestion de dépôts existants, y compris les scénarios de conflit et de mise à jour.
+
+- **`commit-push.sh`:**
+  - Ajout d'un bloc de commentaires à la fin du script fournissant des instructions manuelles pour commiter et pousser les changements sur GitHub, en cas de problème avec l'exécution automatique du script.
+  - **Validation :** Le script a été mis à jour avec les instructions. (Note : Des problèmes de fonctionnement automatique ont été identifiés dans des contextes de dépôts complexes, nécessitant les instructions manuelles).
+
+- **`sync-remote.sh`:**
+  - **Validation :** Le script a été testé et a correctement identifié l'absence de remote configuré, confirmant son fonctionnement de base.
+
+- **`release-version.sh`:**
+  - **Tests en cours :** Des problèmes ont été rencontrés lors des tests initiaux (dépôt sans commit, identité Git non reconnue dans le contexte du script, échec de la création de tag et de la poussée).
+  - **Prochaines étapes :** Nécessite une investigation et des corrections pour assurer un fonctionnement fiable.
