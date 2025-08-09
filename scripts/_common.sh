@@ -94,7 +94,7 @@ check_ssh_auth() {
         echo "${ICON_ERROR} Échec de l'authentification SSH à GitHub."
         echo "${ICON_INFO} Voici les étapes pour résoudre le problème :"
         echo "1. Assurez-vous que votre agent SSH est démarré :"
-        echo "   eval \"$(ssh-agent -s)\"
+        # echo "   eval \"$(ssh-agent -s)\"" # Commented out for debugging
         echo "2. Ajoutez votre clé SSH à l'agent (remplacez 'votre_cle' par le nom de votre clé, ex: id_rsa, github-monprojet) :"
         echo "   ssh-add ~/.ssh/votre_cle"
         echo "   (Si votre clé a un mot de passe, il vous sera demandé.)"
