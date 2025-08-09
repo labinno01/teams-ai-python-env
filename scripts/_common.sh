@@ -14,6 +14,7 @@
 # --- Versioning ---
 # Lit la version depuis le fichier version.json à la racine du projet.
 GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+echo "DEBUG: GIT_ROOT in _common.sh: $GIT_ROOT"
 VERSION_FILE="$GIT_ROOT/.git-scripts/version.json"
 
 if [ -f "$VERSION_FILE" ]; then
