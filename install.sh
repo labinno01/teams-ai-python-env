@@ -11,8 +11,9 @@
 # ==============================================================================
 
 # --- Configuration ---
-# Modifiez cette variable si vous forkez le projet ou si vous voulez utiliser
-# votre propre dépôt privé (assurez-vous d'utiliser l'URL SSH dans ce cas).
+# Modifiez cette variable si vous forkez le projet.
+# Pour les dépôts privés, l'accès doit être géré via des clés SSH configurées
+# sur votre système et GitHub. Ce script est conçu pour les dépôts publics.
 REPO_URL="https://raw.githubusercontent.com/labinno01/teams-ai-python-env/master"
 
 # Nom du dossier où les scripts seront installés.
@@ -83,7 +84,7 @@ done
 # 4. Télécharger le fichier de version
 # Renamed from echo_info to echo_info
 echo_info "Téléchargement du fichier de version..."
-curl -fsSL "${REPO_URL}/version.json" -o "${INSTALL_DIR}/version.json"
+curl -fsSL "${REPO_URL}/.git-scripts/version.json" -o "${INSTALL_DIR}/version.json"
 if [ $? -ne 0 ]; then
     echo_error "Échec du téléchargement de version.json."
 fi
