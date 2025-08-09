@@ -30,7 +30,7 @@ if [ ! -d ".git" ]; then
 fi
 
 # 2. Vérifier si le répertoire de travail est propre
-if ! git diff-index --quiet HEAD --; then
+if ! git diff-index --quiet HEAD -- > /dev/null; then
     echo "${ICON_ERROR} Votre répertoire de travail n'est pas propre. Veuillez commiter ou ranger vos changements."
     git status
     exit 1
