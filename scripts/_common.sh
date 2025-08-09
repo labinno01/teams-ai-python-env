@@ -100,7 +100,7 @@ check_ssh_auth() {
         echo "   (Si votre clé a un mot de passe, il vous sera demandé.)"
         echo "3. Vérifiez que votre clé publique est bien ajoutée à votre compte GitHub :"
         echo "   Allez sur GitHub -> Settings -> SSH and GPG keys."
-        echo "4. Acceptez la clé d'hôte de GitHub (si ce n'est pas déjà fait) en exécutant :"
+        echo "4. Acceptez la clé d'hôte de GitHub \(si ce n'est pas déjà fait\) en exécutant :"
         echo "   ssh -T git@github.com"
         echo "   (Tapez 'yes' si on vous le demande pour accepter l'empreinte digitale.)"
         exit 1
