@@ -89,6 +89,7 @@ fi
 
 if [ "$CONFIRM_PUSH" = "oui" ]; then
     echo "${ICON_INFO} Poussée vers le dépôt distant..."
+    check_ssh_auth # Vérifie l'authentification SSH avant de pousser
     git push
     if [ $? -ne 0 ]; then
         echo "${ICON_ERROR} La poussée a échoué. Votre branche locale n'est peut-être pas synchronisée avec la branche distante."

@@ -148,7 +148,9 @@ echo "${ICON_INFO} Création du tag Git annoté..."
 git tag -a "v${NEXT_VERSION}" -m "$(echo -e "$TAG_MESSAGE")"
 
 echo "${ICON_INFO} Poussée du commit et du tag vers le distant..."
+check_ssh_auth # Vérifie l'authentification SSH avant de pousser
 git push
+check_ssh_auth # Vérifie l'authentification SSH avant de pousser les tags
 git push --tags
 
 echo ""

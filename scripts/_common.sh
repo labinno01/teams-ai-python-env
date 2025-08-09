@@ -77,3 +77,37 @@ check_git_config() {
         echo "${ICON_SUCCESS} Identité Git configurée localement pour ce projet."
     fi
 }
+
+# --- Fonction pour vérifier l'authentification SSH à GitHub ---
+check_ssh_auth() {
+    echo "${ICON_INFO} Vérification de l'authentification SSH à GitHub..."
+    # Tente une connexion SSH silencieuse à GitHub
+    ssh -T git@github.com &> /dev/null
+    local ssh_status=$?
+
+    if [ $ssh_status -eq 1 ]; then
+        # Code 1 signifie authentification réussie mais pas d'accès shell (comportement normal de ssh -T)
+        echo "${ICON_SUCCESS} Authentification SSH à GitHub réussie."
+        return 0
+    elif [ $ssh_status -eq 255 ]; then
+        # Code 255 signifie échec de connexion (Permission denied, Host key verification failed, etc.)
+        echo "${ICON_ERROR} Échec de l'authentification SSH à GitHub."
+        echo "${ICON_INFO} Voici les étapes pour résoudre le problème :"
+        echo "1. Assurez-vous que votre agent SSH est démarré :"
+        echo "   eval \"$(ssh-agent -s)\"
+        echo "2. Ajoutez votre clé SSH à l'agent (remplacez 'votre_cle' par le nom de votre clé, ex: id_rsa, github-monprojet) :"
+        echo "   ssh-add ~/.ssh/votre_cle"
+        echo "   (Si votre clé a un mot de passe, il vous sera demandé.)"
+        echo "3. Vérifiez que votre clé publique est bien ajoutée à votre compte GitHub :"
+        echo "   Allez sur GitHub -> Settings -> SSH and GPG keys."
+        echo "4. Acceptez la clé d'hôte de GitHub (si ce n'est pas déjà fait) en exécutant :"
+        echo "   ssh -T git@github.com"
+        echo "   (Tapez 'yes' si on vous le demande pour accepter l'empreinte digitale.)"
+        exit 1
+    else
+        # Autre code de retour (ex: 0 si pas de clé, ou autre erreur)
+        echo "${ICON_WARN} Un problème inattendu est survenu lors de la vérification SSH (code: $ssh_status)."
+        echo "${ICON_INFO} Veuillez vérifier votre configuration SSH manuellement."
+        exit 1
+    fi
+}
