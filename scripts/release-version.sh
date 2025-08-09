@@ -48,11 +48,11 @@ get_next_version() {
     minor=$(echo $current_version | cut -d. -f2)
     patch=$(echo $current_version | cut -d. -f3)
 
-    echo "${ICON_INFO} Version actuelle : ${current_version}"
-    echo "Quel type de version est-ce ?"
-    echo "  1) PATCH (correction de bug, ex: ${major}.${minor}.$((patch + 1)))"
-    echo "  2) MINOR (ajout de fonctionnalité, ex: ${major}.$((minor + 1)).0)"
-    echo "  3) MAJOR (changement majeur, ex: $((major + 1)).0.0)"
+    echo "${ICON_INFO} Version actuelle : ${current_version}" >&2 # Redirect to stderr
+    echo "Quel type de version est-ce ?" >&2 # Redirect to stderr
+    echo "  1) PATCH (correction de bug, ex: ${major}.${minor}.$((patch + 1)))" >&2 # Redirect to stderr
+    echo "  2) MINOR (ajout de fonctionnalité, ex: ${major}.$((minor + 1)).0)" >&2 # Redirect to stderr
+    echo "  3) MAJOR (changement majeur, ex: $((major + 1)).0.0)" >&2 # Redirect to stderr
     read -p "Votre choix (1, 2, 3) : " version_choice
 
     case $version_choice in
@@ -69,7 +69,7 @@ get_next_version() {
             version_type="MAJOR"
             ;;
         *)
-            echo "${ICON_ERROR} Choix invalide."
+            echo "${ICON_ERROR} Choix invalide." >&2 # Redirect to stderr
             exit 1
             ;;
     esac
