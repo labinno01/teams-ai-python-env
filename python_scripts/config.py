@@ -43,7 +43,7 @@ def get_agent_config(agent_id: str) -> dict:
     agent_email = f"{agent_name_base.lower()}_{agent_id}@{project_name}"
     
     # The key name convention is now more specific
-    ssh_key_name = f"github-{project_name}-{agent_id}"
+    ssh_key_name = f"github-{project_name}"
     ssh_key_path = Path.home() / ".ssh" / ssh_key_name
     
     return {
