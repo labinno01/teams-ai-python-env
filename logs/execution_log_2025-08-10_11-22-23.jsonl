@@ -1,0 +1,2 @@
+{"timestamp": "2025-08-10T10:00:00Z", "agent_id": "test-agent", "executed_script": "dummy_script.py", "parameters": [], "exit_code": 0}
+{"timestamp": "2025-08-10T10:01:00Z", "agent_id": "test-agent", "executed_script": "dummy_script.py", "parameters": [], "exit_code": 0}

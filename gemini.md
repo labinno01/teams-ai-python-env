@@ -254,3 +254,21 @@ Si l'objectif de la version 2.0.0 est de fournir une **interface Python fonction
 4.  **Phase 2 : Intégration de l'API/CLI GitHub :**
     -   **Objectif :** Intégrer des fonctionnalités GitHub avancées pour automatiser des tâches complexes.
     -   **Action :** Rechercher et implémenter des interactions `PyGithub` ou `gh` CLI pour des fonctionnalités telles que la création de PR, la gestion des problèmes, les notes de version automatisées, etc.
+
+## 2025-08-10 (Suite)
+
+### `python_scripts/git_commands.py`
+- **Refactorisation de `_run_command` :** La fonction a été modifiée pour retourner un tuple `(stdout, stderr)`.
+- **Mise à jour des appels `_run_command` :** Tous les appels dans les workflows ont été adaptés pour gérer le nouveau format de retour.
+- **Gestion des options via variables d'environnement :** Les fonctions de workflow (`commit_and_push_workflow`, `release_workflow`, `sync_workflow`) lisent désormais `agent_id` et `log_level` directement depuis `os.environ`.
+- **Signatures des fonctions de workflow :** `agent_id` et `log_level` ont été retirés des signatures des fonctions de workflow.
+- **Correction des erreurs de syntaxe :** Résolution des problèmes liés aux f-strings et aux retours à la ligne dans `_run_command`.
+- **Suppression des fonctions dupliquées :** Les définitions en double de `get_next_version` et `get_tag_message` ont été supprimées.
+
+### `python_scripts/utils/logger.py`
+- **Mise à jour du décorateur `log_workflow` :** Le décorateur lit maintenant `agent_id` et `log_level` directement depuis les variables d'environnement.
+
+### Problèmes rencontrés et leçons apprises
+- **Fiabilité de `replace` :** L'outil `replace` s'est avéré peu fiable pour des modifications complexes et contextuelles, entraînant des boucles.
+- **Stratégie de reconstruction :** La décision a été prise de reconstruire des fichiers entiers à partir de zéro pour garantir la propreté et la correction du code, évitant ainsi les problèmes de `replace`.
+- **Problèmes `Typer` :** Les erreurs persistantes de `typer` liées à l'analyse des arguments ont conduit à l'adoption des variables d'environnement pour les options globales, contournant ainsi le problème.
