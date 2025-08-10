@@ -268,7 +268,38 @@ Si l'objectif de la version 2.0.0 est de fournir une **interface Python fonction
 ### `python_scripts/utils/logger.py`
 - **Mise à jour du décorateur `log_workflow` :** Le décorateur lit maintenant `agent_id` et `log_level` directement depuis les variables d'environnement.
 
+### Gestion des logs : Implémentation et Validation
+
+- **`python_scripts/log_manager.py` : Validation des commandes de gestion des logs**
+  - **Fonctionnalités :** Le fichier `log_manager.py` implémente déjà les commandes `rotate` (rotation manuelle), `compress` (compression des logs anciens en `.zip`), `cleanup` (suppression des archives `.zip` très anciennes) et `run-maintenance` (orchestration des trois).
+  - **Correction des imports :** Des problèmes d'importation (`ImportError`, `ModuleNotFoundError`) ont été résolus en modifiant `log_manager.py` pour utiliser des imports absolus et en ajoutant le répertoire racine du projet au `sys.path` lors de l'exécution directe du script.
+  - **Validation :**
+    - Des fichiers de log factices ont été créés avec différentes dates.
+    - La commande `compress` a été exécutée avec succès, compressant les fichiers `.jsonl` plus anciens que 7 jours.
+    - La commande `cleanup` a été exécutée avec succès, supprimant les archives `.zip` plus anciennes que 30 jours.
+    - Le contenu du répertoire `logs` a été vérifié, confirmant le bon fonctionnement des opérations.
+  - **Conclusion :** Le système de gestion des logs est pleinement opérationnel et validé.
+
 ### Problèmes rencontrés et leçons apprises
 - **Fiabilité de `replace` :** L'outil `replace` s'est avéré peu fiable pour des modifications complexes et contextuelles, entraînant des boucles.
 - **Stratégie de reconstruction :** La décision a été prise de reconstruire des fichiers entiers à partir de zéro pour garantir la propreté et la correction du code, évitant ainsi les problèmes de `replace`.
 - **Problèmes `Typer` :** Les erreurs persistantes de `typer` liées à l'analyse des arguments ont conduit à l'adoption des variables d'environnement pour les options globales, contournant ainsi le problème.
+
+### Résolution des problèmes d'authentification et de silence du CLI Python
+
+- **`python_scripts/config.py` : Correction du chemin de la clé SSH**
+  - **Problème :** La fonction `get_agent_config` construisait un chemin de clé SSH incorrect en ajoutant l'ID de l'agent au nom de la clé (ex: `github-project-agent_id`), alors que la clé réelle n'incluait pas cet ID.
+  - **Correction :** La construction du `ssh_key_name` a été modifiée pour être simplement `github-{project_name}`, assurant ainsi que le chemin de la clé correspond au nom de fichier attendu.
+  - **Validation :** Les vérifications `ruff` ont été exécutées avec succès après cette modification.
+
+- **`python_scripts/git_commands.py` : Débogage et validation du workflow `commit-push`**
+  - **Problème initial :** Le workflow `commit-push` en mode non interactif échouait silencieusement (code de sortie 1, mais aucune sortie visible), rendant le débogage difficile.
+  - **Stratégie de débogage :**
+    - Des instructions `print` temporaires ont été ajoutées à la fonction `_run_command` (dirigées vers `sys.stderr`) pour capturer la sortie.
+    - Un script Python temporaire (`temp_debug_commit.py`) a été créé pour appeler directement `commit_and_push_workflow`, contournant ainsi l'interface `Typer` et les problèmes potentiels de redirection de sortie.
+  - **Résultat :** L'exécution directe du script temporaire a révélé l'erreur `La clé SSH pour l'agent test_agent est introuvable`, confirmant que le problème était lié au chemin de la clé SSH.
+  - **Validation finale :** Après la correction dans `config.py`, le script temporaire a été réexécuté avec succès, confirmant que le `git push` s'effectue correctement.
+  - **Nettoyage :** Toutes les instructions `print` de débogage ont été supprimées de `_run_command`, et le script `temp_debug_commit.py` a été supprimé.
+  - **Validation :** Les vérifications `ruff` ont été exécutées avec succès après le nettoyage, confirmant l'absence d'erreurs.
+
+**Conclusion :** Le CLI Python pour les workflows Git est maintenant pleinement fonctionnel en mode non interactif, avec une gestion correcte de l'authentification SSH.

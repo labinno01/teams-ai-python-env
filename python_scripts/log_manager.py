@@ -4,9 +4,13 @@ from datetime import datetime, timedelta
 import glob
 import zipfile
 import re
+import sys
 
-from .utils.display import ICON_SUCCESS, ICON_ERROR, ICON_INFO
-from .utils.logger import LOG_DIR, LOG_FILE, ensure_log_dir_exists
+# Add the project root to sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from python_scripts.utils.display import ICON_SUCCESS, ICON_ERROR, ICON_INFO
+from python_scripts.utils.logger import LOG_DIR, LOG_FILE, ensure_log_dir_exists
 
 app = typer.Typer(help="Manages log files for the project, including rotation, compression, and cleanup.")
 

@@ -37,9 +37,6 @@ def _unset_git_config():
 def _run_command(command: list[str], check_error: bool = True, capture_output: bool = False, env: dict | None = None) -> tuple[str | None, str | None]:
     """Helper to run shell commands."""
     try:
-        import sys
-        print(f"DEBUG: Executing command: {' '.join(command)}", file=sys.stderr)
-        print(f"DEBUG: Environment: {env}", file=sys.stderr)
         result = subprocess.run(command, check=check_error, capture_output=True, text=True, env=env)
         if capture_output:
             return result.stdout, result.stderr
