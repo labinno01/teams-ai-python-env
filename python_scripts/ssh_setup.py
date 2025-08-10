@@ -2,13 +2,7 @@ import typer
 import subprocess
 import os
 import sys
-
-# Define icons (similar to _common.sh)
-ICON_SUCCESS = "✅"
-ICON_ERROR = "❌"
-ICON_INFO = "ℹ️"
-ICON_WARN = "⚠️"
-ICON_KEY = "🔑"
+from .utils.display import ICON_SUCCESS, ICON_ERROR, ICON_INFO, ICON_WARN, ICON_KEY
 
 def _run_command(command: list[str], check_error: bool = True, capture_output: bool = False) -> subprocess.CompletedProcess:
     """Helper to run shell commands."""

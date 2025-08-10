@@ -3,6 +3,8 @@ from . import ssh_setup
 from . import git_commands
 import json
 import os
+from .utils.display import styled_title, ICON_INFO, ICON_ERROR
+from .utils.chat_utils import display_chat
 
 # Function to get the version from version.json
 def get_version():
@@ -63,7 +65,8 @@ def menu():
     """
     Displays an interactive menu for Git workflows.
     """
-    typer.echo("Welcome to the Git Workflow Menu!")
+    display_chat()
+    typer.echo(styled_title("Welcome to the Git Workflow Menu!"))
     typer.echo(f"Version: {get_version()}")
     typer.echo("Please select an option:")
     typer.echo("1. Commit & Push")
@@ -83,10 +86,10 @@ def menu():
         elif choice == "4":
             setup_ssh()
         elif choice == "5":
-            typer.echo("Exiting Git Workflow Menu. Goodbye!")
+            typer.echo(f"{ICON_INFO} Exiting Git Workflow Menu. Goodbye!")
             break
         else:
-            typer.echo("Invalid choice. Please try again.")
+            typer.echo(f"{ICON_ERROR} Invalid choice. Please try again.")
 
 if __name__ == "__main__":
     app()
