@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>CI/CD - Git Scripts Documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Git Scripts Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../installation/" class="nav-link">Installation</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">CI/CD</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Scripts <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../scripts/utils/setup-git-ssh/" class="dropdown-item">Setup SSH</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/init-repository/" class="dropdown-item">Initialize Repository</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/commit-push/" class="dropdown-item">Commit and Push</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/sync-remote/" class="dropdown-item">Sync Remote</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/release-version/" class="dropdown-item">Release Version</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/documentation_scripts_git/" class="dropdown-item">Git Scripts Documentation</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../installation/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../scripts/utils/setup-git-ssh/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-light">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#integration-continue-ci-avec-github-actions" class="nav-link">Intégration Continue (CI) avec GitHub Actions</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#1-quest-ce-que-lintegration-continue" class="nav-link">1. Qu'est-ce que l'Intégration Continue ?</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2-workflow-de-linting-avec-ruff" class="nav-link">2. Workflow de Linting avec ruff</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#3-comment-utiliser-ce-workflow" class="nav-link">3. Comment Utiliser ce Workflow ?</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#4-visualiser-les-resultats-et-corriger-les-erreurs" class="nav-link">4. Visualiser les Résultats et Corriger les Erreurs</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#5-le-workflow-cicd-comme-filet-de-securite" class="nav-link">5. Le Workflow CI/CD comme Filet de Sécurité</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="integration-continue-ci-avec-github-actions">Intégration Continue (CI) avec GitHub Actions</h1>
+<p>Ce document décrit la mise en place d'un workflow d'Intégration Continue (CI) simple pour votre projet, utilisant GitHub Actions. L'objectif est d'automatiser la vérification de la qualité du code à chaque modification.</p>
+<hr />
+<h2 id="1-quest-ce-que-lintegration-continue">1. Qu'est-ce que l'Intégration Continue ?</h2>
+<p>L'Intégration Continue (CI) est une pratique de développement logiciel où les développeurs intègrent fréquemment leur code dans un dépôt partagé. Chaque intégration est ensuite vérifiée par une construction automatisée (build) et des tests automatisés.</p>
+<p><strong>Bénéfices :</strong>
+*   Détection rapide des erreurs.
+*   Amélioration de la qualité du code.
+*   Réduction des risques lors des fusions de code.
+*   Confiance accrue dans la base de code.</p>
+<hr />
+<h2 id="2-workflow-de-linting-avec-ruff">2. Workflow de Linting avec <code>ruff</code></h2>
+<p>Nous avons mis en place un premier workflow simple qui utilise l'outil <code>ruff</code> pour vérifier la qualité de votre code Python.</p>
+<h3 id="fichier-de-configuration">Fichier de Configuration</h3>
+<p>Le workflow est défini dans le fichier <code>.github/workflows/lint.yml</code> :</p>
+<pre><code class="language-yaml">name: Lint Code
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install ruff
+    - name: Run ruff
+      run: |
+        ruff check .
+</code></pre>
+<h3 id="explication-du-workflow">Explication du Workflow</h3>
+<ul>
+<li><strong><code>name: Lint Code</code></strong> : Le nom du workflow, visible dans l'interface GitHub.</li>
+<li><strong><code>on:</code></strong> : Définit les événements qui déclenchent le workflow :<ul>
+<li><code>push</code> sur la branche <code>main</code>.</li>
+<li><code>pull_request</code> ciblant la branche <code>main</code>.</li>
+</ul>
+</li>
+<li><strong><code>jobs:</code></strong> : Contient les différentes tâches à exécuter. Ici, un seul job nommé <code>lint</code>.<ul>
+<li><strong><code>runs-on: ubuntu-latest</code></strong> : Le job s'exécutera sur une machine virtuelle Ubuntu hébergée par GitHub.</li>
+<li><strong><code>steps:</code></strong> : La séquence d'actions à réaliser :<ol>
+<li><strong><code>uses: actions/checkout@v3</code></strong> : Télécharge le code de votre dépôt sur la machine virtuelle.</li>
+<li><strong><code>name: Set up Python</code></strong> et <strong><code>uses: actions/setup-python@v4</code></strong> : Configure un environnement Python (dernière version 3.x) nécessaire pour <code>ruff</code>.</li>
+<li><strong><code>name: Install dependencies</code></strong> : Installe <code>pip</code> et <code>ruff</code>.</li>
+<li><strong><code>name: Run ruff</code></strong> : Exécute la commande <code>ruff check .</code> pour analyser votre code.</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="3-comment-utiliser-ce-workflow">3. Comment Utiliser ce Workflow ?</h2>
+<ol>
+<li><strong>Commitez et Poussez le Fichier :</strong> Le workflow sera actif dès que le fichier <code>.github/workflows/lint.yml</code> sera poussé sur votre dépôt GitHub.
+    <code>bash
+    git add .github/workflows/lint.yml
+    git commit -m "feat: Add GitHub Actions workflow for linting with ruff"
+    git push</code></li>
+<li><strong>Déclenchement Automatique :</strong> Chaque fois que vous pousserez du code sur <code>main</code> ou ouvrirez/mettrez à jour une Pull Request vers <code>main</code>, le workflow se lancera automatiquement.</li>
+</ol>
+<hr />
+<h2 id="4-visualiser-les-resultats-et-corriger-les-erreurs">4. Visualiser les Résultats et Corriger les Erreurs</h2>
+<ul>
+<li><strong>Interface GitHub :</strong> Rendez-vous sur la page de votre Pull Request ou sur l'onglet "Actions" de votre dépôt GitHub.</li>
+<li><strong>Statut :</strong> Vous verrez le statut du workflow (en cours, succès, échec).</li>
+<li><strong>Logs Détaillés :</strong> En cas d'échec, cliquez sur le lien "Details" à côté du job <code>lint</code>. Vous accéderez aux logs complets, affichant les messages d'erreur de <code>ruff</code> (lignes concernées, type d'erreur, etc.).</li>
+<li><strong>Correction :</strong> Corrigez les erreurs localement, commitez et poussez à nouveau. Le workflow se relancera pour valider vos corrections.</li>
+</ul>
+<hr />
+<h2 id="5-le-workflow-cicd-comme-filet-de-securite">5. Le Workflow CI/CD comme Filet de Sécurité</h2>
+<p>Il est crucial de comprendre que ce workflow est un <strong>filet de sécurité</strong>. Vous devez toujours exécuter <code>ruff check .</code> (et vos tests) <strong>localement</strong> avant de pousser votre code. Le CI est là pour : 
+*   Garantir que les standards sont respectés par tous les contributeurs.
+*   Attraper les erreurs qui auraient pu être manquées localement.
+*   Assurer la qualité constante de la branche principale.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

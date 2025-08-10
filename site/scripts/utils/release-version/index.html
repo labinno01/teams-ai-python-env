@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Release Version - Git Scripts Documentation</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">Git Scripts Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../installation/" class="nav-link">Installation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../cicd/" class="nav-link">CI/CD</a>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Scripts <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../setup-git-ssh/" class="dropdown-item">Setup SSH</a>
+</li>
+                                    
+<li>
+    <a href="../init-repository/" class="dropdown-item">Initialize Repository</a>
+</li>
+                                    
+<li>
+    <a href="../commit-push/" class="dropdown-item">Commit and Push</a>
+</li>
+                                    
+<li>
+    <a href="../sync-remote/" class="dropdown-item">Sync Remote</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active">Release Version</a>
+</li>
+                                    
+<li>
+    <a href="../documentation_scripts_git/" class="dropdown-item">Git Scripts Documentation</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../sync-remote/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../documentation_scripts_git/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-light">
+        <ul class="nav flex-column">
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<ol>
+<li>Identification</li>
+<li>ID de l'Exigence : GIT-REQ-005</li>
+<li>Nom du Script : release-version.sh</li>
+<li>Version : Gérée par les tags Git (ex: v0.1.0)</li>
+<li>
+<p>Objectif (Raison d'être) : Automatiser et sécuriser le processus de création d'une release, en garantissant la synchronisation entre le fichier <code>version.json</code> et les tags Git.</p>
+</li>
+<li>
+<p>Description Fonctionnelle (Le "Quoi")</p>
+</li>
+<li>Déclencheur : Manuellement par le développeur depuis la branche principale (<code>main</code>) lorsque le code est stable et prêt à être versionné.</li>
+<li>Processus :<ol>
+<li><strong>Vérification du Contexte :</strong><ul>
+<li>Le script s'assure qu'il est bien exécuté à l'intérieur d'un dépôt Git.</li>
+<li>Il vérifie que le répertoire de travail est "propre" (pas de modifications non commitées).</li>
+</ul>
+</li>
+<li><strong>Choix de la Version :</strong><ul>
+<li>Il lit la version actuelle depuis <code>version.json</code>.</li>
+<li>Il demande à l'utilisateur de choisir le type de la nouvelle version : <code>PATCH</code>, <code>MINEUR</code>, ou <code>MAJEUR</code>.</li>
+<li>Il calcule le nouveau numéro de version (ex: <code>0.1.0</code> -&gt; <code>0.1.1</code>).</li>
+</ul>
+</li>
+<li><strong>Génération des Notes de Version :</strong><ul>
+<li><strong>Pour un <code>PATCH</code> :</strong> Le script génère automatiquement la liste des commits depuis le dernier tag.</li>
+<li><strong>Pour un <code>MINEUR</code> :</strong> Il demande à l'utilisateur de décrire la nouvelle fonctionnalité.</li>
+<li><strong>Pour un <code>MAJEUR</code> :</strong> Il demande à l'utilisateur de justifier le changement non rétrocompatible.</li>
+</ul>
+</li>
+<li><strong>Confirmation :</strong><ul>
+<li>Le script affiche un résumé complet : nouvelle version, message du tag.</li>
+<li>Il demande une confirmation finale avant d'exécuter les changements.</li>
+</ul>
+</li>
+<li><strong>Exécution de la Release :</strong><ul>
+<li>Il met à jour le numéro de version dans le fichier <code>version.json</code>.</li>
+<li>Il crée un commit avec le message <code>chore(release): Bump version to X.Y.Z</code>.</li>
+<li>Il crée un tag Git annoté (<code>git tag -a</code>) avec le message généré.</li>
+<li>Il pousse le nouveau commit et le nouveau tag vers le dépôt distant (<code>origin</code>).</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p>Résultat Attendu : Le projet a une nouvelle version officielle, visible dans <code>version.json</code> et dans les tags Git, et synchronisée avec le dépôt distant.</p>
+</li>
+<li>
+<p>Exigences Non-Fonctionnelles (Les "Contraintes")</p>
+</li>
+<li>Sécurité : Le script ne permet pas de créer une release si le code n'est pas dans un état stable (commitée).</li>
+<li>
+<p>Configuration : Entièrement interactif.</p>
+</li>
+<li>
+<p>Spécifications Techniques (Le "Comment")</p>
+</li>
+<li>Langage et Dépendances : Bash, git. Doit "sourcer" <code>_common.sh</code>.</li>
+<li>
+<p>Environnement d'Exécution : Tout environnement de type Unix (Linux, macOS, WSL).</p>
+</li>
+<li>
+<p>Cas d'Utilisation</p>
+</li>
+<li>Exemple d'Appel :</li>
+</ol>
+<p>1     # Se placer sur la branche main et s'assurer qu'elle est à jour
+   2     git checkout main
+   3     git pull
+   4     # Lancer l'assistant de release
+   5     ./scripts/release-version.sh</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

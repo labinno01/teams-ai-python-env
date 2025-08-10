@@ -20,7 +20,7 @@ VERSION_FILE="$GIT_ROOT/.git-scripts/version.json"
 if [ -f "$VERSION_FILE" ]; then
     # Utilise sed pour extraire la valeur. C'est plus portable que jq.
     VERSION=$(grep -o '"version": "[^"]*"' "$VERSION_FILE" | sed 's/"version": "//;s/"//')
-    echo "DEBUG: VERSION in _common.sh: $VERSION"
+    
 else
     VERSION="dev"
 fi

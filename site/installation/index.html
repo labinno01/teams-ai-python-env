@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Installation - Git Scripts Documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Git Scripts Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">Installation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../cicd/" class="nav-link">CI/CD</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Scripts <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../scripts/utils/setup-git-ssh/" class="dropdown-item">Setup SSH</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/init-repository/" class="dropdown-item">Initialize Repository</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/commit-push/" class="dropdown-item">Commit and Push</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/sync-remote/" class="dropdown-item">Sync Remote</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/release-version/" class="dropdown-item">Release Version</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/documentation_scripts_git/" class="dropdown-item">Git Scripts Documentation</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href=".." class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../cicd/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-light">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#installation-du-patrimoine-de-scripts-git" class="nav-link">Installation du Patrimoine de Scripts Git</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#1-commande-dinstallation-rapide" class="nav-link">1. Commande d'Installation Rapide</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2-que-fait-le-script-dinstallation" class="nav-link">2. Que Fait le Script d'Installation ?</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#3-personnalisation-utilisation-avec-un-depot-prive" class="nav-link">3. Personnalisation (Utilisation avec un Dépôt Privé)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#remplacez-lurl-par-lurl-de-votre-depot" class="nav-link">Remplacez l'URL par l'URL de votre dépôt</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="installation-du-patrimoine-de-scripts-git">Installation du Patrimoine de Scripts Git</h1>
+<p>Ce document explique comment installer l'ensemble des scripts utilitaires Git dans un nouveau projet à l'aide du script d'installation <code>install.sh</code>.</p>
+<p>L'objectif est de vous permettre de déployer rapidement votre environnement de travail Git standardisé sur n'importe quel nouveau projet.</p>
+<hr />
+<h2 id="1-commande-dinstallation-rapide">1. Commande d'Installation Rapide</h2>
+<p>Pour installer les scripts, placez-vous à la racine de votre nouveau projet et exécutez la commande suivante dans votre terminal :</p>
+<pre><code class="language-bash">bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/labinno01/teams-ai-python-env/main/install.sh)&quot;
+</code></pre>
+<p>Cette commande télécharge et exécute le script d'installation de manière sécurisée.</p>
+<hr />
+<h2 id="2-que-fait-le-script-dinstallation">2. Que Fait le Script d'Installation ?</h2>
+<p>Le script est conçu pour être transparent et didactique. Voici les étapes qu'il réalise :</p>
+<ol>
+<li><strong>Vérification de <code>curl</code> :</strong> Il s'assure que l'outil <code>curl</code> est disponible sur votre système.</li>
+<li><strong>Création du Dossier :</strong> Il crée un dossier <code>.git-scripts/</code> à la racine de votre projet pour y stocker tous les scripts utilitaires.</li>
+<li><strong>Téléchargement des Scripts :</strong> Il télécharge la dernière version de chaque script (<code>setup-ssh.sh</code>, <code>init-repository.sh</code>, etc.) depuis le dépôt GitHub de référence.</li>
+<li><strong>Téléchargement de <code>version.json</code> :</strong> Il récupère le fichier <code>version.json</code> pour que les scripts connaissent leur version actuelle.</li>
+<li><strong>Permissions :</strong> Il rend automatiquement les scripts téléchargés exécutables (<code>chmod +x</code>).</li>
+<li><strong>Mise à jour du <code>.gitignore</code> :</strong> Il vous propose d'ajouter le dossier <code>.git-scripts/</code> à votre fichier <code>.gitignore</code> pour éviter de commiter les outils eux-mêmes dans votre nouveau projet.</li>
+<li><strong>Message de Fin :</strong> Il affiche un message de succès avec des instructions pour commencer à utiliser les scripts.</li>
+</ol>
+<hr />
+<h2 id="3-personnalisation-utilisation-avec-un-depot-prive">3. Personnalisation (Utilisation avec un Dépôt Privé)</h2>
+<p>Si vous avez "forké" le projet <code>teams-ai-python-env</code> ou si vous souhaitez maintenir votre propre version des scripts dans un <strong>dépôt privé</strong>, vous pouvez facilement adapter le script.</p>
+<ol>
+<li><strong>Téléchargez le script <code>install.sh</code></strong> localement au lieu de l'exécuter directement via <code>curl</code>.</li>
+<li>
+<p><strong>Modifiez la variable <code>REPO_URL</code></strong> au début du script pour pointer vers votre dépôt.</p>
+<p>```bash</p>
+<h1 id="remplacez-lurl-par-lurl-de-votre-depot">Remplacez l'URL par l'URL de votre dépôt</h1>
+<p>REPO_URL="https://raw.githubusercontent.com/VOTRE_NOM/VOTRE_DEPOT/main"
+```</p>
+</li>
+<li>
+<p>Si votre dépôt est privé, assurez-vous d'avoir configuré votre <a href="https://docs.github.com/fr/authentication/connecting-to-github-with-ssh">accès SSH</a> et utilisez l'URL SSH de votre dépôt pour que l'authentification se fasse de manière transparente.</p>
+</li>
+</ol></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

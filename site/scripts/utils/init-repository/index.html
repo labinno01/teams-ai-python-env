@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Initialize Repository - Git Scripts Documentation</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">Git Scripts Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../installation/" class="nav-link">Installation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../cicd/" class="nav-link">CI/CD</a>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Scripts <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../setup-git-ssh/" class="dropdown-item">Setup SSH</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active">Initialize Repository</a>
+</li>
+                                    
+<li>
+    <a href="../commit-push/" class="dropdown-item">Commit and Push</a>
+</li>
+                                    
+<li>
+    <a href="../sync-remote/" class="dropdown-item">Sync Remote</a>
+</li>
+                                    
+<li>
+    <a href="../release-version/" class="dropdown-item">Release Version</a>
+</li>
+                                    
+<li>
+    <a href="../documentation_scripts_git/" class="dropdown-item">Git Scripts Documentation</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../setup-git-ssh/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../commit-push/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-light">
+        <ul class="nav flex-column">
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<ol>
+<li>Identification</li>
+<li>ID de l'Exigence : GIT-REQ-002</li>
+<li>Nom du Script : init-repository.sh</li>
+<li>Version : Gérée par les tags Git (ex: v0.1.0)</li>
+<li>
+<p>Objectif (Raison d'être) : Assister l'utilisateur dans l'initialisation complète d'un nouveau dépôt Git local, en
+     le liant à un dépôt distant et en créant un premier commit propre.</p>
+</li>
+<li>
+<p>Description Fonctionnelle (Le "Quoi")</p>
+</li>
+<li>Déclencheur : Manuellement par le développeur, dans le dossier racine d'un projet qui n'est pas encore un dépôt Git.</li>
+<li>Processus :<ol>
+<li>Vérification Initiale : Le script vérifie d'abord si un dossier .git existe déjà. Si c'est le cas, il informe
+      l'utilisateur que le dépôt est déjà initialisé et se termine.</li>
+<li>Initialisation : Exécute git init pour créer le dépôt local.</li>
+<li>Configuration Utilisateur : Vérifie si user.name et user.email sont configurés localement. Si non, il demande à
+      l'utilisateur de les saisir (en utilisant la fonction check_git_config de _common.sh).</li>
+<li>Demande du Distant : Demande à l'utilisateur de fournir l'URL SSH du dépôt distant (ex:
+      git@github.com:user/repo.git).</li>
+<li>Ajout du Distant : Exécute git remote add origin <URL_fournie>.</li>
+<li>Création du README : Crée un fichier README.md avec le nom du dossier du projet comme titre, pour s'assurer que
+      le premier commit ne soit pas vide.</li>
+<li>Indexation : Ajoute tous les fichiers à l'index avec git add ..</li>
+<li>Message de Commit : Demande à l'utilisateur un message pour le commit initial, en proposant "feat: Initial
+      commit" comme valeur par défaut.</li>
+<li>Commit Initial : Exécute git commit avec le message fourni.</li>
+<li>Push Initial (Optionnel) : Demande à l'utilisateur s'il souhaite pousser la branche main vers origin. Si oui,
+       exécute git push -u origin main.</li>
+</ol>
+</li>
+<li>
+<p>Résultat Attendu : Le dossier courant est un dépôt Git fonctionnel, avec un remote nommé origin configuré, un fichier
+     README.md, et un premier commit créé. La branche main est potentiellement déjà synchronisée avec le dépôt distant.</p>
+</li>
+<li>
+<p>Exigences Non-Fonctionnelles (Les "Contraintes")</p>
+</li>
+<li>Performance : L'exécution doit être rapide, limitée principalement par le temps de réponse de l'utilisateur aux
+     questions.</li>
+<li>Sécurité : Aucune information sensible n'est stockée ou affichée.</li>
+<li>Configuration : Le script est entièrement interactif et ne nécessite aucun fichier de configuration.</li>
+<li>
+<p>Gestion des Erreurs : Chaque commande git critique (init, remote add, commit, push) doit être vérifiée. En cas
+     d'échec, le script doit afficher un message d'erreur clair et s'arrêter.</p>
+</li>
+<li>
+<p>Spécifications Techniques (Le "Comment")</p>
+</li>
+<li>Langage et Dépendances : Bash, git. Le script doit "sourcer" _common.sh pour les fonctions utilitaires.</li>
+<li>Environnement d'Exécution : Tout environnement de type Unix (Linux, macOS, WSL).</li>
+<li>
+<p>Entrées / Sorties :</p>
+<ul>
+<li>Arguments en ligne de commande : Aucun.</li>
+<li>Sortie standard (stdout) : Messages de guidage pour l'assistant interactif et retours d'information sur les
+     commandes exécutées.</li>
+</ul>
+</li>
+<li>
+<p>Cas d'Utilisation</p>
+</li>
+<li>Exemple d'Appel :</li>
+</ol>
+<p>1     # Se placer dans le nouveau projet
+   2     cd ~/projets/mon-nouveau-site
+   3     # Lancer l'assistant
+   4     /chemin/vers/les/scripts/init-repository.sh</p>
+<p>Processus (mis à jour) :
+   1. Vérification Initiale : ... (inchangé)
+   2. Initialisation : Exécute git init.
+   3. Configuration Utilisateur : ... (inchangé)
+   4. Demande du Distant : Demande à l'utilisateur de fournir l'URL SSH du dépôt distant.
+   5. Vérification du Distant (Nouvelle Étape) :
+       * Le script exécute git ls-remote <URL_fournie> en silence.
+       * Si la commande réussit (code de sortie 0), cela signifie que le dépôt existe.
+       * Le script affiche alors un message d'avertissement et demande à l'utilisateur s'il souhaite continuer.
+       * Si l'utilisateur ne confirme pas explicitement, le script s'arrête avec un message expliquant qu'il devrait
+         peut-être utiliser git clone.
+   6. Ajout du Distant : Exécute git remote add origin <URL_fournie>.
+   7. Création du README : ... (anciennement 6)
+   8. Indexation : ... (anciennement 7)
+   9. Message de Commit : ... (anciennement 8)
+   10. Commit Initial : ... (anciennement 9)
+   11. Push Initial (Optionnel) : ... (anciennement 10)</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

@@ -22,34 +22,38 @@ fi
 echo "${ICON_KEY} Assistant de configuration SSH pour Git (GitHub)"
 echo "-------------------------------------------------"
 
+# NOTE: Scenario 1 (SSH Agent Not Running) is currently non-testable due to automatic ssh-agent restarts on the user's system.
+# The script's interactive prompt for starting the agent is in place, but cannot be fully automated for testing.
+
 # 1. Vérifier et démarrer l'agent SSH
 echo "${ICON_INFO} Étape 1: Vérification et démarrage de l'agent SSH."
-if ! pgrep -q "ssh-agent"; then
-    echo "${ICON_WARN} L'agent SSH ne semble pas être en cours d'exécution."
-    read -p "Voulez-vous le démarrer maintenant ? (oui/non): " START_AGENT
-    if [ "$START_AGENT" = "oui" ]; then
-        eval "$(ssh-agent -s)"
-        if [ $? -eq 0 ]; then
-            echo "${ICON_SUCCESS} Agent SSH démarré."
-        else
-            echo "${ICON_ERROR} Échec du démarrage de l'agent SSH. Veuillez le démarrer manuellement."
-            echo "   Exemple: eval "$(ssh-agent -s)""
-            exit 1
-        fi
+if [ -z "$SSH_AGENT_PID" ] || ! ps -p $SSH_AGENT_PID > /dev/null; then
+    echo "${ICON_WARN} L'agent SSH ne semble pas être en cours d'exécution ou ses variables d'environnement ne sont pas chargées."
+    echo "${ICON_INFO} Veuillez exécuter la commande suivante dans votre terminal pour démarrer l'agent et charger ses variables :"
+    echo "   eval \"$(ssh-agent -s)\""
+    read -p "Avez-vous exécuté la commande ci-dessus et l'agent SSH a-t-il démarré avec succès ? (oui/non): " AGENT_STARTED
+    if [ "$AGENT_STARTED" = "oui" ]; then
+        echo "${ICON_SUCCESS} Agent SSH démarré et variables chargées (confirmé par l'utilisateur)."
     else
-        echo "${ICON_INFO} L'agent SSH n'a pas été démarré. Certaines opérations pourraient échouer."
+        echo "${ICON_ERROR} L'agent SSH n'a pas été démarré ou confirmé. Impossible de continuer sans un agent SSH fonctionnel."
+        echo "${ICON_INFO} Pistes de résolution :"
+        echo "   - Assurez-vous que 'ssh-agent' est installé sur votre système."
+        echo "   - Redémarrez votre terminal et réessayez."
+        echo "   - Vérifiez les messages d'erreur lors de l'exécution de 'eval \"$(ssh-agent -s)\'."
+        exit 1
     fi
 else
-    echo "${ICON_SUCCESS} L'agent SSH est déjà en cours d'exécution."
+    echo "${ICON_SUCCESS} L'agent SSH est déjà en cours d'exécution et ses variables sont chargées."
 fi
+
 
 # 2. Ajouter la clé SSH à l'agent
 echo ""
 echo "${ICON_INFO} Étape 2: Ajout de votre clé SSH à l'agent."
 echo "   Nous allons essayer d'ajouter la clé par défaut ou celle que vous spécifiez."
-read -p "Entrez le chemin complet de votre clé privée SSH (laissez vide pour la clé par défaut ~/.ssh/id_rsa): " SSH_KEY_PATH
+read -p "Entrez le chemin complet de votre clé privée SSH (laissez vide pour la clé par défaut ~/.ssh/github-teams-ai-python-env): " SSH_KEY_PATH
 if [ -z "$SSH_KEY_PATH" ]; then
-    SSH_KEY_PATH="$HOME/.ssh/id_rsa"
+    SSH_KEY_PATH="$HOME/.ssh/github-teams-ai-python-env"
 fi
 
 if [ ! -f "$SSH_KEY_PATH" ]; then
