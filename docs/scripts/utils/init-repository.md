@@ -1,3 +1,6 @@
+<!-- Documentation for Git Scripts Version 1.x.x (Bash) -->
+<!-- For Python CLI Version 2.0.0+, refer to the main documentation. -->
+
 1. Identification
    * ID de l'Exigence : GIT-REQ-002
    * Nom du Script : init-repository.sh

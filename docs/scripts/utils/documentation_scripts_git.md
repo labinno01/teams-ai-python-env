@@ -1,3 +1,6 @@
+<!-- Documentation for Git Scripts Version 1.x.x (Bash) -->
+<!-- For Python CLI Version 2.0.0+, refer to the main documentation. -->
+
 # Documentation des Scripts Utilitaires Git
 
 Ce document décrit le fonctionnement et l'utilisation des scripts `manage_git.sh` et `restore_generic.sh`. Ces outils ont pour but de standardiser et de simplifier la gestion des dépôts Git au sein de nos projets.
