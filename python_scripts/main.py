@@ -1,5 +1,6 @@
 import typer
 from . import ssh_setup
+from . import git_commands
 import json
 import os
 
@@ -34,8 +35,7 @@ def commit_push():
     """
     Handles committing and pushing changes to the remote repository.
     """
-    typer.echo("Running Commit & Push workflow...")
-    # Placeholder for future Python implementation of commit-push.sh
+    git_commands.commit_and_push_workflow()
 
 @app.command()
 def release():
