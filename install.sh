@@ -22,7 +22,7 @@ INSTALL_DIR=".git-scripts"
 # Liste des scripts à installer.
 SCRIPTS_TO_INSTALL=(
     "_common.sh"
-    "setup-ssh.sh"
+    "setup-git-ssh.sh"
     "init-repository.sh"
     "commit-push.sh"
     "sync-remote.sh"

@@ -29,7 +29,10 @@ if [ ! -d ".git" ]; then
     exit 1
 fi
 
-# 2. Vérifier si le répertoire de travail est propre (temporairement désactivé pour le débogage)
+# 2. Vérifier la configuration Git (nom/email)
+check_git_config
+
+# 3. Vérifier si le répertoire de travail est propre (temporairement désactivé pour le débogage)
 # if ! git diff-index --quiet HEAD -- > /dev/null; then
 #     echo "${ICON_ERROR} Votre répertoire de travail n'est pas propre. Veuillez commiter ou ranger vos changements."
 #     git status
@@ -70,7 +73,8 @@ get_next_version() {
             ;;
         *)
             echo "${ICON_ERROR} Choix invalide." >&2 # Redirect to stderr
-            exit 1
+            echo ""
+            return 1
             ;;
     esac
     # Retourne la version et le type pour la suite
@@ -79,6 +83,10 @@ get_next_version() {
 
 # 3. Déterminer la prochaine version
 read -r NEXT_VERSION VERSION_TYPE <<< $(get_next_version $VERSION)
+if [ -z "$NEXT_VERSION" ]; then
+    echo "${ICON_ERROR} Détermination de la prochaine version annulée ou échouée. Opération annulée."
+    exit 1
+fi
 echo "${ICON_INFO} La nouvelle version sera : ${NEXT_VERSION}"
 
 # --- Fonction pour générer le message du tag ---
@@ -86,6 +94,14 @@ get_tag_message() {
     local version_type=$1
     local next_version=$2
     local last_tag=$(git describe --tags --abbrev=0 2>/dev/null)
+
+    # Check if there are any commits at all
+    if ! git rev-parse --verify HEAD &>/dev/null;
+    then
+        tag_message="Version ${next_version}\n\nInitial release - No previous commits."
+        echo -e "$tag_message"
+        return
+    fi
 
     if [ "$version_type" = "PATCH" ]; then
         echo "${ICON_INFO} Génération automatique du message pour le PATCH..."

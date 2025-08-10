@@ -1,0 +1,10 @@
+site_name: Git Scripts Documentation
+nav:
+  - Home: index.md
+  - Scripts:
+    - Common Utilities: docs/scripts/utils/_common.md
+    - Setup SSH: docs/scripts/utils/setup-git-ssh.md
+    - Initialize Repository: docs/scripts/utils/init-repository.md
+    - Commit and Push: docs/scripts/utils/commit-push.md
+    - Sync Remote: docs/scripts/utils/sync-remote.md
+    - Release Version: docs/scripts/utils/release-version.md
