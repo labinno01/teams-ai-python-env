@@ -108,7 +108,9 @@ def commit_and_push_workflow():
     typer.echo(f"{ICON_SUCCESS} Opération terminée.")
 
 def get_next_version(current_version: str) -> tuple[str, str] | None:
-    major, minor, patch = map(int, current_version.split('.'))
+    # Handle pre-release suffixes like '2.0.0-dev'
+    base_version = current_version.split('-')[0]
+    major, minor, patch = map(int, base_version.split('.'))
 
     typer.echo(f"{ICON_INFO} Version actuelle : {current_version}")
     typer.echo("Quel type de version est-ce ?")
