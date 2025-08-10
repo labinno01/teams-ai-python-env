@@ -42,8 +42,7 @@ def release():
     """
     Manages creating new releases (versioning and tagging).
     """
-    typer.echo("Running Release workflow...")
-    # Placeholder for future Python implementation of release-version.sh
+    git_commands.release_workflow()
 
 @app.command()
 def sync():
