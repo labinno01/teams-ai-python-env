@@ -165,6 +165,16 @@ def commit_and_push_workflow(non_interactive: bool, commit_message: str | None):
         typer.echo(f"{ICON_INFO} Statut actuel du dépôt :")
         _run_command(["git", "status"])
         
+        # Get current branch name
+        stdout, _ = _run_command(["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True)
+        current_branch = stdout.strip()
+
+        if current_branch in ["main", "master"]:
+            typer.echo(f"{ICON_WARN} Vous êtes sur la branche '{current_branch}'. Il est recommandé de travailler sur une branche de fonctionnalité.")
+            if not typer.confirm("Voulez-vous vraiment commiter directement sur cette branche ?"):
+                typer.echo(f"{ICON_INFO} Opération annulée. Veuillez créer une nouvelle branche pour vos modifications.")
+                return
+
         if typer.confirm("Voulez-vous indexer tous les changements et créer un commit ?"):
             _run_command(["git", "add", "."])
             typer.echo(f"{ICON_SUCCESS} Tous les changements ont été indexés.")

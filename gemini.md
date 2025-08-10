@@ -268,6 +268,19 @@ Si l'objectif de la version 2.0.0 est de fournir une **interface Python fonction
 ### `python_scripts/utils/logger.py`
 - **Mise à jour du décorateur `log_workflow` :** Le décorateur lit maintenant `agent_id` et `log_level` directement depuis les variables d'environnement.
 
+### Diagnostic des problèmes de passage d'arguments au CLI Python
+
+- **Problème initial :** Le CLI Python (`python_scripts/main.py`) rencontrait des problèmes de passage d'arguments via `run_shell_command`, se manifestant par des échecs silencieux ou une mauvaise interprétation des arguments, ce qui a conduit à l'utilisation de variables d'environnement comme solution de contournement.
+- **Hypothèses :** Des conflits avec `typer`, l'isolation de l'environnement `run_shell_command`, ou des spécificités de Python/Debian WSL étaient envisagés.
+- **Méthodologie de diagnostic :**
+  - Création d'un script Python minimal (`python_scripts/test_args.py`) utilisant `typer` pour afficher `sys.argv` et les arguments parsés.
+  - Exécution de tests avec divers scénarios : arguments simples, arguments avec espaces (guillemets simples et doubles), arguments avec caractères spéciaux, et capture de tous les arguments en liste.
+- **Résultats des tests :**
+  - Tous les scénarios de passage d'arguments ont été correctement interprétés par `typer` et `sys.argv` correspondait aux attentes.
+  - Cela inclut les arguments simples, les arguments avec espaces (guillemets simples et doubles), les caractères spéciaux, et la capture de listes d'arguments.
+- **Conclusion :** Les problèmes de passage d'arguments et les échecs silencieux précédents n'étaient **pas** directement liés au mécanisme de parsing d'arguments de `typer` ou à l'exécution shell de base. Le problème était très probablement lié à l'**environnement** dans lequel le script Python s'exécutait, en particulier lors de l'interaction avec des commandes externes comme `git` qui dépendent de variables d'environnement spécifiques (comme `GIT_SSH_COMMAND`) ou de l'agent SSH.
+- **Recommandation :** L'utilisation de variables d'environnement pour les options de configuration globales (`GIT_CLI_AGENT_ID`, `GIT_CLI_LOG_LEVEL`) est une solution efficace et fiable pour les agents IA, car elle contourne les problèmes potentiels de quoting shell. Pour les arguments spécifiques aux commandes, le parsing standard de `typer` fonctionne correctement.
+
 ### Gestion des logs : Implémentation et Validation
 
 - **`python_scripts/log_manager.py` : Validation des commandes de gestion des logs**

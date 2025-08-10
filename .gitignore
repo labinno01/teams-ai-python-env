@@ -1,3 +1,4 @@
 stdout.txt
 __pycache__/
 python_scripts/.venv/
+logs/

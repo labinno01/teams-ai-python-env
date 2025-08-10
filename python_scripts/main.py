@@ -108,29 +108,47 @@ def menu():
     display_chat()
     typer.echo(styled_title("Welcome to the Git Workflow Menu!"))
     typer.echo(f"Version: {get_version()}")
-    typer.echo("Please select an option:")
-    typer.echo("1. Commit & Push")
-    typer.echo("2. Create Release")
-    typer.echo("3. Sync with Remote")
-    typer.echo("4. Setup SSH")
-    typer.echo("5. Exit")
+    def _display_menu_options():
+        typer.echo("Please select an option:")
+        typer.echo("1. Commit & Push")
+        typer.echo("2. Create Release")
+        typer.echo("3. Sync with Remote")
+        typer.echo("4. Setup SSH")
+        typer.echo("5. Exit")
 
     while True:
+        os.system('cls' if os.name == 'nt' else 'clear') # Clear screen
+        display_chat()
+        typer.echo(styled_title("Welcome to the Git Workflow Menu!"))
+        typer.echo(f"Version: {get_version()}")
+        _display_menu_options()
+
         choice = typer.prompt("Enter your choice")
-        if choice == "1":
-            git_commands.commit_and_push_workflow(commit_message=None)
-            
-        elif choice == "2":
-            git_commands.release_workflow()
-        elif choice == "3":
-            git_commands.sync_workflow()
-        elif choice == "4":
-            setup_ssh()
-        elif choice == "5":
-            typer.echo(f"{ICON_INFO} Exiting Git Workflow Menu. Goodbye!")
-            break
-        else:
-            typer.echo(f"{ICON_ERROR} Invalid choice. Please try again.")
+        try:
+            if choice == "1":
+                git_commands.commit_and_push_workflow(commit_message=None)
+                typer.prompt("Press Enter to continue...") # Pause after action
+            elif choice == "2":
+                git_commands.release_workflow()
+                typer.prompt("Press Enter to continue...")
+            elif choice == "3":
+                git_commands.sync_workflow()
+                typer.prompt("Press Enter to continue...")
+            elif choice == "4":
+                setup_ssh()
+                typer.prompt("Press Enter to continue...")
+            elif choice == "5":
+                typer.echo(f"{ICON_INFO} Exiting Git Workflow Menu. Goodbye!")
+                break
+            else:
+                typer.echo(f"{ICON_ERROR} Invalid choice. Please try again.")
+                typer.prompt("Press Enter to continue...")
+        except typer.Exit as e:
+            if e.code == 0: # Successful exit, return to menu
+                typer.echo(f"{ICON_INFO} Operation completed. Returning to menu.")
+                typer.prompt("Press Enter to continue...")
+            else: # Error exit, propagate
+                raise # Re-raise the exception to exit the application
 
 if __name__ == "__main__":
     app()
