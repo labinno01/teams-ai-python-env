@@ -123,3 +123,112 @@ Ce fichier récapitule les modifications apportées au projet `teams-ai-python-e
 - **`release-version.sh`:**
   - **Tests en cours :** Des problèmes ont été rencontrés lors des tests initiaux (dépôt sans commit, identité Git non reconnue dans le contexte du script, échec de la création de tag et de la poussée).
   - **Prochaines étapes :** Nécessite une investigation et des corrections pour assurer un fonctionnement fiable.
+
+## 2025-08-10
+
+### Git Scripts (release-version.sh, sync-remote.sh, setup-git-ssh.sh, _common.sh, install.sh)
+
+- **`release-version.sh`:**
+  - **Fixes:**
+    - Added `check_git_config` call to ensure Git identity is set.
+    - Improved handling for repositories with no commits when generating tag messages.
+    - Corrected exit status handling for invalid version choices.
+  - **Validation:** Thoroughly tested in various scenarios (no commits, no remote, with remote). Confirmed core logic for versioning, committing, and tagging works. Push functionality depends on correct SSH configuration.
+
+- **`sync-remote.sh`:**
+  - **Validation:** Confirmed correct behavior for scenarios including no remote, local ahead, local behind, and divergent branches.
+
+- **`setup-git-ssh.sh` (New Script - Replaces `setup-ssh.sh`):
+  - **Purpose:** Comprehensive script to assist with Git SSH authentication for GitHub. Guides user through SSH agent management, key addition, public key verification, and host key acceptance.
+  - **Location:** `scripts/setup-git-ssh.sh`
+  - **Changes:**
+    - Replaced `scripts/setup-ssh.sh`.
+    - Updated references in `install.sh` and within `setup-git-ssh.sh` itself.
+    - Implemented interactive prompts for manual steps (e.g., running `eval "$(ssh-agent -s)"`).
+    - Improved SSH agent detection logic.
+  - **Validation:** Tested for invalid key paths and public key confirmation. SSH agent startup and key addition were manually verified due to environment limitations.
+
+- **`_common.sh`:**
+  - **Refinement:** Removed debug message `DEBUG: VERSION in _common.sh`.
+
+- **`install.sh`:**
+  - **Update:** Modified to include `setup-git-ssh.sh` in the list of scripts to install.
+
+### Documentation (MkDocs)
+
+- **`mkdocs.yml` (New File):**
+  - **Purpose:** Added a basic MkDocs configuration file at the project root.
+  - **Configuration:** Configured `site_name`, `nav` structure, and `docs_dir` to correctly link all documentation files.
+- **`docs/index.md` (New File):
+  - **Purpose:** Created a main entry point for the documentation.
+- **`docs/scripts/utils/setup-git-ssh.md` (New File):
+  - **Purpose:** Added detailed documentation for the new `setup-git-ssh.sh` script.
+- **Validation:** MkDocs build now runs without warnings, confirming correct documentation generation.
+
+### Project Versioning
+
+- **Version 1.0.0 Release:**
+  - `version.json` updated to `1.0.0`.
+  - Commit `chore(release): Bump version to 1.0.0` created.
+  - Tag `v1.0.0` created.
+  - **Note:** Manual `git push origin master` and `git push origin v1.0.0` required due to SSH authentication environment.
+
+### Future Development (Version 2.0)
+
+- **Goal:** Transition to a Python-based, menu-driven workflow management system to improve user experience, especially around Git/GitHub authentication.
+- **Key Features:**
+  - Centralized menu for Git workflows.
+  - Potential integration with GitHub API/CLI for advanced features (PR creation, issue management, etc.).
+- **Proposed Approach:** Phased development.
+  - **Phase 1:** Core Menu System & Existing Workflow Porting (from Bash to Python).
+  - **Phase 2:** GitHub API/CLI Integration.
+- **Technology Choice:** `Typer` selected as the Python CLI framework for its modern API and type-hinting capabilities.
+
+## Backlog - 2025-08-10 (Python 2.0 Development)
+
+### Current Status: Phase 1 - Core Menu System & Existing Workflow Porting
+
+- **Objective:** Develop a Python-based, menu-driven Git workflow management system.
+- **Framework:** `Typer` has been chosen as the Python CLI framework.
+
+#### Completed Tasks:
+
+- **Project Setup:**
+  - Created `python_scripts/` directory.
+  - Virtual environment `teams-ai-python-env-venv` created at `/mnt/d/projets-python/teams-ai-python-env/teams-ai-python-env-venv`.
+  - `typer` installed in the virtual environment.
+- **Main Menu Structure:**
+  - Created `python_scripts/main.py` with a basic `Typer` application.
+  - Placeholder functions for `commit_push`, `release`, `sync`, and `setup_ssh` commands.
+  - Interactive `menu` command implemented.
+- **SSH Setup Workflow Porting (Partial):**
+  - Created `python_scripts/ssh_setup.py` with Python implementations for:
+    - `_run_command` helper function.
+    - `check_and_start_ssh_agent` (guides user to manually run `eval "$(ssh-agent -s)"`).
+    - `add_ssh_key_to_agent` (handles adding key and checking if already added).
+    - `verify_github_public_key` (guides manual verification on GitHub).
+    - `test_ssh_connection_to_github` (tests SSH connection to `git@github.com`).
+    - `run_ssh_setup_workflow` (orchestrates the SSH setup steps).
+  - Integrated `ssh_setup.py` into `python_scripts/main.py`'s `setup_ssh` command.
+
+#### Next Steps & Objectives:
+
+1.  **Test Python SSH Setup Workflow (Critical):**
+    - **Objective:** Thoroughly test `python_scripts/ssh_setup.py` through `python_scripts/main.py`'s `setup_ssh` command.
+    - **Action:** User to execute `python -m python_scripts.main menu` and select option `4` (Setup SSH). Follow all interactive prompts, including manually running `eval "$(ssh-agent -s)"` when instructed. Provide full `stdout` output.
+    - **Expected Outcome:** All steps of the SSH setup workflow (agent check, key add, public key verification, connection test) should complete successfully.
+
+2.  **Port Remaining Bash Scripts to Python (Phase 1 Continuation):**
+    - **Objective:** Translate `commit-push.sh`, `release-version.sh`, and `sync-remote.sh` to Python modules.
+    - **Action:** Create new Python files (e.g., `python_scripts/git_commands.py`) and implement their logic using `subprocess` for Git commands.
+    - **Expected Outcome:** All core Git workflows are accessible and functional via the Python menu.
+
+3.  **Refine Python Menu & CLI:**
+    - **Objective:** Enhance the user experience of the Python menu.
+    - **Action:** Implement clearer prompts, better error messages, and potentially more advanced `Typer` features.
+    - **Expected Outcome:** A robust and intuitive CLI for Git workflows.
+
+4.  **Phase 2: GitHub API/CLI Integration (Future):**
+    - **Objective:** Integrate advanced GitHub functionalities.
+    - **Action:** Research and implement `PyGithub` or `gh` CLI interactions for features like PR creation, issue management, etc.
+    - **Expected Outcome:** Expanded capabilities beyond basic Git operations.
