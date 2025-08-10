@@ -247,5 +247,78 @@ def release_workflow():
     typer.echo(f"""
 {ICON_SUCCESS} Release v{next_version} créée et poussée avec succès !""")
 
+def sync_workflow():
+    """
+    Handles the synchronization with the remote repository.
+    """
+    typer.echo(f"{ICON_GIT} Assistant de synchronisation avec le distant")
+    typer.echo("-----------------------------------------------------")
+
+    check_git_repo()
+
+    # Get remote information
+    # Use 'origin' as the default remote name for synchronization
+    remote_name = "origin"
+
+    # Check if 'origin' remote exists
+    check_remote_result = _run_command(["git", "remote", "get-url", remote_name], capture_output=True, check_error=False)
+    if check_remote_result.returncode != 0:
+        typer.echo(f"{ICON_WARN} Le remote '{remote_name}' n'est pas configuré. Impossible de synchroniser.")
+        sys.exit(0)
+
+    current_branch_result = _run_command(["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True)
+    current_branch = current_branch_result.stdout.strip()
+
+    typer.echo(f"{ICON_INFO} Récupération des dernières informations du dépôt distant ({remote_name})...")
+    try:
+        _run_command(["git", "fetch", remote_name])
+    except subprocess.CalledProcessError:
+        typer.echo(f"{ICON_ERROR} La récupération depuis le distant a échoué. Vérifiez votre connexion et les droits d'accès au dépôt.")
+        sys.exit(1)
+
+    # Check status against remote branch
+    local_hash_result = _run_command(["git", "rev-parse", "HEAD"], capture_output=True)
+    local_hash = local_hash_result.stdout.strip()
+
+    remote_hash_result = _run_command(["git", "rev-parse", f"{remote_name}/{current_branch}"], capture_output=True, check_error=False)
+    remote_hash = remote_hash_result.stdout.strip()
+
+    if not remote_hash:
+        typer.echo(f"{ICON_WARN} La branche distante '{remote_name}/{current_branch}' n'existe pas. Impossible de comparer.")
+        sys.exit(0)
+
+    if local_hash == remote_hash:
+        typer.echo(f"{ICON_SUCCESS} Votre branche locale '{current_branch}' est déjà à jour avec '{remote_name}/{current_branch}'.")
+        sys.exit(0)
+
+    # Check if local is ahead (commits to push)
+    local_ahead_result = _run_command(["git", "log", f"..{remote_name}/{current_branch}", "--oneline"], capture_output=True)
+    if local_ahead_result.stdout.strip():
+        typer.echo(f"{ICON_INFO} Votre branche locale est en avance sur la branche distante. Vous devriez pousser vos changements.")
+
+    # Check if local is behind (commits to pull)
+    remote_behind_result = _run_command(["git", "log", f"{remote_name}/{current_branch}..", "--oneline"], capture_output=True)
+    if remote_behind_result.stdout.strip():
+        typer.echo(f"{ICON_WARN} La branche distante contient des changements qui ne sont pas dans votre branche locale.")
+        typer.echo("Changements distants :")
+        _run_command(["git", "log", "--oneline", "--graph", "--decorate", f"{remote_name}/{current_branch}..HEAD"])
+
+        confirm_pull = typer.confirm("Voulez-vous intégrer (pull) ces changements maintenant ?")
+        if confirm_pull:
+            typer.echo(f"{ICON_INFO} Intégration des changements depuis {remote_name}/{current_branch}...")
+            try:
+                _run_command(["git", "pull", "--ff-only"])
+                typer.echo(f"{ICON_SUCCESS} Votre branche a été mise à jour avec succès.")
+            except subprocess.CalledProcessError:
+                typer.echo(f"{ICON_ERROR} Le pull en fast-forward a échoué. Votre branche locale a probablement des commits divergents.")
+                typer.echo(f"{ICON_INFO} Un rebase ou un merge manuel est nécessaire pour résoudre les conflits.")
+                sys.exit(1)
+        else:
+            typer.echo(f"{ICON_INFO} Opération annulée.")
+    else:
+        typer.echo(f"{ICON_INFO} Votre branche locale et la branche distante ont divergé. Un rebase ou un merge est nécessaire.")
+
+    typer.echo(f"{ICON_SUCCESS} Opération de synchronisation terminée.")
+
 if __name__ == "__main__":
     typer.run(commit_and_push_workflow)

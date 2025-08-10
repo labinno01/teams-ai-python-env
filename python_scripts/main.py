@@ -49,8 +49,7 @@ def sync():
     """
     Synchronizes the local repository with the remote.
     """
-    typer.echo("Running Sync workflow...")
-    # Placeholder for future Python implementation of sync-remote.sh
+    git_commands.sync_workflow()
 
 @app.command()
 def setup_ssh():

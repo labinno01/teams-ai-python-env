@@ -44,7 +44,7 @@ def check_and_start_ssh_agent():
     if not agent_running:
         typer.echo(f"{ICON_WARN} L'agent SSH ne semble pas être en cours d'exécution ou ses variables d'environnement ne sont pas chargées.")
         typer.echo(f"{ICON_INFO} Veuillez exécuter la commande suivante dans votre terminal pour démarrer l'agent et charger ses variables :")
-        typer.echo(f"   eval \"$(ssh-agent -s)\"")
+        typer.echo("   eval \"$(ssh-agent -s)\"")
         
         agent_started_confirm = typer.prompt("Avez-vous exécuté la commande ci-dessus et l'agent SSH a-t-il démarré avec succès ? (oui/non)")
         
@@ -56,9 +56,9 @@ def check_and_start_ssh_agent():
         else:
             typer.echo(f"{ICON_ERROR} L'agent SSH n'a pas été démarré ou confirmé. Impossible de continuer sans un agent SSH fonctionnel.")
             typer.echo(f"{ICON_INFO} Pistes de résolution :")
-            typer.echo(f"   - Assurez-vous que 'ssh-agent' est installé sur votre système.")
-            typer.echo(f"   - Redémarrez votre terminal et réessayez.")
-            typer.echo(f"   - Vérifiez les messages d'erreur lors de l'exécution de 'eval \"$(ssh-agent -s)\"' .")
+            typer.echo("   - Assurez-vous que 'ssh-agent' est installé sur votre système.")
+            typer.echo("   - Redémarrez votre terminal et réessayez.")
+            typer.echo("   - Vérifiez les messages d'erreur lors de l'exécution de 'eval \"$(ssh-agent -s)\"' .")
             sys.exit(1)
     else:
         typer.echo(f"{ICON_SUCCESS} L'agent SSH est déjà en cours d'exécution et ses variables sont chargées.")
@@ -114,10 +114,10 @@ def verify_github_public_key():
     
     typer.echo(f"   Votre clé publique est généralement située à '{public_key_path}'.")
     typer.echo("\n   Pour vérifier :")
-    typer.echo(f"   1. Copiez le contenu de votre clé publique :")
+    typer.echo("   1. Copiez le contenu de votre clé publique :")
     typer.echo(f"      cat '{public_key_path}'")
-    typer.echo(f"   2. Allez sur GitHub.com -> Settings -> SSH and GPG keys.")
-    typer.echo(f"   3. Assurez-vous que la clé copiée est présente dans la liste.")
+    typer.echo("   2. Allez sur GitHub.com -> Settings -> SSH and GPG keys.")
+    typer.echo("   3. Assurez-vous que la clé copiée est présente dans la liste.")
     
     confirm_github_key = typer.prompt("Avez-vous vérifié que votre clé publique est sur GitHub ? (oui/non)")
     if confirm_github_key.lower() != "oui":
