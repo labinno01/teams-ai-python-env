@@ -2,6 +2,7 @@ import typer
 import subprocess
 import os
 import sys
+import json
 
 # Define icons (similar to _common.sh)
 ICON_SUCCESS = "✅"
