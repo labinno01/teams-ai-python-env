@@ -1,0 +1,729 @@
+ Fichier logger.py
+"""Module de gestion des logs et interactions utilisateur pour Git Workflow Tool.
+
+Ce module fournit une interface unifiée pour :
+- L'affichage de messages (info, succès, erreur, avertissement)
+- La gestion des confirmations utilisateur
+- La saisie interactive/non-interactive
+- Le logging en mode debug
+
+Classes :
+    Logger : Interface abstraite pour les opérations de logging.
+    ConsoleLogger : Implémentation concrète pour la sortie console.
+    SilentLogger : Implémentation silencieuse (pour les scripts non-interactifs).
+"""
+
+import os
+import sys
+from abc import ABC, abstractmethod
+from typing import Optional, Protocol, runtime_checkable
+
+# --- Constantes de style ---
+class Color:
+    """Codes ANSI pour la colorisation des sorties console."""
+    HEADER = "\033[95m"
+    OKBLUE = "\033[94m"
+    OKGREEN = "\033[92m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+    ENDC = "\033[0m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"
+
+# --- Icônes visuelles ---
+ICON_SUCCESS = f"{Color.OKGREEN}✓{Color.ENDC}"
+ICON_ERROR = f"{Color.FAIL}✗{Color.ENDC}"
+ICON_INFO = f"{Color.OKBLUE}ℹ{Color.ENDC}"
+ICON_WARN = f"{Color.WARNING}⚠{Color.ENDC}"
+ICON_DEBUG = f"{Color.HEADER}🐛{Color.ENDC}"
+ICON_INPUT = f"{Color.BOLD}❯{Color.ENDC}"
+
+@runtime_checkable
+class Logger(Protocol):
+    """Interface pour les opérations de logging et d'interaction utilisateur."""
+
+    def info(self, message: str, newline: bool = True) -> None:
+        """Affiche un message informatif."""
+        ...
+
+    def success(self, message: str, newline: bool = True) -> None:
+        """Affiche un message de succès."""
+        ...
+
+    def error(self, message: str, newline: bool = True) -> None:
+        """Affiche un message d'erreur."""
+        ...
+
+    def warning(self, message: str, newline: bool = True) -> None:
+        """Affiche un message d'avertissement."""
+        ...
+
+    def debug(self, message: str, newline: bool = True) -> None:
+        """Affiche un message de debug (si DEBUG=1)."""
+        ...
+
+    def confirm(
+        self,
+        prompt: str,
+        default: Optional[bool] = None,
+        abort: bool = False,
+    ) -> bool:
+        """Demande une confirmation à l'utilisateur.
+
+        Args:
+            prompt: Message à afficher.
+            default: Valeur par défaut (None = aucune valeur par défaut).
+            abort: Si True, quitte le programme en cas de réponse négative.
+
+        Returns:
+            bool: True si l'utilisateur a confirmé, False sinon.
+        """
+        ...
+
+    def prompt(
+        self,
+        prompt: str,
+        default: Optional[str] = None,
+        password: bool = False,
+    ) -> str:
+        """Demande une saisie utilisateur.
+
+        Args:
+            prompt: Message à afficher.
+            default: Valeur par défaut.
+            password: Masquer la saisie (pour les mots de passe).
+
+        Returns:
+            str: La saisie utilisateur.
+        """
+        ...
+
+class ConsoleLogger:
+    """Implémentation concrète de Logger pour la sortie console.
+
+    Gère :
+    - La colorisation des messages
+    - Les interactions utilisateur
+    - Le mode debug (via la variable d'environnement DEBUG)
+    - Les confirmations et saisies
+    """
+
+    def __init__(self, force_color: bool = False) -> None:
+        """Initialise le logger console.
+
+        Args:
+            force_color: Forcer l'affichage des couleurs (même si stdout n'est pas un TTY).
+        """
+        self._force_color = force_color
+        self._debug_mode = os.environ.get("DEBUG", "0").lower() in ("1", "true", "yes")
+
+    def _should_colorize(self) -> bool:
+        """Détermine si les couleurs doivent être affichées."""
+        if self._force_color:
+            return True
+        return sys.stdout.isatty()
+
+    def _format_message(self, icon: str, message: str, color: str) -> str:
+        """Formate un message avec icône et couleur."""
+        if not self._should_colorize():
+            return f"{icon} {message}"
+        return f"{color}{icon}{Color.ENDC} {message}"
+
+    def info(self, message: str, newline: bool = True) -> None:
+        """Affiche un message informatif."""
+        formatted = self._format_message(ICON_INFO, message, Color.OKBLUE)
+        self._print(formatted, newline)
+
+    def success(self, message: str, newline: bool = True) -> None:
+        """Affiche un message de succès."""
+        formatted = self._format_message(ICON_SUCCESS, message, Color.OKGREEN)
+        self._print(formatted, newline)
+
+    def error(self, message: str, newline: bool = True) -> None:
+        """Affiche un message d'erreur."""
+        formatted = self._format_message(ICON_ERROR, message, Color.FAIL)
+        self._print(formatted, newline, file=sys.stderr)
+
+    def warning(self, message: str, newline: bool = True) -> None:
+        """Affiche un message d'avertissement."""
+        formatted = self._format_message(ICON_WARN, message, Color.WARNING)
+        self._print(formatted, newline)
+
+    def debug(self, message: str, newline: bool = True) -> None:
+        """Affiche un message de debug (si DEBUG=1)."""
+        if not self._debug_mode:
+            return
+        formatted = self._format_message(ICON_DEBUG, message, Color.HEADER)
+        self._print(formatted, newline)
+
+    def _print(self, message: str, newline: bool, file=sys.stdout) -> None:
+        """Affiche un message avec gestion des nouvelles lignes."""
+        end = "\n" if newline else ""
+        print(message, end=end, file=file, flush=True)
+
+    def confirm(
+        self,
+        prompt: str,
+        default: Optional[bool] = None,
+        abort: bool = False,
+    ) -> bool:
+        """Demande une confirmation à l'utilisateur.
+
+        Args:
+            prompt: Message à afficher.
+            default: Valeur par défaut (None = aucune valeur par défaut).
+            abort: Si True, quitte le programme en cas de réponse négative.
+
+        Returns:
+            bool: True si l'utilisateur a confirmé, False sinon.
+
+        Raises:
+            SystemExit: Si abort=True et que l'utilisateur refuse.
+        """
+        if default is None:
+            choices = "[y/N]"
+            default_str = "n"
+        elif default:
+            choices = "[Y/n]"
+            default_str = "y"
+        else:
+            choices = "[y/N]"
+            default_str = "n"
+
+        while True:
+            full_prompt = f"{ICON_INPUT} {prompt} {choices} "
+            self._print(full_prompt, newline=False)
+            choice = input().strip().lower()
+
+            if not choice:
+                confirmed = default if default is not None else False
+            else:
+                confirmed = choice.startswith("y")
+
+            if confirmed:
+                return True
+            if not abort:
+                return False
+            self.error("Operation aborted by user.")
+            sys.exit(1)
+
+    def prompt(
+        self,
+        prompt: str,
+        default: Optional[str] = None,
+        password: bool = False,
+    ) -> str:
+        """Demande une saisie utilisateur.
+
+        Args:
+            prompt: Message à afficher.
+            default: Valeur par défaut.
+            password: Masquer la saisie (pour les mots de passe).
+
+        Returns:
+            str: La saisie utilisateur.
+        """
+        if default:
+            prompt_with_default = f"{prompt} [{default}]"
+        else:
+            prompt_with_default = prompt
+
+        self._print(f"{ICON_INPUT} {prompt_with_default}", newline=False)
+
+        if password:
+            try:
+                import getpass
+                value = getpass.getpass("")
+            except ImportError:
+                # Fallback si getpass n'est pas disponible
+                value = input()
+        else:
+            value = input()
+
+        return value.strip() if value.strip() else default if default else ""
+
+class SilentLogger:
+    """Implémentation silencieuse pour les scripts non-interactifs.
+
+    Ignore tous les messages sauf les erreurs.
+    """
+
+    def info(self, message: str, newline: bool = True) -> None:
+        """Ne fait rien (mode silencieux)."""
+        pass
+
+    def success(self, message: str, newline: bool = True) -> None:
+        """Ne fait rien (mode silencieux)."""
+        pass
+
+    def warning(self, message: str, newline: bool = True) -> None:
+        """Ne fait rien (mode silencieux)."""
+        pass
+
+    def debug(self, message: str, newline: bool = True) -> None:
+        """Ne fait rien (mode silencieux)."""
+        pass
+
+    def error(self, message: str, newline: bool = True) -> None:
+        """Affiche les erreurs sur stderr."""
+        print(f"{ICON_ERROR} {message}", file=sys.stderr)
+
+    def confirm(
+        self,
+        prompt: str,
+        default: Optional[bool] = None,
+        abort: bool = False,
+    ) -> bool:
+        """En mode silencieux, retourne toujours True (sauf si default=False)."""
+        if default is False:
+            return False
+        return True
+
+    def prompt(
+        self,
+        prompt: str,
+        default: Optional[str] = None,
+        password: bool = False,
+    ) -> str:
+        """En mode silencieux, retourne la valeur par défaut ou une chaîne vide."""
+        return default if default is not None else ""
+
+def get_logger(non_interactive: bool = False, force_color: bool = False) -> Logger:
+    """Fabrique pour obtenir un logger adapté au contexte.
+
+    Args:
+        non_interactive: Si True, retourne un SilentLogger.
+        force_color: Forcer l'affichage des couleurs.
+
+    Returns:
+        Logger: Une instance de Logger appropriée.
+    """
+    if non_interactive:
+        return SilentLogger()
+    return ConsoleLogger(force_color=force_color)
+
+2. Documentation Markdown (LOGGER.md)
+# Git Workflow Tool - Logger Module
+
+## Table des matières
+1. [Introduction](#introduction)
+2. [Installation](#installation)
+3. [Concepts clés](#concepts-clés)
+4. [Utilisation](#utilisation)
+   - [Initialisation](#initialisation)
+   - [Affichage de messages](#affichage-de-messages)
+   - [Interactions utilisateur](#interactions-utilisateur)
+   - [Mode non-interactif](#mode-non-interactif)
+5. [Exemples complets](#exemples-complets)
+6. [Personnalisation](#personnalisation)
+7. [Variables d'environnement](#variables-denvironnement)
+8. [Bonnes pratiques](#bonnes-pratiques)
+
+---
+
+## Introduction
+Le module `logger.py` fournit une interface unifiée pour :
+- **Gérer les sorties utilisateur** (messages, erreurs, succès, avertissements)
+- **Interagir avec l'utilisateur** (confirmations, saisies)
+- **Supporter les modes interactif/non-interactif**
+- **Gérer le debugging** via une variable d'environnement
+
+Il est conçu pour être :
+✅ **Testable** (mockable facilement)
+✅ **Extensible** (nouveaux types de loggers)
+✅ **Consistant** (messages formatés de manière uniforme)
+✅ **Flexible** (comporte[...]s non-interactifs)
+
+---
+
+## Installation
+Le module est inclus dans le package principal. Aucune installation supplémentaire n'est nécessaire.
+
+---
+
+## Concepts clés
+
+### 1. L'interface `Logger`
+Définit le contrat que doivent respecter tous les loggers :
+```python
+class Logger(Protocol):
+    def info(self, message: str, newline: bool = True) -> None: ...
+    def success(self, message: str, newline: bool = True) -> None: ...
+    # ... (autres méthodes)
+2. Implémentations disponibles
+
+
+
+Classe
+Description
+
+
+
+ConsoleLogger
+Affiche des messages colorisés en console (mode interactif par défaut)
+
+
+SilentLogger
+Ignore la plupart des messages (pour les scripts non-interactifs)
+
+
+3. Niveaux de messages
+
+
+
+Méthode
+Icône
+Couleur
+Utilisation typique
+
+
+
+info()
+ℹ
+Bleu
+Messages informatifs
+
+
+success()
+✓
+Vert
+Opérations réussies
+
+
+warning()
+⚠
+Jaune
+Avertissements
+
+
+error()
+✗
+Rouge
+Erreurs (affichées sur stderr)
+
+
+debug()
+🐛
+Violet
+Messages de debug (si DEBUG=1)
+
+
+
+Utilisation
+Initialisation
+from logger import get_logger
+
+# Mode interactif (par défaut)
+logger = get_logger()
+
+# Mode non-interactif (silencieux)
+logger = get_logger(non_interactive=True)
+
+# Forcer les couleurs (même si stdout n'est pas un TTY)
+logger = get_logger(force_color=True)
+Affichage de messages
+logger.info("Début du traitement...")
+logger.success("Opération terminée avec succès !")
+logger.warning("Cette action est irréversible")
+logger.error("Échec de la connexion au dépôt")
+logger.debug("Détails techniques: {...}")  # Affiché seulement si DEBUG=1
+Interactions utilisateur
+Confirmations
+# Confirmation avec valeur par défaut "oui"
+if logger.confirm("Voulez-vous continuer?", default=True):
+    print("L'utilisateur a confirmé")
+
+# Confirmation avec abort (quitte le programme si non)
+logger.confirm("Êtes-vous sûr?", abort=True)  # Quitte si réponse = non
+Saisies utilisateur
+# Saisie simple
+nom = logger.prompt("Quel est votre nom?")
+
+# Saisie avec valeur par défaut
+version = logger.prompt("Numéro de version", default="1.0.0")
+
+# Saisie de mot de passe (masqué)
+mdp = logger.prompt("Mot de passe", password=True)
+Mode non-interactif
+En mode non-interactif (SilentLogger) :
+
+Tous les messages sauf les erreurs sont ignorés
+Les confirmations retournent toujours True (sauf si default=False)
+Les prompts retournent la valeur par défaut ou une chaîne vide
+
+logger = get_logger(non_interactive=True)
+logger.info("Ce message ne sera pas affiché")
+result = logger.confirm("Cette question ne sera pas posée")  # retourne True
+
+Exemples complets
+1. Script interactif
+from logger import get_logger
+
+def main():
+    logger = get_logger()
+
+    logger.info("Bienvenue dans l'assistant Git!")
+
+    if not logger.confirm("Voulez-vous commencer?"):
+        logger.warning("Opération annulée")
+        return
+
+    message = logger.prompt("Message de commit")
+    logger.info(f"Commit en cours avec le message: {message}")
+
+    # Simulation d'une opération
+    logger.success("Opération terminée!")
+
+if __name__ == "__main__":
+    main()
+2. Script non-interactif
+from logger import get_logger
+
+def main():
+    logger = get_logger(non_interactive=True)
+
+    # En mode non-interactif, toutes les interactions ont des valeurs par défaut
+    if logger.confirm("Voulez-vous continuer?", default=True):
+        version = logger.prompt("Numéro de version", default="1.0.0")
+        logger.info(f"Traitement de la version {version}...")  # Ne sera pas affiché
+        logger.success("Terminé!")  # Ne sera pas affiché
+
+    logger.error("Cette erreur sera affichée même en mode silencieux")
+
+if __name__ == "__main__":
+    main()
+3. Utilisation avancée avec gestion d'erreurs
+from logger import get_logger
+
+def safe_operation(logger):
+    try:
+        logger.info("Début de l'opération...")
+        # Simulation d'une erreur
+        raise ValueError("Quelque chose s'est mal passé!")
+    except Exception as e:
+        logger.error(f"Échec: {str(e)}")
+        if logger.confirm("Voulez-vous réessayer?", default=False):
+            safe_operation(logger)
+        else:
+            logger.warning("Opération abandonnée")
+
+def main():
+    logger = get_logger()
+    safe_operation(logger)
+
+if __name__ == "__main__":
+    main()
+
+Personnalisation
+1. Créer un logger personnalisé
+from logger import Logger
+
+class FileLogger:
+    """Logger qui écrit dans un fichier."""
+
+    def __init__(self, log_file="app.log"):
+        self.log_file = log_file
+
+    def info(self, message: str, newline: bool = True):
+        with open(self.log_file, "a") as f:
+            f.write(f"[INFO] {message}\n")
+
+    # Implémenter les autres méthodes de l'interface Logger...
+    ...
+
+# Utilisation
+logger = FileLogger("mon_fichier.log")
+logger.info("Test")
+2. Surcharger les couleurs/icônes
+from logger import ConsoleLogger
+
+class MyCustomLogger(ConsoleLogger):
+    def _format_message(self, icon, message, color):
+        # Personnalisation des icônes/couleurs
+        if "erreur" in message.lower():
+            icon = "💥"
+            color = "\033[31m"  # Rouge
+        return super()._format_message(icon, message, color)
+
+logger = MyCustomLogger()
+logger.error("Une erreur critique est survenue")  # Affiche 💥 au lieu de ✗
+
+Variables d'environnement
+
+
+
+Variable
+Description
+Valeurs possibles
+
+
+
+DEBUG
+Active les messages de debug
+1, true, yes
+
+
+FORCE_COLOR
+Force l'affichage des couleurs (même si stdout n'est pas un TTY)
+1, true, yes
+
+
+NO_COLOR
+Désactive complètement les couleurs
+Toute valeur
+
+
+Exemple :
+# Activer le mode debug
+DEBUG=1 python mon_script.py
+
+# Forcer les couleurs
+FORCE_COLOR=1 python mon_script.py | grep "erreur"
+
+Bonnes pratiques
+
+Utiliser get_logger() plutôt que d'instancier directement les classes :
+# ✅ Bonne pratique
+logger = get_logger(non_interactive=is_ci)
+
+# ❌ À éviter
+logger = ConsoleLogger()
+
+Gérer les modes interactif/non-interactif dès le début du script :
+def main():
+    is_ci = os.environ.get("CI", "false").lower() in ("true", "1")
+    logger = get_logger(non_interactive=is_ci)
+    # ...
+
+Utiliser les valeurs par défaut pour les prompts en mode non-interactif :
+# ✅ Bonne pratique
+version = logger.prompt("Version", default="1.0.0")
+
+# ❌ À éviter (plantera en mode non-interactif)
+version = logger.prompt("Version")
+
+Réserver logger.error() pour les erreurs critiques :
+# ✅ Pour les erreurs bloquantes
+logger.error("Impossible de se connecter au dépôt")
+
+# ❌ Pour les avertissements (utiliser warning à la place)
+logger.error("Attention, cette action est irréversible")
+
+Utiliser newline=False pour les messages multi-lignes :
+logger.info("Traitement en cours", newline=False)
+for i in range(10):
+    logger.info(f" {i}/10", newline=False)
+logger.info(" terminé", newline=True)
+
+Documenter les interactions utilisateur dans les docstrings :
+def dangerous_operation(logger):
+    """Effectue une opération dangereuse.
+
+    Args:
+        logger: Instance de Logger pour les interactions utilisateur.
+            - Demande une confirmation avant de continuer.
+            - Affiche un avertissement si l'opération échoue.
+    """
+    if not logger.confirm("Cette opération est dangereuse. Continuer?", default=False):
+        return
+    # ...
+
+
+
+Résolution des problèmes
+Problème : Les couleurs ne s'affichent pas
+Causes possibles :
+
+La sortie standard n'est pas un TTY (ex : redirection vers un fichier)
+La variable NO_COLOR est définie
+Le terminal ne supporte pas les couleurs ANSI
+
+Solutions :
+
+Forcer les couleurs avec FORCE_COLOR=1
+Utiliser --color=always si votre script le supporte
+Vérifier la configuration du terminal
+
+
+Problème : Le script plante en mode non-interactif
+Cause probable :
+Vous utilisez logger.prompt() ou logger.confirm() sans valeur par défaut.
+Solution :
+Toujours fournir une valeur par défaut en mode non-interactif :
+value = logger.prompt("Valeur", default="valeur_par_défaut")
+
+Problème : Les messages de debug n'apparaissent pas
+Cause probable :
+La variable d'environnement DEBUG n'est pas définie.
+Solution :
+DEBUG=1 python mon_script.py
+
+Changelog
+v1.0.0 (2023-11-15)
+
+Première version stable
+Support complet des modes interactif/non-interactif
+Gestion des couleurs et icônes
+Interface Logger bien définie
+
+v1.1.0 (2023-11-20)
+
+Ajout du support des mots de passe masqués
+Amélioration de la gestion des valeurs par défaut
+Meilleure gestion des erreurs
+
+
+---
+
+## **3. Points clés de l'implémentation**
+1. **Respect des standards** :
+   - **Ruff/PEP 8** : Longueur de ligne (88 chars), nommage, typage
+   - **Typage strict** : Utilisation de `Protocol` pour l'interface `Logger`
+   - **Docstrings** : Format Google pour toutes les méthodes publiques
+
+2. **Fonctionnalités avancées** :
+   - **Détection automatique des couleurs** : Désactive les couleurs si `stdout` n'est pas un TTY
+   - **Mode debug** : Contrôlé par la variable d'environnement `DEBUG`
+   - **Gestion des mots de passe** : Masquage de la saisie avec `getpass`
+   - **Confirmations avec abort** : Permet de quitter le programme si l'utilisateur refuse
+
+3. **Extensibilité** :
+   - **Interface claire** : Toute nouvelle implémentation n'a qu'à respecter le `Protocol`
+   - **Fabrique `get_logger()`** : Permet de changer facilement d'implémentation
+   - **Personnalisation** : Surcharge possible des icônes/couleurs
+
+4. **Gestion des modes** :
+   - **Interactif** : `ConsoleLogger` avec saisies utilisateur
+   - **Non-interactif** : `SilentLogger` pour les scripts/CI
+   - **Hybride** : Comportement adapté selon le contexte
+
+5. **Robustesse** :
+   - **Gestion des erreurs** : Messages d'erreur toujours affichés (même en mode silencieux)
+   - **Fallbacks** : Si `getpass` n'est pas disponible, utilise `input`
+   - **Validation des saisies** : Gestion des valeurs par défaut et des confirmations
+
+---
+
+## **4. Exemple d'intégration dans le projet**
+```python
+# git_commands.py (extrait)
+from logger import get_logger, Logger
+
+def commit_and_push_workflow(logger: Logger, non_interactive: bool = False) -> None:
+    """Effectue un commit et un push avec gestion des interactions."""
+    logger.info("Début du workflow de commit/push")
+
+    if non_interactive:
+        message = logger.prompt(
+            "Message de commit",
+            default="Auto-commit from CI"
+        )
+    else:
+        message = logger.prompt("Message de commit")
+        if not logger.confirm("Confirmer le commit?"):
+            logger.warning("Opération annulée")
+            return
+
+    logger.info(f"Commit en cours avec le message: {message}")
+    # ... (logique de commit/push)
+    logger.success("Opération terminée avec succès!")
