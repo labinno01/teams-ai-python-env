@@ -42,7 +42,7 @@ def commit_and_push_workflow(logger: Logger, args: argparse.Namespace):
         stdout, _ = git_utils.run_command(["git", "rev-parse", "--abbrev-ref", "HEAD"], logger=logger, capture_output=True)
         current_branch = stdout.strip()
 
-        if current_branch in ["main", "master"]:
+        if not isinstance(logger, SilentLogger) and current_branch in ["main", "master"]:
             if not logger.confirm(f"Vous êtes sur la branche '{current_branch}'. Voulez-vous vraiment commiter directement sur cette branche ?", default=False, abort=True):
                 return
 

@@ -244,8 +244,11 @@ class ConsoleLogger:
 class SilentLogger:
     """Implémentation silencieuse pour les scripts non-interactifs.
 
-    Ignore tous les messages sauf les erreurs.
+    Ignore tous les messages sauf les erreurs et les messages de debug.
     """
+
+    def __init__(self) -> None:
+        self._debug_mode = os.environ.get("DEBUG", "0").lower() in ("1", "true", "yes")
 
     def info(self, message: str, newline: bool = True) -> None:
         """Ne fait rien (mode silencieux)."""
@@ -260,8 +263,10 @@ class SilentLogger:
         pass
 
     def debug(self, message: str, newline: bool = True) -> None:
-        """Ne fait rien (mode silencieux)."""
-        pass
+        """Affiche un message de debug (si DEBUG=1)."""
+        if not self._debug_mode:
+            return
+        print(f"🐛 [DEBUG] {message}", file=sys.stderr)
 
     def error(self, message: str, newline: bool = True) -> None:
         """Affiche les erreurs sur stderr."""
