@@ -255,6 +255,10 @@ Si l'objectif de la version 2.0.0 est de fournir une **interface Python fonction
     -   **Objectif :** Intégrer des fonctionnalités GitHub avancées pour automatiser des tâches complexes.
     -   **Action :** Rechercher et implémenter des interactions `PyGithub` ou `gh` CLI pour des fonctionnalités telles que la création de PR, la gestion des problèmes, les notes de version automatisées, etc.
 
+5.  **Intégration de Keychain et gestion des clés SSH par agent :**
+    *   **Objectif :** Formaliser l'utilisation de `keychain` et la gestion de clés SSH dédiées par agent/contexte pour améliorer l'authentification Git.
+    *   **Action :** Documenter `keychain` comme prérequis, intégrer la logique de chargement des clés (similaire à la fonction `load_ssh_keys` fournie) dans le workflow `setup_ssh` ou un nouveau module de gestion SSH, et adapter les workflows Git pour utiliser ces clés spécifiques.
+
 ## 2025-08-10 (Suite)
 
 ### `python_scripts/git_commands.py`
@@ -316,3 +320,24 @@ Si l'objectif de la version 2.0.0 est de fournir une **interface Python fonction
   - **Validation :** Les vérifications `ruff` ont été exécutées avec succès après le nettoyage, confirmant l'absence d'erreurs.
 
 **Conclusion :** Le CLI Python pour les workflows Git est maintenant pleinement fonctionnel en mode non interactif, avec une gestion correcte de l'authentification SSH.
+
+## État de la session - 2025-08-10
+
+### Test du `sync_workflow` (Scénario 1 : Branche locale en retard par rapport au distant)
+
+**Progression actuelle :**
+*   Le répertoire local `test_sync_behind` a été créé et initialisé avec un commit.
+*   L'utilisateur a configuré son identité Git.
+*   L'utilisateur est sur le point de pousser le commit initial vers GitHub en utilisant SSH.
+
+**Prochaine étape pour l'utilisateur :**
+Exécuter les commandes suivantes dans le répertoire `test_sync_behind` :
+```bash
+git remote remove origin # Si déjà ajouté en HTTPS
+git remote add origin git@github.com:votre_nom_utilisateur/test-sync-remote.git
+git branch -M main
+git push -u origin main
+```
+(Remplacer `votre_nom_utilisateur` par votre nom d'utilisateur GitHub réel).
+
+Une fois le push initial confirmé, l'étape suivante sera de faire un commit directement sur le dépôt GitHub pour simuler le retard.

@@ -348,101 +348,100 @@ def sync_workflow(non_interactive: bool, target_directory: str | None = None):
         ssh_env = _get_ssh_env(agent_id)
         remote_name = "origin"
 
-        if non_interactive:
-            typer.echo(f"{ICON_INFO} Mode non interactif activé pour la synchronisation.\n")
-            _set_git_config(agent_id)
-            try:
-                _run_command(["git", "fetch", remote_name], env=ssh_env)
-                
-                stdout, _ = _run_command(["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True)
-                current_branch = stdout.strip()
-
-                stdout, _ = _run_command(["git", "rev-parse", f"{remote_name}/{current_branch}"], capture_output=True, check_error=False)
-                remote_hash = stdout.strip()
-                if not remote_hash:
-                    typer.echo(f"{ICON_WARN} La branche distante '{remote_name}/{current_branch}' n'existe pas. Impossible de synchroniser.\n")
-                    raise typer.Exit(0)
-
-                stdout, _ = _run_command(["git", "rev-parse", "HEAD"], capture_output=True)
-                local_hash = stdout.strip()
-                
-                if local_hash == remote_hash:
-                    typer.echo(f"{ICON_SUCCESS} Votre branche locale '{current_branch}' est déjà à jour avec '{remote_name}/{current_branch}'.\n")
-                    return
-                
-                typer.echo(f"{ICON_INFO} Intégration des changements depuis {remote_name}/{current_branch}...\n")
-                _run_command(["git", "pull", "--ff-only"], env=ssh_env)
-                typer.echo(f"{ICON_SUCCESS} Synchronisation non interactive terminée avec succès.\n")
-
-            except subprocess.CalledProcessError as e:
-                typer.echo(f"{ICON_ERROR} La synchronisation non interactive a échoué. Des conflits ou une divergence nécessitent une intervention manuelle.\n")
-                typer.echo(f"Erreur: {e.stderr}\n")
-                raise typer.Exit(1)
-            finally:
-                _unset_git_config()
-        else:
-            typer.echo(f"{ICON_GIT} Assistant de synchronisation avec le distant\n")
-            typer.echo("-----------------------------------------------------\n")
-
-            check_git_repo()
-            ssh_env = _get_ssh_env(agent_id)
-            remote_name = "origin"
-
-            stdout, _ = _run_command(["git", "remote", "get-url", remote_name], capture_output=True, check_error=False)
-            if not stdout: # Corrected condition
-                typer.echo(f"{ICON_WARN} Le remote '{remote_name}' n'est pas configuré. Impossible de synchroniser.\n")
-                raise typer.Exit(0)
-
+    if non_interactive:
+        typer.echo(f"{ICON_INFO} Mode non interactif activé pour la synchronisation.\n")
+        _set_git_config(agent_id)
+        try:
+            _run_command(["git", "fetch", remote_name], env=ssh_env)
+            
             stdout, _ = _run_command(["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True)
             current_branch = stdout.strip()
 
-            typer.echo(f"{ICON_INFO} Récupération des dernières informations du dépôt distant ({remote_name})...\n")
-            _run_command(["git", "fetch", remote_name], env=ssh_env)
+            stdout, _ = _run_command(["git", "rev-parse", f"{remote_name}/{current_branch}"], capture_output=True, check_error=False)
+            remote_hash = stdout.strip()
+            if not remote_hash:
+                typer.echo(f"{ICON_WARN} La branche distante '{remote_name}/{current_branch}' n'existe pas. Impossible de synchroniser.\n")
+                raise typer.Exit(0)
 
             stdout, _ = _run_command(["git", "rev-parse", "HEAD"], capture_output=True)
             local_hash = stdout.strip()
-            stdout, _ = _run_command(["git", "rev-parse", f"{current_branch}..{remote_name}/{current_branch}"], capture_output=True, check_error=False)
-            remote_hash = stdout.strip()
-
-            if not remote_hash:
-                typer.echo(f"{ICON_WARN} La branche distante '{remote_name}/{current_branch}' n'existe pas. Impossible de comparer.\n")
-                raise typer.Exit(0)
-
+            
             if local_hash == remote_hash:
                 typer.echo(f"{ICON_SUCCESS} Votre branche locale '{current_branch}' est déjà à jour avec '{remote_name}/{current_branch}'.\n")
-                raise typer.Exit(0)
+                return
+            
+            typer.echo(f"{ICON_INFO} Intégration des changements depuis {remote_name}/{current_branch}...\n")
+            _run_command(["git", "pull", "--ff-only"], env=ssh_env)
+            typer.echo(f"{ICON_SUCCESS} Synchronisation non interactive terminée avec succès.\n")
 
-            stdout, _ = _run_command(["git", "log", f"..{remote_name}/{current_branch}", "--oneline"], capture_output=True)
-            local_ahead_result = stdout.strip()
-            if local_ahead_result:
-                typer.echo(f"{ICON_INFO} Votre branche locale est en avance sur la branche distante. Vous devriez pousser vos changements.\n")
+        except subprocess.CalledProcessError as e:
+            typer.echo(f"{ICON_ERROR} La synchronisation non interactive a échoué. Des conflits ou une divergence nécessitent une intervention manuelle.\n")
+            typer.echo(f"Erreur: {e.stderr}\n")
+            raise typer.Exit(1)
+        finally:
+            _unset_git_config()
+    else:
+        typer.echo(f"{ICON_GIT} Assistant de synchronisation avec le distant\n")
+        typer.echo("-----------------------------------------------------\n")
 
-            stdout, _ = _run_command(["git", "log", f"{current_branch}..{remote_name}/{current_branch}", "--oneline"], capture_output=True)
-            remote_behind_result = stdout.strip()
-            if remote_behind_result:
-                typer.echo(f"{ICON_WARN} La branche distante contient des changements qui ne sont pas dans votre branche locale.\n")
-                typer.echo("Changements distants :\n")
-                _run_command(["git", "log", "--oneline", "--graph", "--decorate", f"{current_branch}..{remote_name}/{current_branch}"])
+        check_git_repo()
+        ssh_env = _get_ssh_env(agent_id)
+        remote_name = "origin"
 
-                if typer.confirm("Voulez-vous intégrer (pull) ces changements maintenant ?"):
-                    typer.echo(f"{ICON_INFO} Intégration des changements depuis {remote_name}/{current_branch}...\n")
-                    try:
-                        _run_command(["git", "pull", "--rebase", remote_name], env=ssh_env)
-                        typer.echo(f"{ICON_SUCCESS} Votre branche a été mise à jour avec succès.\n")
-                    except subprocess.CalledProcessError:
-                        typer.echo(f"{ICON_ERROR} Le pull en rebase a échoué. Votre branche locale a probablement des commits divergents ou des conflits.\n")
-                        typer.echo(f"{ICON_INFO} Un rebase ou un merge manuel est nécessaire pour résoudre les conflits.\n")
-                        raise typer.Exit(1)
-                else:
-                    typer.echo(f"{ICON_INFO} Opération annulée.\n")
-            elif not local_ahead_result: # This condition means diverged
-                typer.echo(f"{ICON_INFO} Votre branche locale et la branche distante ont divergé. Un rebase ou un merge est nécessaire.\n")
+        stdout, _ = _run_command(["git", "remote", "get-url", remote_name], capture_output=True, check_error=False)
+        if not stdout: # Corrected condition
+            typer.echo(f"{ICON_WARN} Le remote '{remote_name}' n'est pas configuré. Impossible de synchroniser.\n")
+            raise typer.Exit(0)
 
-            typer.echo(f"{ICON_SUCCESS} Opération de synchronisation terminée.\n")
+        stdout, _ = _run_command(["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True)
+        current_branch = stdout.strip()
+
+        typer.echo(f"{ICON_INFO} Récupération des dernières informations du dépôt distant ({remote_name})...\n")
+        _run_command(["git", "fetch", remote_name], env=ssh_env)
+
+        stdout, _ = _run_command(["git", "rev-parse", "HEAD"], capture_output=True)
+        local_hash = stdout.strip()
+        stdout, _ = _run_command(["git", "rev-parse", f"{current_branch}..{remote_name}/{current_branch}"], capture_output=True, check_error=False)
+        remote_hash = stdout.strip()
+
+        if not remote_hash:
+            typer.echo(f"{ICON_WARN} La branche distante '{remote_name}/{current_branch}' n'existe pas. Impossible de comparer.\n")
+            raise typer.Exit(0)
+
+        if local_hash == remote_hash:
+            typer.echo(f"{ICON_SUCCESS} Votre branche locale '{current_branch}' est déjà à jour avec '{remote_name}/{current_branch}'.\n")
+            raise typer.Exit(0)
+
+        stdout, _ = _run_command(["git", "log", f"..{remote_name}/{current_branch}", "--oneline"], capture_output=True)
+        local_ahead_result = stdout.strip()
+        if local_ahead_result:
+            typer.echo(f"{ICON_INFO} Votre branche locale est en avance sur la branche distante. Vous devriez pousser vos changements.\n")
+
+        stdout, _ = _run_command(["git", "log", f"{current_branch}..{remote_name}/{current_branch}", "--oneline"], capture_output=True)
+        remote_behind_result = stdout.strip()
+        if remote_behind_result:
+            typer.echo(f"{ICON_WARN} La branche distante contient des changements qui ne sont pas dans votre branche locale.\n")
+            typer.echo("Changements distants :\n")
+            _run_command(["git", "log", "--oneline", "--graph", "--decorate", f"{current_branch}..{remote_name}/{current_branch}"])
+
+            if typer.confirm("Voulez-vous intégrer (pull) ces changements maintenant ?"):
+                typer.echo(f"{ICON_INFO} Intégration des changements depuis {remote_name}/{current_branch}...\n")
+                try:
+                    _run_command(["git", "pull", "--rebase", remote_name], env=ssh_env)
+                    typer.echo(f"{ICON_SUCCESS} Votre branche a été mise à jour avec succès.\n")
+                except subprocess.CalledProcessError:
+                    typer.echo(f"{ICON_ERROR} Le pull en rebase a échoué. Votre branche locale a probablement des commits divergents ou des conflits.\n")
+                    typer.echo(f"{ICON_INFO} Un rebase ou un merge manuel est nécessaire pour résoudre les conflits.\n")
+                    raise typer.Exit(1)
+            else:
+                typer.echo(f"{ICON_INFO} Opération annulée.\n")
+        elif not local_ahead_result: # This condition means diverged
+            typer.echo(f"{ICON_INFO} Votre branche locale et la branche distante ont divergé. Un rebase ou un merge est nécessaire.\n")
+
+        typer.echo(f"{ICON_SUCCESS} Opération de synchronisation terminée.\n")
 
     finally:
         if target_directory:
             os.chdir(original_directory) # Change back to original directory
             typer.echo(f"DEBUG: Changed back to original directory: {os.getcwd()}")
-
 

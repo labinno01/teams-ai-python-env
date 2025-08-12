@@ -80,11 +80,13 @@ def release():
     git_commands.release_workflow()
 
 @app.command()
-def sync():
+def sync(
+    target_directory: str = typer.Option(None, "--dir", "-d", help="Directory to perform sync in.")
+):
     """
     Synchronizes the local repository with the remote.
     """
-    git_commands.sync_workflow()
+    git_commands.sync_workflow(non_interactive=False, target_directory=target_directory)
 
 @app.command()
 def setup_ssh():
