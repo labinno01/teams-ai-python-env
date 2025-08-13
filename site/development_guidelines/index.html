@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Development Guidelines - Git Scripts Documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Git Scripts Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../installation/" class="nav-link">Installation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../cicd/" class="nav-link">CI/CD</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../CLI/" class="nav-link">CLI</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../LOGGER/" class="nav-link">Logger</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../agent_capabilities/" class="nav-link">Agent Capabilities</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">Development Guidelines</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Specs <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../specs/create_command_spec/" class="dropdown-item">Create Command Spec</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Scripts <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../scripts/utils/setup-git-ssh/" class="dropdown-item">Setup SSH</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/init-repository/" class="dropdown-item">Initialize Repository</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/commit-push/" class="dropdown-item">Commit and Push</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/sync-remote/" class="dropdown-item">Sync Remote</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/release-version/" class="dropdown-item">Release Version</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/documentation_scripts_git/" class="dropdown-item">Git Scripts Documentation</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="navitem">
+                                <a href="../ssh-manager-v3/" class="nav-link">SSH Manager v3</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../agent_capabilities/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../specs/create_command_spec/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#regles-de-developpement-pour-lagent-codeur" class="nav-link">Règles de Développement pour l'Agent Codeur</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#1-lecture-prealable" class="nav-link">1. Lecture Préalable</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2-strategie-de-remplacement" class="nav-link">2. Stratégie de Remplacement</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#3-precision-des-caracteres" class="nav-link">3. Précision des Caractères</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#4-gestion-des-fichiers-volumineux" class="nav-link">4. Gestion des Fichiers Volumineux</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#5-encodage-explicite" class="nav-link">5. Encodage Explicite</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#6-documentation-et-journalisation" class="nav-link">6. Documentation et Journalisation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#7-tests-et-validation" class="nav-link">7. Tests et Validation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#8-utilisation-doutils-specialises" class="nav-link">8. Utilisation d'Outils Spécialisés</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#9-automatisation-des-taches-repetitives" class="nav-link">9. Automatisation des Tâches Répétitives</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#10-regles-specifiques-par-langage" class="nav-link">10. Règles Spécifiques par Langage</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#11-regles-generales-complementaires" class="nav-link">11. Règles Générales Complémentaires</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#prochaines-etapes-outils-a-fournir" class="nav-link">Prochaines Étapes : Outils à Fournir</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="regles-de-developpement-pour-lagent-codeur">Règles de Développement pour l'Agent Codeur</h1>
+<p>Ce guide détaille les bonnes pratiques de développement à suivre pour l'agent codeur, afin de limiter les problèmes liés aux opérations de remplacement de code et d'assurer la qualité et la maintenabilité du code produit. Ces règles feront partie du kit de bienvenue pour tout nouvel agent développeur.</p>
+<h2 id="1-lecture-prealable">1. Lecture Préalable</h2>
+<ul>
+<li><strong>Toujours lire le fichier</strong> avant de tenter un remplacement pour assurer une correspondance exacte du contenu, y compris les espaces, indentations, et caractères spéciaux.</li>
+</ul>
+<h2 id="2-strategie-de-remplacement">2. Stratégie de Remplacement</h2>
+<ul>
+<li><strong>Éviter les Chaînes Multi-lignes pour les Remplacements Directs :</strong> Préférer les remplacements simples (une seule ligne, sans caractères spéciaux conflictuels pour l'outil <code>replace</code>).</li>
+<li><strong>Utilisation de la Solution de Secours pour les Changements Complexes :</strong> Pour les changements impliquant :<ul>
+<li>Des modifications multi-lignes.</li>
+<li>Des indentations complexes.</li>
+<li>Des caractères spéciaux (<code>\</code>, <code>'</code>, <code>"</code>) qui peuvent poser problème à l'outil <code>replace</code>.</li>
+<li>Une incertitude sur le contenu exact du fichier cible.
+Utiliser la méthode de secours : <strong>lire le fichier en entier, effectuer les modifications en mémoire (avec les fonctions de manipulation de chaînes de Python ou des expressions régulières), puis écrire le fichier modifié en entier.</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="3-precision-des-caracteres">3. Précision des Caractères</h2>
+<ul>
+<li><strong>Copier-coller directement</strong> depuis le contenu du fichier pour construire les chaînes de remplacement (<code>old_string</code>, <code>new_string</code>). Cela permet de préserver les espaces, indentations et caractères spéciaux exacts.</li>
+</ul>
+<h2 id="4-gestion-des-fichiers-volumineux">4. Gestion des Fichiers Volumineux</h2>
+<ul>
+<li><strong>Évaluer la taille du fichier</strong> avant de choisir la méthode de manipulation. Pour les fichiers très volumineux, envisager des méthodes alternatives ou des outils spécialisés (à discuter avec l'utilisateur si nécessaire).</li>
+</ul>
+<h2 id="5-encodage-explicite">5. Encodage Explicite</h2>
+<ul>
+<li><strong>Spécifier explicitement l'encodage</strong> (par exemple, <code>UTF-8</code>) lors de la lecture et de l'écriture de fichiers pour éviter les problèmes de caractères.</li>
+</ul>
+<h2 id="6-documentation-et-journalisation">6. Documentation et Journalisation</h2>
+<ul>
+<li><strong>Garder une trace des modifications effectuées.</strong> Utiliser le système de gestion de versions (Git) pour des commits fréquents et des messages descriptifs.</li>
+<li><strong>Sauvegarder les versions précédentes des fichiers</strong> avant de faire des modifications importantes (par exemple, via des fichiers <code>.bak</code> ou des branches Git temporaires).</li>
+</ul>
+<h2 id="7-tests-et-validation">7. Tests et Validation</h2>
+<ul>
+<li><strong>Toujours tester le code</strong> après des modifications pour s'assurer de son bon fonctionnement.</li>
+<li><strong>Utiliser des outils de validation</strong> (linters, formatteurs, frameworks de test) pour vérifier que le code modifié est correct et conforme aux standards du projet.</li>
+</ul>
+<h2 id="8-utilisation-doutils-specialises">8. Utilisation d'Outils Spécialisés</h2>
+<ul>
+<li>Pour des tâches spécifiques (par exemple, manipulation de JSON ou XML), utiliser des bibliothèques et outils dédiés plutôt que de dépendre uniquement de l'outil de remplacement générique.</li>
+</ul>
+<h2 id="9-automatisation-des-taches-repetitives">9. Automatisation des Tâches Répétitives</h2>
+<ul>
+<li><strong>Écrire des scripts</strong> pour automatiser les modifications répétitives et les tâches complexes, afin de gagner en efficacité et de réduire les erreurs.</li>
+</ul>
+<h2 id="10-regles-specifiques-par-langage">10. Règles Spécifiques par Langage</h2>
+<p>Ces règles complètent les principes généraux et s'appliquent aux particularités de chaque langage :</p>
+<h3 id="python">Python</h3>
+<ul>
+<li><strong>Indentation :</strong> Toujours conserver l'indentation exacte lors des modifications. Utiliser des outils de formatage (tels que Black ou Autopep8) pour garantir la cohérence.</li>
+<li><strong>Gestion des Fichiers :</strong> Spécifier explicitement l'encodage <code>UTF-8</code> lors de la lecture et de l'écriture de fichiers. Utiliser <code>pathlib</code> pour une gestion robuste des chemins.</li>
+<li><strong>Environnements Virtuels :</strong> Tester les modifications dans un environnement virtuel pour s'assurer qu'elles ne cassent pas les dépendances et pour isoler le projet. Utiliser des outils de gestion d'environnement (tels que Virtualenv ou Conda).</li>
+<li><strong>Qualité de Code :</strong> Appliquer des outils de linting (comme Pylint, Flake8, ou Ruff) et des frameworks de test (comme Pytest ou Unittest) pour valider le code.</li>
+<li><strong>Gestion de Projet :</strong> Utiliser des outils de gestion de dépendances (comme Pipenv ou Poetry) et des systèmes de gestion de version (comme Git ou GitPython).</li>
+<li><strong>Documentation :</strong> Générer et maintenir la documentation avec des outils dédiés (comme Sphinx ou MkDocs).</li>
+<li><strong>Performance et Sécurité :</strong> Utiliser des profileurs (comme cProfile ou Py-Spy) et des outils d'analyse de sécurité (comme Bandit ou Safety) pour optimiser et sécuriser le code.</li>
+</ul>
+<h3 id="bash">Bash</h3>
+<ul>
+<li><strong>Gestion des Espaces et des Guillemets :</strong> Toujours échapper les espaces dans les chemins de fichiers et les arguments de commande. Utiliser des guillemets pour entourer les variables et les chemins.</li>
+<li><strong>Caractères Spéciaux :</strong> Échapper les caractères spéciaux avec des backslashes ou utiliser des guillemets simples ou doubles.</li>
+<li><strong>Fin de Ligne :</strong> Utiliser des outils qui préservent les fins de ligne (LF vs CRLF) selon l'environnement cible. Préférer LF (Unix) pour les scripts Bash.</li>
+</ul>
+<h3 id="cc">C/C++</h3>
+<ul>
+<li><strong>Sensibilité aux Espaces et aux Sauts de Ligne :</strong> Être très attentif aux espaces et aux sauts de ligne, surtout dans les directives de préprocesseur.</li>
+<li><strong>Gestion des Fichiers d'En-tête :</strong> Modifier les fichiers d'en-tête avec prudence, car les changements peuvent affecter de nombreux fichiers sources.</li>
+<li><strong>Compilation et Liens :</strong> Toujours recompiler et relier le projet après des modifications pour s'assurer qu'il n'y a pas d'erreurs de compilation ou de liens.</li>
+</ul>
+<h3 id="javascript">JavaScript</h3>
+<ul>
+<li><strong>Sensibilité aux Points-virgules :</strong> Inclure explicitement les points-virgules pour éviter les ambiguïtés.</li>
+<li><strong>Gestion des Modules et des Dépendances :</strong> Tester les modifications dans un environnement qui reproduit les dépendances du projet.</li>
+<li><strong>Environnements d'Exécution :</strong> Tester les modifications dans l'environnement cible (navigateur, Node.js, etc.).</li>
+</ul>
+<h2 id="11-regles-generales-complementaires">11. Règles Générales Complémentaires</h2>
+<ul>
+<li><strong>Utiliser des Outils de Formatage :</strong> Appliquer des outils comme Black (Python), clang-format (C/C++), ou Prettier (JavaScript) pour maintenir un code bien formaté.</li>
+<li><strong>Tests Automatiques :</strong> Mettre en place des tests automatiques (avec Pytest, Google Test, Jest, etc.) après chaque modification.</li>
+<li><strong>Gestion des Versions :</strong> Utiliser Git pour suivre les changements, faire des commits fréquents avec des messages descriptifs.</li>
+</ul>
+<h2 id="prochaines-etapes-outils-a-fournir">Prochaines Étapes : Outils à Fournir</h2>
+<p>Pour faciliter l'adhérence à ces règles, les outils suivants devraient être fournis à l'agent codeur :</p>
+<ul>
+<li><strong>Outils de Lecture et Écriture de Fichiers :</strong> Avec options pour gérer les encodages, les fins de ligne, etc.</li>
+<li><strong>Bibliothèques de Manipulation de Chaînes :</strong> Pour les expressions régulières, les opérations de chaînes complexes.</li>
+<li><strong>Outils de Test et Validation :</strong> Linters, formatteurs, frameworks de test.</li>
+<li><strong>Outils de Journalisation et Suivi :</strong> Pour suivre les changements et les sauvegardes.</li>
+<li><strong>Outils d'Automatisation :</strong> Pour les tâches répétitives et les modifications complexes.</li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

@@ -4,6 +4,12 @@ nav:
   - Home: index.md
   - Installation: installation.md
   - CI/CD: cicd.md
+  - CLI: CLI.md
+  - Logger: LOGGER.md
+  - Agent Capabilities: agent_capabilities.md
+  - Development Guidelines: development_guidelines.md
+  - Specs:
+    - Create Command Spec: specs/create_command_spec.md
   - Scripts:
     - Setup SSH: scripts/utils/setup-git-ssh.md
     - Initialize Repository: scripts/utils/init-repository.md
@@ -11,3 +17,4 @@ nav:
     - Sync Remote: scripts/utils/sync-remote.md
     - Release Version: scripts/utils/release-version.md
     - Git Scripts Documentation: scripts/utils/documentation_scripts_git.md
+  - SSH Manager v3: ssh-manager-v3.md

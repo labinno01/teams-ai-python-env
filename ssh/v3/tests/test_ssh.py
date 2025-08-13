@@ -3,8 +3,9 @@ from unittest.mock import patch, mock_open
 from pathlib import Path
 import os
 import requests # Added import
+import subprocess # Added
 
-from sshkeys.core.ssh import generate_ssh_key, add_key_to_host # Added add_key_to_host
+from sshkeys.core.ssh import generate_ssh_key, add_key_to_host, unload_key_from_agent, load_key_to_agent, unload_all_keys_from_agent, get_agent_status # Added add_key_to_host
 from sshkeys.core.models import HostConfig
 
 @patch('subprocess.run')
@@ -174,6 +175,95 @@ def test_add_key_to_host_public_key_not_found(mock_path_exists, tmp_path):
     # Call the function, expect FileNotFoundError
     with pytest.raises(FileNotFoundError):
         add_key_to_host(host_config)
+
+@patch('subprocess.run')
+def test_unload_key_from_agent_success(mock_subprocess_run, tmp_path):
+    key_path = tmp_path / "test_key"
+    result = unload_key_from_agent(key_path)
+    mock_subprocess_run.assert_called_once_with(["ssh-add", "-d", str(key_path)], check=True)
+    assert result is True
+
+@patch('subprocess.run', side_effect=subprocess.CalledProcessError(1, "cmd"))
+def test_unload_key_from_agent_called_process_error(mock_subprocess_run, tmp_path, capsys):
+    key_path = tmp_path / "test_key"
+    result = unload_key_from_agent(key_path)
+    assert result is False
+    captured = capsys.readouterr()
+    assert f"Erreur lors du déchargement de la clé {key_path}" in captured.err
+
+@patch('subprocess.run', side_effect=FileNotFoundError)
+def test_unload_key_from_agent_file_not_found_error(mock_subprocess_run, tmp_path, capsys):
+    key_path = tmp_path / "test_key"
+    result = unload_key_from_agent(key_path)
+    assert result is False
+    captured = capsys.readouterr()
+    assert "ssh-add non trouvé" in captured.err
+
+@patch('subprocess.run')
+def test_load_key_to_agent_success(mock_subprocess_run, tmp_path):
+    key_path = tmp_path / "test_key"
+    result = load_key_to_agent(key_path)
+    mock_subprocess_run.assert_called_once_with(["ssh-add", str(key_path)], check=True)
+    assert result is True
+
+@patch('subprocess.run', side_effect=subprocess.CalledProcessError(1, "cmd"))
+def test_load_key_to_agent_called_process_error(mock_subprocess_run, tmp_path, capsys):
+    key_path = tmp_path / "test_key"
+    result = load_key_to_agent(key_path)
+    assert result is False
+    captured = capsys.readouterr()
+    assert f"Erreur lors du chargement de la clé {key_path}" in captured.err
+
+@patch('subprocess.run', side_effect=FileNotFoundError)
+def test_load_key_to_agent_file_not_found_error(mock_subprocess_run, tmp_path, capsys):
+    key_path = tmp_path / "test_key"
+    result = load_key_to_agent(key_path)
+    assert result is False
+    captured = capsys.readouterr()
+    assert "ssh-add non trouvé" in captured.err
+
+@patch('subprocess.run')
+def test_unload_all_keys_from_agent_success(mock_subprocess_run):
+    result = unload_all_keys_from_agent()
+    mock_subprocess_run.assert_called_once_with(["ssh-add", "-D"], check=True)
+    assert result is True
+
+@patch('subprocess.run', side_effect=subprocess.CalledProcessError(1, "cmd"))
+def test_unload_all_keys_from_agent_called_process_error(mock_subprocess_run, capsys):
+    result = unload_all_keys_from_agent()
+    assert result is False
+    captured = capsys.readouterr()
+    assert "Erreur lors du déchargement de toutes les clés" in captured.err
+
+@patch('subprocess.run', side_effect=FileNotFoundError)
+def test_unload_all_keys_from_agent_file_not_found_error(mock_subprocess_run, capsys):
+    result = unload_all_keys_from_agent()
+    assert result is False
+    captured = capsys.readouterr()
+    assert "ssh-add non trouvé" in captured.err
+
+@patch('subprocess.run')
+def test_get_agent_status_success(mock_subprocess_run):
+    mock_subprocess_run.return_value.stdout = "256 SHA256:fingerprint /path/to/key (ED25519)"
+    mock_subprocess_run.return_value.returncode = 0
+    status = get_agent_status()
+    mock_subprocess_run.assert_called_once_with(["ssh-add", "-l"], capture_output=True, text=True, check=True)
+    assert status == "256 SHA256:fingerprint /path/to/key (ED25519)"
+
+@patch('subprocess.run', side_effect=subprocess.CalledProcessError(1, "cmd", stderr="The agent has no identities."))
+def test_get_agent_status_no_identities(mock_subprocess_run):
+    status = get_agent_status()
+    assert status == "Agent SSH démarré, mais aucune clé chargée."
+
+@patch('subprocess.run', side_effect=subprocess.CalledProcessError(1, "cmd", stderr="Some other error."))
+def test_get_agent_status_failure(mock_subprocess_run):
+    status = get_agent_status()
+    assert status == "Erreur lors de la récupération du statut de l'agent: Some other error."
+
+@patch('subprocess.run', side_effect=FileNotFoundError)
+def test_get_agent_status_file_not_found_error(mock_subprocess_run):
+    status = get_agent_status()
+    assert status == "ssh-add non trouvé. Assurez-vous que ssh-agent est installé et dans votre PATH."
 
 # This test is problematic given the HostConfig model's strictness.
 # The HostConfig model itself prevents 'host_type="unsupported"'.

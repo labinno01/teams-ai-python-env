@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Logger - Git Scripts Documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Git Scripts Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../installation/" class="nav-link">Installation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../cicd/" class="nav-link">CI/CD</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../CLI/" class="nav-link">CLI</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">Logger</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../agent_capabilities/" class="nav-link">Agent Capabilities</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../development_guidelines/" class="nav-link">Development Guidelines</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Specs <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../specs/create_command_spec/" class="dropdown-item">Create Command Spec</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Scripts <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../scripts/utils/setup-git-ssh/" class="dropdown-item">Setup SSH</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/init-repository/" class="dropdown-item">Initialize Repository</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/commit-push/" class="dropdown-item">Commit and Push</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/sync-remote/" class="dropdown-item">Sync Remote</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/release-version/" class="dropdown-item">Release Version</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/documentation_scripts_git/" class="dropdown-item">Git Scripts Documentation</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="navitem">
+                                <a href="../ssh-manager-v3/" class="nav-link">SSH Manager v3</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../CLI/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../agent_capabilities/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#git-workflow-tool-logger-module" class="nav-link">Git Workflow Tool - Logger Module</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#table-des-matieres" class="nav-link">Table des matières</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#introduction" class="nav-link">Introduction</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#installation" class="nav-link">Installation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#concepts-cles" class="nav-link">Concepts clés</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#utilisation" class="nav-link">Utilisation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#exemples-complets" class="nav-link">Exemples complets</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#personnalisation" class="nav-link">Personnalisation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#variables-denvironnement" class="nav-link">Variables d'environnement</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#bonnes-pratiques" class="nav-link">Bonnes pratiques</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#resolution-des-problemes" class="nav-link">Résolution des problèmes</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#changelog" class="nav-link">Changelog</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="git-workflow-tool-logger-module">Git Workflow Tool - Logger Module</h1>
+<h2 id="table-des-matieres">Table des matières</h2>
+<ol>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#concepts-clés">Concepts clés</a></li>
+<li><a href="#utilisation">Utilisation</a></li>
+<li><a href="#initialisation">Initialisation</a></li>
+<li><a href="#affichage-de-messages">Affichage de messages</a></li>
+<li><a href="#interactions-utilisateur">Interactions utilisateur</a></li>
+<li><a href="#mode-non-interactif">Mode non-interactif</a></li>
+<li><a href="#exemples-complets">Exemples complets</a></li>
+<li><a href="#personnalisation">Personnalisation</a></li>
+<li><a href="#variables-denvironnement">Variables d'environnement</a></li>
+<li><a href="#bonnes-pratiques">Bonnes pratiques</a></li>
+</ol>
+<hr />
+<h2 id="introduction">Introduction</h2>
+<p>Le module <code>logger.py</code> fournit une interface unifiée pour :
+- <strong>Gérer les sorties utilisateur</strong> (messages, erreurs, succès, avertissements)
+- <strong>Interagir avec l'utilisateur</strong> (confirmations, saisies)
+- <strong>Supporter les modes interactif/non-interactif</strong>
+- <strong>Gérer le debugging</strong> via une variable d'environnement</p>
+<p>Il est conçu pour être :
+✅ <strong>Testable</strong> (mockable facilement)
+✅ <strong>Extensible</strong> (nouveaux types de loggers)
+✅ <strong>Consistant</strong> (messages formatés de manière uniforme)
+✅ <strong>Flexible</strong> (comportements non-interactifs)</p>
+<hr />
+<h2 id="installation">Installation</h2>
+<p>Le module est inclus dans le package principal. Aucune installation supplémentaire n'est nécessaire.</p>
+<hr />
+<h2 id="concepts-cles">Concepts clés</h2>
+<h3 id="1-linterface-logger">1. L'interface <code>Logger</code></h3>
+<p>Définit le contrat que doivent respecter tous les loggers :</p>
+<pre><code class="language-python">class Logger(Protocol):
+    def info(self, message: str, newline: bool = True) -&gt; None: ...
+    def success(self, message: str, newline: bool = True) -&gt; None: ...
+    # ... (autres méthodes)
+</code></pre>
+<h3 id="2-implementations-disponibles">2. Implémentations disponibles</h3>
+<table>
+<thead>
+<tr>
+<th>Classe</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ConsoleLogger</code></td>
+<td>Affiche des messages colorisés en console (mode interactif par défaut)</td>
+</tr>
+<tr>
+<td><code>SilentLogger</code></td>
+<td>Ignore la plupart des messages (pour les scripts non-interactifs)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-niveaux-de-messages">3. Niveaux de messages</h3>
+<table>
+<thead>
+<tr>
+<th>Méthode</th>
+<th>Icône</th>
+<th>Couleur</th>
+<th>Utilisation typique</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>info()</code></td>
+<td>ℹ</td>
+<td>Bleu</td>
+<td>Messages informatifs</td>
+</tr>
+<tr>
+<td><code>success()</code></td>
+<td>✓</td>
+<td>Vert</td>
+<td>Opérations réussies</td>
+</tr>
+<tr>
+<td><code>warning()</code></td>
+<td>⚠</td>
+<td>Jaune</td>
+<td>Avertissements</td>
+</tr>
+<tr>
+<td><code>error()</code></td>
+<td>✗</td>
+<td>Rouge</td>
+<td>Erreurs (affichées sur stderr)</td>
+</tr>
+<tr>
+<td><code>debug()</code></td>
+<td>🐛</td>
+<td>Violet</td>
+<td>Messages de debug (si <code>DEBUG=1</code>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="utilisation">Utilisation</h2>
+<h3 id="initialisation">Initialisation</h3>
+<pre><code class="language-python">from logger import get_logger
+
+# Mode interactif (par défaut)
+logger = get_logger()
+
+# Mode non-interactif (silencieux)
+logger = get_logger(non_interactive=True)
+
+# Forcer les couleurs (même si stdout n'est pas un TTY)
+logger = get_logger(force_color=True)
+</code></pre>
+<h3 id="affichage-de-messages">Affichage de messages</h3>
+<pre><code class="language-python">logger.info(&quot;Début du traitement...&quot;)
+logger.success(&quot;Opération terminée avec succès !&quot;)
+logger.warning(&quot;Cette action est irréversible&quot;)
+logger.error(&quot;Échec de la connexion au dépôt&quot;)
+logger.debug(&quot;Détails techniques: {...}&quot;)  # Affiché seulement si DEBUG=1
+</code></pre>
+<h3 id="interactions-utilisateur">Interactions utilisateur</h3>
+<h4 id="confirmations">Confirmations</h4>
+<pre><code class="language-python"># Confirmation avec valeur par défaut &quot;oui&quot;
+if logger.confirm(&quot;Voulez-vous continuer?&quot;, default=True):
+    print(&quot;L'utilisateur a confirmé&quot;)
+
+# Confirmation avec abort (quitte le programme si non)
+logger.confirm(&quot;Êtes-vous sûr?&quot;, abort=True)  # Quitte si réponse = non
+</code></pre>
+<h4 id="saisies-utilisateur">Saisies utilisateur</h4>
+<pre><code class="language-python"># Saisie simple
+nom = logger.prompt(&quot;Quel est votre nom?&quot;)
+
+# Saisie avec valeur par défaut
+version = logger.prompt(&quot;Numéro de version&quot;, default=&quot;1.0.0&quot;)
+
+# Saisie de mot de passe (masqué)
+mdp = logger.prompt(&quot;Mot de passe&quot;, password=True)
+</code></pre>
+<h3 id="mode-non-interactif">Mode non-interactif</h3>
+<p>En mode non-interactif (<code>SilentLogger</code>) :
+- Tous les messages sauf les erreurs sont ignorés
+- Les confirmations retournent toujours <code>True</code> (sauf si <code>default=False</code>)
+- Les prompts retournent la valeur par défaut ou une chaîne vide</p>
+<pre><code class="language-python">logger = get_logger(non_interactive=True)
+logger.info(&quot;Ce message ne sera pas affiché&quot;)
+result = logger.confirm(&quot;Cette question ne sera pas posée&quot;)  # retourne True
+</code></pre>
+<hr />
+<h2 id="exemples-complets">Exemples complets</h2>
+<h3 id="1-script-interactif">1. Script interactif</h3>
+<pre><code class="language-python">from logger import get_logger
+
+def main():
+    logger = get_logger()
+
+    logger.info(&quot;Bienvenue dans l'assistant Git!&quot;)
+
+    if not logger.confirm(&quot;Voulez-vous commencer?&quot;):
+        logger.warning(&quot;Opération annulée&quot;)
+        return
+
+    message = logger.prompt(&quot;Message de commit&quot;)
+    logger.info(f&quot;Commit en cours avec le message: {message}&quot;)
+
+    # Simulation d'une opération
+    logger.success(&quot;Opération terminée!&quot;)
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<h3 id="2-script-non-interactif">2. Script non-interactif</h3>
+<pre><code class="language-python">from logger import get_logger
+
+def main():
+    logger = get_logger(non_interactive=True)
+
+    # En mode non-interactif, toutes les interactions ont des valeurs par défaut
+    if logger.confirm(&quot;Voulez-vous continuer?&quot;, default=True):
+        version = logger.prompt(&quot;Numéro de version&quot;, default=&quot;1.0.0&quot;)
+        logger.info(f&quot;Traitement de la version {version}...&quot;)  # Ne sera pas affiché
+        logger.success(&quot;Terminé!&quot;)  # Ne sera pas affiché
+
+    logger.error(&quot;Cette erreur sera affichée même en mode silencieux&quot;)
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<h3 id="3-utilisation-avancee-avec-gestion-derreurs">3. Utilisation avancée avec gestion d'erreurs</h3>
+<pre><code class="language-python">from logger import get_logger
+
+def safe_operation(logger):
+    try:
+        logger.info(&quot;Début de l'opération...&quot;)
+        # Simulation d'une erreur
+        raise ValueError(&quot;Quelque chose s'est mal passé!&quot;)
+    except Exception as e:
+        logger.error(f&quot;Échec: {str(e)}&quot;)
+        if logger.confirm(&quot;Voulez-vous réessayer?&quot;, default=False):
+            safe_operation(logger)
+        else:
+            logger.warning(&quot;Opération abandonnée&quot;)
+
+def main():
+    logger = get_logger()
+    safe_operation(logger)
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<hr />
+<h2 id="personnalisation">Personnalisation</h2>
+<h3 id="1-creer-un-logger-personnalise">1. Créer un logger personnalisé</h3>
+<pre><code class="language-python">from logger import Logger
+
+class FileLogger:
+    &quot;&quot;&quot;Logger qui écrit dans un fichier.&quot;&quot;&quot;
+
+    def __init__(self, log_file=&quot;app.log&quot;):
+        self.log_file = log_file
+
+    def info(self, message: str, newline: bool = True):
+        with open(self.log_file, &quot;a&quot;) as f:
+            f.write(f&quot;[INFO] {message}\n&quot;)
+
+    # Implémenter les autres méthodes de l'interface Logger...
+    ...
+
+# Utilisation
+logger = FileLogger(&quot;mon_fichier.log&quot;)
+logger.info(&quot;Test&quot;)
+</code></pre>
+<h3 id="2-surcharger-les-couleursicones">2. Surcharger les couleurs/icônes</h3>
+<pre><code class="language-python">from logger import ConsoleLogger
+
+class MyCustomLogger(ConsoleLogger):
+    def _format_message(self, icon, message, color):
+        # Personnalisation des icônes/couleurs
+        if &quot;erreur&quot; in message.lower():
+            icon = &quot;💥&quot;
+            color = &quot;\033[31m&quot;  # Rouge
+        return super()._format_message(icon, message, color)
+
+logger = MyCustomLogger()
+logger.error(&quot;Une erreur critique est survenue&quot;)  # Affiche 💥 au lieu de ✗
+</code></pre>
+<hr />
+<h2 id="variables-denvironnement">Variables d'environnement</h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+<th>Valeurs possibles</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DEBUG</code></td>
+<td>Active les messages de debug</td>
+<td><code>1</code>, <code>true</code>, <code>yes</code></td>
+</tr>
+<tr>
+<td><code>FORCE_COLOR</code></td>
+<td>Force l'affichage des couleurs (même si stdout n'est pas un TTY)</td>
+<td><code>1</code>, <code>true</code>, <code>yes</code></td>
+</tr>
+<tr>
+<td><code>NO_COLOR</code></td>
+<td>Désactive complètement les couleurs</td>
+<td>Toute valeur</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exemple :</strong></p>
+<pre><code class="language-bash"># Activer le mode debug
+DEBUG=1 python mon_script.py
+
+# Forcer les couleurs
+FORCE_COLOR=1 python mon_script.py | grep &quot;erreur&quot;
+</code></pre>
+<hr />
+<h2 id="bonnes-pratiques">Bonnes pratiques</h2>
+<ul>
+<li><strong>Utiliser <code>get_logger()</code></strong> plutôt que d'instancier directement les classes.</li>
+<li><strong>Gérer les modes interactif/non-interactif</strong> dès le début du script.</li>
+<li><strong>Utiliser les valeurs par défaut</strong> pour les prompts en mode non-interactif.</li>
+<li><strong>Réserver <code>logger.error()</code></strong> pour les erreurs critiques.</li>
+<li><strong>Utiliser <code>newline=False</code></strong> pour les messages sur la même ligne.</li>
+<li><strong>Documenter les interactions utilisateur</strong> dans les docstrings.</li>
+</ul>
+<hr />
+<h2 id="resolution-des-problemes">Résolution des problèmes</h2>
+<ul>
+<li><strong>Problème : Les couleurs ne s'affichent pas</strong></li>
+<li><strong>Causes :</strong> Sortie non-TTY, variable <code>NO_COLOR</code>, terminal incompatible.</li>
+<li>
+<p><strong>Solutions :</strong> Forcer avec <code>FORCE_COLOR=1</code>, vérifier la configuration.</p>
+</li>
+<li>
+<p><strong>Problème : Le script plante en mode non-interactif</strong></p>
+</li>
+<li><strong>Cause :</strong> <code>prompt()</code> ou <code>confirm()</code> sans valeur par défaut.</li>
+<li>
+<p><strong>Solution :</strong> Toujours fournir une valeur par défaut.</p>
+</li>
+<li>
+<p><strong>Problème : Les messages de debug n'apparaissent pas</strong></p>
+</li>
+<li><strong>Cause :</strong> Variable <code>DEBUG</code> non définie.</li>
+<li><strong>Solution :</strong> Lancer avec <code>DEBUG=1</code>.</li>
+</ul>
+<hr />
+<h2 id="changelog">Changelog</h2>
+<ul>
+<li><strong>v1.0.0 (2023-11-15):</strong> Première version stable.</li>
+<li><strong>v1.1.0 (2023-11-20):</strong> Ajout du support des mots de passe masqués.</li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

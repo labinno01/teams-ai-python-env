@@ -1,73 +1,90 @@
-# Git Workflow CLI (Version 2.0.0 - Python)
+# Git Workflow Tool (Version 3.0.0)
 
-Bienvenue dans la CLI Git Workflow ! Cet outil est conçu pour simplifier et automatiser les opérations Git courantes via une interface conviviale basée sur des menus.
+Bienvenue dans la nouvelle version de Git Workflow Tool ! Cet outil a été entièrement refactorisé pour offrir une expérience en ligne de commande plus robuste, plus simple et sans dépendances externes lourdes.
 
 ## Table des matières
+- [Philosophie](#philosophie)
 - [Fonctionnalités](#fonctionnalités)
+- [Prérequis : Gestion des clés SSH](#prérequis--gestion-des-clés-ssh)
 - [Installation](#installation)
 - [Utilisation](#utilisation)
 - [Documentation](#documentation)
 - [Contribution](#contribution)
 - [Licence](#licence)
 
+## Philosophie
+
+La version 3.0 adopte une approche modulaire et standard :
+
+*   **Zéro dépendance lourde :** L'interface n'utilise plus `typer` mais le module `argparse` natif de Python.
+*   **Interactions claires :** Un nouveau module de `logger` gère toutes les sorties et interactions avec l'utilisateur, en supportant les modes interactif et non-interactif.
+*   **Séparation des responsabilités :** La gestion des clés SSH est maintenant déléguée à un script `bash` externe, `ssh/sshkeys.sh`, pour plus de clarté et de puissance.
+
 ## Fonctionnalités
 
-La CLI Git Workflow (v2.0.0) offre les fonctionnalités suivantes :
+*   **Menu interactif :** Lancez `python -m git_tools` sans argument pour un menu guidé.
+*   **Commandes directes :** Utilisez les commandes `commit`, `release`, `sync`, et `tag` directement depuis votre terminal.
+*   **Mode non-interactif :** Toutes les commandes sont scriptables pour une utilisation dans des pipelines CI/CD via le flag `--non-interactive`.
 
-*   **Menu interactif :** Naviguez facilement entre les différents workflows Git.
-*   **Configuration SSH guidée :** Un assistant pas à pas pour configurer et dépanner l'authentification SSH avec GitHub.
-*   **Commit & Push :** Simplifiez le processus d'indexation, de commit et de push de vos modifications.
-*   **Création de Release :** Automatisez la gestion des versions, y compris la mise à jour de `version.json`, la création de commits de version et de tags Git.
-*   **Synchronisation avec le distant :** Récupérez les dernières modifications et synchronisez votre branche locale avec le dépôt distant.
+## Prérequis : Gestion des clés SSH
+
+Avant d'utiliser cet outil, votre authentification SSH avec les services Git (GitHub, GitLab, etc.) doit être fonctionnelle.
+
+Nous fournissons un puissant gestionnaire de clés SSH en `bash` pour vous aider. **Veuillez utiliser ce script pour toute configuration de vos clés.**
+
+*   **Script :** `ssh/sshkeys.sh`
+*   **Documentation :** `ssh/sshkeys.md`
+
+Consultez sa documentation pour créer, ajouter et gérer vos clés. Une fois que votre connexion SSH est fonctionnelle (`ssh -T git@github.com` réussit), vous pouvez utiliser `git-tools` sans problème.
 
 ## Installation
-
-Pour utiliser la CLI Git Workflow, suivez ces étapes :
 
 1.  **Cloner le dépôt :**
     ```bash
     git clone git@github.com:labinno01/teams-ai-python-env.git
     cd teams-ai-python-env
     ```
-    *(Assurez-vous d'avoir configuré votre clé SSH pour GitHub. Si ce n'est pas le cas, utilisez `https://github.com/labinno01/teams-ai-python-env.git` pour le clonage initial, puis exécutez la commande `setup-ssh` du menu pour configurer SSH.)*
 
 2.  **Créer et activer l'environnement virtuel :**
-    Il est fortement recommandé d'utiliser un environnement virtuel pour gérer les dépendances.
     ```bash
-    python3 -m venv .venv-teams-ai-python-env
-    source .venv-teams-ai-python-env/bin/activate
+    python3 -m venv .venv
+    source .venv/bin/activate
     ```
-    *(Si vous préférez un autre emplacement pour votre environnement virtuel, ajustez le chemin en conséquence.)*
 
 3.  **Installer les dépendances :**
     ```bash
-    pip install typer
-    # D'autres dépendances seront ajoutées au fur et à mesure du développement
+    pip install -r requirements.txt
     ```
 
 ## Utilisation
 
-Une fois installé, vous pouvez lancer la CLI via le menu interactif :
+L'outil s'exécute comme un module Python.
 
+**Lancer le menu interactif :**
 ```bash
-python -m python_scripts.main menu
+python -m git_tools
 ```
 
-Le menu vous guidera à travers les options disponibles.
-
-Vous pouvez également exécuter des commandes spécifiques directement :
-
+**Exécuter des commandes spécifiques :**
 ```bash
-python -m python_scripts.main --help
-python -m python_scripts.main commit-push --help
-python -m python_scripts.main setup-ssh
+# Afficher l'aide générale
+python -m git_tools --help
+
+# Lancer un commit en mode interactif
+python -m git_tools commit
+
+# Lancer un commit en mode non-interactif
+python -m git_tools --non-interactive commit --message "Mon commit"
+
+# Créer une nouvelle release "minor"
+python -m git_tools release --type minor
 ```
 
 ## Documentation
 
-La documentation complète de la CLI Git Workflow est disponible dans le dossier `docs/`.
+La documentation détaillée des différents modules (`logger`, `cli`) se trouve dans le dossier `docs/`.
 
-Pour générer et consulter la documentation localement :
+Pour générer et consulter la documentation du projet avec MkDocs :
 
 1.  **Installer MkDocs :**
     ```bash
@@ -77,9 +94,7 @@ Pour générer et consulter la documentation localement :
     ```bash
     mkdocs build
     ```
-    Les fichiers HTML générés se trouveront dans le dossier `site/`.
-
-3.  **Lancer le serveur de documentation (pour le développement) :**
+3.  **Lancer le serveur de documentation :**
     ```bash
     mkdocs serve
     ```
@@ -87,7 +102,7 @@ Pour générer et consulter la documentation localement :
 
 ## Contribution
 
-Les contributions sont les bienvenues ! Veuillez consulter le fichier `CONTRIBUTING.md` (à créer) pour plus de détails sur la façon de contribuer.
+Les contributions sont les bienvenues ! Veuillez consulter le fichier `CONTRIBUTING.md` (à créer) pour plus de détails.
 
 ## Licence
 

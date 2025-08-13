@@ -2,35 +2,11 @@ import subprocess
 import os
 import sys
 from .logger import Logger
-from . import config
 
-def get_ssh_env(agent_id: str | None, logger: Logger) -> dict | None:
-    if not agent_id:
-        return None
-    agent_conf = config.get_agent_config(agent_id)
-    key_path = agent_conf["ssh_key_path"]
-    if not os.path.exists(key_path):
-        logger.error(f"La clé SSH pour l'agent {agent_id} est introuvable à : {key_path}")
-        sys.exit(1)
-    env = os.environ.copy()
-    env["GIT_SSH_COMMAND"] = f"ssh -i {key_path} -o StrictHostKeyChecking=no"
-    return env
-
-def set_git_config(agent_id: str, logger: Logger):
-    agent_conf = config.get_agent_config(agent_id)
-    run_command(["git", "config", "user.name", f'"{agent_conf["name"]}"'], logger=logger)
-    run_command(["git", "config", "user.email", agent_conf["email"]], logger=logger)
-    logger.info(f"Identité Git configurée pour l'agent : {agent_conf['name']}")
-
-def unset_git_config(logger: Logger):
-    run_command(["git", "config", "--unset-all", "user.name"], logger=logger, check_error=False)
-    run_command(["git", "config", "--unset-all", "user.email"], logger=logger, check_error=False)
-    logger.info("Configuration de l'identité Git de l'agent nettoyée.")
-
-def run_command(command: list[str], logger: Logger, check_error: bool = True, capture_output: bool = False, env: dict | None = None) -> tuple[str | None, str | None]:
+def run_command(command: list[str], logger: Logger, check_error: bool = True, capture_output: bool = False) -> tuple[str | None, str | None]:
     logger.debug(f"Running command: {' '.join(command)}")
     try:
-        result = subprocess.run(command, check=check_error, capture_output=capture_output, text=True, env=env)
+        result = subprocess.run(command, check=check_error, capture_output=capture_output, text=True)
         if capture_output:
             return result.stdout, result.stderr
         return None, None

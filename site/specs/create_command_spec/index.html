@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Create Command Spec - Git Scripts Documentation</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">Git Scripts Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../installation/" class="nav-link">Installation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../cicd/" class="nav-link">CI/CD</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../CLI/" class="nav-link">CLI</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../LOGGER/" class="nav-link">Logger</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../agent_capabilities/" class="nav-link">Agent Capabilities</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../development_guidelines/" class="nav-link">Development Guidelines</a>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Specs <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="./" class="dropdown-item active">Create Command Spec</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Scripts <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../scripts/utils/setup-git-ssh/" class="dropdown-item">Setup SSH</a>
+</li>
+                                    
+<li>
+    <a href="../../scripts/utils/init-repository/" class="dropdown-item">Initialize Repository</a>
+</li>
+                                    
+<li>
+    <a href="../../scripts/utils/commit-push/" class="dropdown-item">Commit and Push</a>
+</li>
+                                    
+<li>
+    <a href="../../scripts/utils/sync-remote/" class="dropdown-item">Sync Remote</a>
+</li>
+                                    
+<li>
+    <a href="../../scripts/utils/release-version/" class="dropdown-item">Release Version</a>
+</li>
+                                    
+<li>
+    <a href="../../scripts/utils/documentation_scripts_git/" class="dropdown-item">Git Scripts Documentation</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../ssh-manager-v3/" class="nav-link">SSH Manager v3</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../../development_guidelines/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../../scripts/utils/setup-git-ssh/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p><strong>Cahier des Charges : Commande <code>sshkeys create</code></strong></p>
+<p><strong>Objectif :</strong> Implémenter la commande <code>create</code> pour générer une nouvelle clé SSH, l'ajouter à l'agent, et optionnellement la configurer dans <code>~/.ssh/config</code>.</p>
+<p><strong>1. Nom de la Commande :</strong>
+   <code>create</code> (sera une sous-commande du groupe principal <code>cli</code>)</p>
+<p><strong>2. Description CLI (pour l'aide <code>sshkeys create --help</code>) :</strong>
+   <code>Crée une nouvelle clé SSH, la charge dans l'agent et met à jour votre fichier ~/.ssh/config.
+   L'empreinte de la clé est affichée après sa création pour vérification.</code></p>
+<p><strong>3. Syntaxe CLI :</strong>
+   <code>sshkeys create &lt;nom_de_la_clé&gt; [OPTIONS]</code></p>
+<p><strong>4. Arguments :</strong></p>
+<ul>
+<li><code>&lt;nom_de_la_clé&gt;</code>
+        *   <strong>Type Click :</strong> <code>click.Argument("key_name")</code>
+        *   <strong>Description :</strong> Nom de base du fichier de la clé SSH (ex: <code>github-perso</code>). Ce nom sera utilisé pour les fichiers <code>~/.ssh/&lt;nom_de_la_clé&gt;</code> et <code>~/.ssh/&lt;nom_de_la_clé&gt;.pub</code>.
+        *   <strong>Obligatoire :</strong> Oui.</li>
+</ul>
+<p><strong>5. Options :</strong></p>
+<ul>
+<li>
+<p><code>--host &lt;nom_hôte&gt;</code>
+        *   <strong>Type Click :</strong> <code>click.Option("--host", type=str, help="Spécifie le nom d'hôte à utiliser dans ~/.ssh/config (ex: github.com-work). Si omis, la clé n'est pas ajoutée à config.")</code>
+        *   <strong>Description :</strong> Spécifie le nom d'hôte à utiliser dans <code>~/.ssh/config</code>.
+        *   <strong>Comportement :</strong> Si cette option est fournie, la clé sera également ajoutée à <code>~/.ssh/config</code> en utilisant ce <code>nom_hôte</code> comme <code>alias</code> et <code>real_host</code> dans l'objet <code>HostConfig</code> passé à <code>add_to_ssh_config</code>.
+        *   <strong>Valeur par défaut :</strong> Aucune (optionnel).</p>
+</li>
+<li>
+<p><code>--email &lt;adresse_email&gt;</code>
+        *   <strong>Type Click :</strong> <code>click.Option("--email", type=str, help="Spécifie l'email à utiliser comme commentaire pour la clé.")</code>
+        *   <strong>Description :</strong> Spécifie l'email à utiliser comme commentaire pour la clé (ex: <code>votre@email.com</code>).
+        *   <strong>Comportement :</strong> La valeur de cette option sera passée comme partie du commentaire (<code>-C</code>) à <code>ssh-keygen</code>. Si omis, le commentaire sera généré sans email spécifique.
+        *   <strong>Valeur par défaut :</strong> Aucune (optionnel).</p>
+</li>
+<li>
+<p><code>--passphrase</code>, <code>-P</code>
+        *   <strong>Type Click :</strong> <code>click.Option("--passphrase", "-P", is_flag=True, help="Demande une phrase secrète pour la clé.")</code>
+        *   <strong>Description :</strong> Demande une phrase secrète pour la clé.
+        *   <strong>Comportement :</strong> Si ce flag est présent, la fonction <code>generate_ssh_key</code> doit être appelée de manière à ce que <code>ssh-keygen</code> demande interactivement la phrase secrète. Si omis, <code>generate_ssh_key</code> doit être appelée avec <code>-N ""</code> pour créer une clé sans phrase secrète.
+        *   <strong>Valeur par défaut :</strong> <code>False</code> (flag).</p>
+</li>
+<li>
+<p><code>--force</code>, <code>-f</code>
+        *   <strong>Type Click :</strong> <code>click.Option("--force", "-f", is_flag=True, help="Force l'écrasement d'une clé existante sans demander confirmation.")</code>
+        *   <strong>Description :</strong> Force l'écrasement d'une clé existante.
+        *   <strong>Comportement :</strong> La valeur de ce flag sera passée comme argument <code>overwrite</code> à la fonction <code>generate_ssh_key</code>.
+        *   <strong>Valeur par défaut :</strong> <code>False</code> (flag).</p>
+</li>
+</ul>
+<p><strong>6. Comportement / Logique Interne (Implémentation dans <code>sshkeys/cli.py</code>) :</strong></p>
+<ul>
+<li><strong>Décorateur Click :</strong> <code>@cli.command()</code></li>
+<li><strong>Signature de la Fonction :</strong> <code>def create(key_name: str, host: Optional[str], email: Optional[str], passphrase: bool, force: bool):</code>
+        *   Assurez-vous d'importer <code>Optional</code> depuis <code>typing</code>.</li>
+<li><strong>Validation du Nom de la Clé (<code>key_name</code>) :</strong>
+        *   <strong>Règles :</strong>
+            *   Doit contenir uniquement des caractères alphanumériques (a-z, A-Z, 0-9), des tirets (<code>-</code>) ou des underscores (<code>_</code>).
+            *   Ne peut pas être <code>config</code> ou <code>known_hosts</code> (insensible à la casse).
+        *   <strong>Action en cas d'erreur :</strong> Lever une <code>click.BadParameter(message, param_name="key_name")</code> ou <code>click.UsageError(message)</code>.</li>
+<li><strong>Construction de l'Objet <code>HostConfig</code> pour <code>generate_ssh_key</code> :</strong>
+        *   Créez une instance de <code>HostConfig</code> (importez-la depuis <code>sshkeys.core.models</code>).
+        *   <code>host_type</code>: Définir à <code>"server"</code> par défaut. (Pour ce prototype, <code>"server"</code> est suffisant. L'intégration avec <code>detect_host</code> pour les URLs GitHub/GitLab peut être une amélioration future).
+        *   <code>alias</code>: <code>key_name</code>
+        *   <code>real_host</code>: <code>host</code> si spécifié, sinon <code>key_name</code>.
+        *   <code>user</code>: <code>git</code> (valeur par défaut simple pour le prototype).
+        *   <code>key_path</code>: <code>Path.home() / ".ssh" / key_name</code>
+        *   <code>key_type</code>: <code>ed25519</code> (valeur par défaut simple pour le prototype).
+        *   <code>identity_file</code>: <code>None</code> (pour le prototype).
+        *   <code>port</code>: <code>22</code> (par défaut).</li>
+<li><strong>Gestion de la Passphrase et Interactivité :</strong>
+        *   Si l'option <code>--passphrase</code> est utilisée, la fonction <code>generate_ssh_key</code> doit appeler <code>ssh-keygen</code> de manière à ce qu'il demande interactivement la phrase secrète à l'utilisateur.
+        *   Si l'option <code>--passphrase</code> n'est <em>pas</em> utilisée, la fonction <code>generate_ssh_key</code> doit appeler <code>ssh-keygen</code> avec l'option <code>-N ""</code> pour créer une clé sans phrase secrète et éviter toute interaction.
+        *   Pour toutes les autres options (<code>--host</code>, <code>--email</code>, <code>--force</code>), la commande <code>create</code> fonctionnera de manière non-interactive, en utilisant les valeurs fournies ou leurs valeurs par défaut. Elle ne demandera pas d'informations supplémentaires à l'utilisateur.</li>
+<li><strong>Appel à <code>generate_ssh_key</code> :</strong>
+        *   <code>generate_ssh_key(host_config_instance, overwrite=force)</code>
+        *   Assurez-vous que <code>generate_ssh_key</code> gère correctement l'absence de <code>-N ""</code> pour la passphrase.</li>
+<li><strong>Ajout à <code>~/.ssh/config</code> (si <code>--host</code> est spécifié) :</strong>
+        *   Si l'option <code>host</code> est fournie :
+            *   Construire un objet <code>HostConfig</code> approprié pour <code>add_to_ssh_config</code>.
+            *   Appeler <code>add_to_ssh_config(host_config_for_config)</code>.</li>
+<li><strong>Affichage de l'Empreinte :</strong>
+        *   Après la création réussie, afficher un message de succès.
+        *   Pour afficher l'empreinte, vous pouvez utiliser <code>subprocess.run(["ssh-keygen", "-lf", str(key_path)])</code> et capturer sa sortie.</li>
+<li><strong>Gestion des Erreurs :</strong>
+        *   Utiliser un bloc <code>try...except Exception as e:</code> pour capturer les erreurs (ex: <code>FileExistsError</code> de <code>generate_ssh_key</code>, <code>click.BadParameter</code>).
+        *   Afficher les messages d'erreur clairs via <code>click.echo(f"❌ Erreur : {e}", err=True)</code>.</li>
+</ul>
+<p><strong>7. Fichiers Impactés :</strong>
+   *   <code>sshkeys/cli.py</code> (ajout de la commande <code>create</code>)
+   *   Potentiellement <code>sshkeys/core/ssh.py</code> (si <code>generate_ssh_key</code> doit être ajustée pour la gestion de la phrase secrète).</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

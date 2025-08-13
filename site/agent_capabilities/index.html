@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Agent Capabilities - Git Scripts Documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Git Scripts Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../installation/" class="nav-link">Installation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../cicd/" class="nav-link">CI/CD</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../CLI/" class="nav-link">CLI</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../LOGGER/" class="nav-link">Logger</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">Agent Capabilities</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../development_guidelines/" class="nav-link">Development Guidelines</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Specs <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../specs/create_command_spec/" class="dropdown-item">Create Command Spec</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Scripts <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../scripts/utils/setup-git-ssh/" class="dropdown-item">Setup SSH</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/init-repository/" class="dropdown-item">Initialize Repository</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/commit-push/" class="dropdown-item">Commit and Push</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/sync-remote/" class="dropdown-item">Sync Remote</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/release-version/" class="dropdown-item">Release Version</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/documentation_scripts_git/" class="dropdown-item">Git Scripts Documentation</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="navitem">
+                                <a href="../ssh-manager-v3/" class="nav-link">SSH Manager v3</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../LOGGER/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../development_guidelines/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#agent-capabilities-and-available-tools" class="nav-link">Agent Capabilities and Available Tools</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#core-principles" class="nav-link">Core Principles</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#available-tools" class="nav-link">Available Tools</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#common-workflows-and-best-practices" class="nav-link">Common Workflows and Best Practices</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="agent-capabilities-and-available-tools">Agent Capabilities and Available Tools</h1>
+<p>This document outlines the tools and capabilities available to the agent, along with best practices for their use. Understanding these tools is crucial for efficient and effective development, avoiding redundant work, and leveraging existing functionalities.</p>
+<h2 id="core-principles">Core Principles</h2>
+<ul>
+<li><strong>Leverage Existing Tools:</strong> Before attempting to re-develop any functionality, check if an existing tool or capability already provides it.</li>
+<li><strong>Understand Tool Limitations:</strong> Be aware of the specific limitations and nuances of each tool (e.g., the strictness of the <code>replace</code> tool).</li>
+<li><strong>Prioritize Safety and Efficiency:</strong> Use tools in a manner that ensures the safety of the codebase and the efficiency of the development process.</li>
+</ul>
+<h2 id="available-tools">Available Tools</h2>
+<p>The agent has access to a set of powerful tools to interact with the filesystem, execute shell commands, perform web searches, and manage memory. These tools are exposed via the <code>default_api</code>.</p>
+<h3 id="1-filesystem-interaction">1. Filesystem Interaction</h3>
+<ul>
+<li>
+<p><strong><code>default_api.list_directory(path, file_filtering_options, ignore)</code></strong></p>
+<ul>
+<li><strong>Purpose:</strong> Lists files and subdirectories within a specified path.</li>
+<li><strong>Best Practices:</strong> Always use absolute paths. Can filter using glob patterns and respect <code>.gitignore</code>.</li>
+<li><strong>Example:</strong> <code>default_api.list_directory(path='/path/to/project', ignore=['*.log'])</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>default_api.read_file(absolute_path, limit, offset)</code></strong></p>
+<ul>
+<li><strong>Purpose:</strong> Reads the content of a specified file. Supports text, images, and PDF files.</li>
+<li><strong>Best Practices:</strong> Always use absolute paths. Crucial for understanding file content before modification. For large text files, use <code>limit</code> and <code>offset</code> for pagination.</li>
+<li><strong>Example:</strong> <code>default_api.read_file(absolute_path='/path/to/file.txt')</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>default_api.read_many_files(paths, exclude, file_filtering_options, include, recursive, useDefaultExcludes)</code></strong></p>
+<ul>
+<li><strong>Purpose:</strong> Reads content from multiple files specified by paths or glob patterns. Useful for gaining context from multiple files simultaneously.</li>
+<li><strong>Best Practices:</strong> Use when a broad understanding of multiple files is needed. Supports glob patterns and exclusions.</li>
+<li><strong>Example:</strong> <code>default_api.read_many_files(paths=['src/**/*.py', 'docs/*.md'])</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>default_api.search_file_content(pattern, include, path)</code></strong></p>
+<ul>
+<li><strong>Purpose:</strong> Searches for a regular expression pattern within file contents.</li>
+<li><strong>Best Practices:</strong> Efficient for finding specific code snippets or patterns across the codebase. Can filter by glob patterns.</li>
+<li><strong>Example:</strong> <code>default_api.search_file_content(pattern='function\s+myFunction', include='*.js')</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>default_api.write_file(content, file_path)</code></strong></p>
+<ul>
+<li><strong>Purpose:</strong> Writes content to a specified file.</li>
+<li><strong>Best Practices:</strong> Always use absolute paths. Use with caution as it overwrites existing content. Ensure content is correctly formatted and encoded.</li>
+<li><strong>Example:</strong> <code>default_api.write_file(content='Hello World', file_path='/path/to/new_file.txt')</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>default_api.replace(file_path, new_string, old_string, expected_replacements)</code></strong></p>
+<ul>
+<li><strong>Purpose:</strong> Replaces text within a file.</li>
+<li><strong>Best Practices:</strong> <strong>Highly sensitive to exact string matching.</strong> Always <code>read_file</code> the target content immediately before using <code>replace</code> to construct <code>old_string</code> precisely. For complex, multi-line, or uncertain changes, prefer the fallback method: <code>read_file</code> -&gt; modify in memory -&gt; <code>write_file</code>. Avoid escaping <code>old_string</code> or <code>new_string</code> unless explicitly required by the underlying system.</li>
+<li><strong>Example:</strong> <code>default_api.replace(file_path='/file.txt', old_string='old text', new_string='new text')</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>default_api.glob(pattern, case_sensitive, path, respect_git_ignore)</code></strong></p>
+<ul>
+<li><strong>Purpose:</strong> Finds files matching specific glob patterns.</li>
+<li><strong>Best Practices:</strong> Efficient for locating files by name or path structure. Can respect <code>.gitignore</code>.</li>
+<li><strong>Example:</strong> <code>default_api.glob(pattern='**/*.py')</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="2-shell-command-execution">2. Shell Command Execution</h3>
+<ul>
+<li><strong><code>default_api.run_shell_command(command, description, directory)</code></strong><ul>
+<li><strong>Purpose:</strong> Executes a given shell command.</li>
+<li><strong>Best Practices:</strong> Provide a clear <code>description</code> for commands that modify the filesystem or system state. Use <code>&amp;</code> for background processes. Avoid interactive commands. Ensure commands are safe and necessary.</li>
+<li><strong>Example:</strong> <code>default_api.run_shell_command(command='ls -l', description='List files in current directory.')</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="3-web-interaction">3. Web Interaction</h3>
+<ul>
+<li>
+<p><strong><code>default_api.web_fetch(prompt)</code></strong></p>
+<ul>
+<li><strong>Purpose:</strong> Processes content from URLs (including local/private network) based on instructions in the prompt.</li>
+<li><strong>Best Practices:</strong> Include clear instructions and up to 20 URLs. Useful for summarizing web content or extracting specific data.</li>
+<li><strong>Example:</strong> <code>default_api.web_fetch(prompt='Summarize https://example.com/article')</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>default_api.google_web_search(query)</code></strong></p>
+<ul>
+<li><strong>Purpose:</strong> Performs a web search using Google Search.</li>
+<li><strong>Best Practices:</strong> Use for finding general information on the internet.</li>
+<li><strong>Example:</strong> <code>default_api.google_web_search(query='Python best practices')</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="4-memory-management">4. Memory Management</h3>
+<ul>
+<li><strong><code>default_api.save_memory(fact)</code></strong><ul>
+<li><strong>Purpose:</strong> Saves a specific piece of information or fact to long-term memory.</li>
+<li><strong>Best Practices:</strong> Use only for user-specific facts or preferences that should persist across sessions. Do not use for conversational context or general project information.</li>
+<li><strong>Example:</strong> <code>default_api.save_memory(fact='User prefers tabs over spaces.')</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="common-workflows-and-best-practices">Common Workflows and Best Practices</h2>
+<ul>
+<li><strong>Code Modification:</strong> Always <code>read_file</code> before <code>replace</code>. For complex changes, use <code>read_file</code> -&gt; in-memory modification -&gt; <code>write_file</code> as a robust fallback.</li>
+<li><strong>Git Operations:</strong> Use <code>run_shell_command</code> for <code>git status</code>, <code>git add</code>, <code>git commit</code>, <code>git push</code>, etc. Always check <code>git status</code> before committing.</li>
+<li><strong>Python Development:</strong> Leverage <code>run_shell_command</code> for <code>pip install</code>, <code>poetry install</code>, <code>pytest</code>, <code>ruff check</code>, <code>black</code>, etc. Always work within virtual environments.</li>
+<li><strong>Problem Solving:</strong> Use <code>search_file_content</code> and <code>glob</code> to understand the codebase. Use <code>google_web_search</code> for external knowledge.</li>
+</ul>
+<h3 id="5-orchestration-of-external-python-development-tools">5. Orchestration of External Python Development Tools</h3>
+<p>The agent is capable of orchestrating a wide range of external Python development tools by executing them via <code>default_api.run_shell_command</code>. This allows the agent to leverage industry-standard tools for various development tasks.</p>
+<ul>
+<li><strong>Formatage de Code :</strong> Black, Autopep8</li>
+<li><strong>Linting :</strong> Pylint, Flake8, Ruff</li>
+<li><strong>Gestion des Dépendances :</strong> Pipenv, Poetry</li>
+<li><strong>Tests :</strong> Pytest, Unittest</li>
+<li><strong>Environnements Virtuels :</strong> Virtualenv, Conda</li>
+<li><strong>Documentation :</strong> Sphinx, MkDocs</li>
+<li><strong>Gestion de Version :</strong> Git, GitPython</li>
+<li><strong>Construction et Déploiement :</strong> Setuptools, Twine</li>
+<li><strong>Profiling et Performance :</strong> cProfile, Py-Spy</li>
+<li><strong>Gestion des Erreurs et Logging :</strong> Logging, Sentry</li>
+<li><strong>Gestion des Données :</strong> Pandas, SQLAlchemy</li>
+<li><strong>Sécurité :</strong> Bandit, Safety</li>
+</ul>
+<p>This document will be updated as new tools and capabilities are introduced or refined.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

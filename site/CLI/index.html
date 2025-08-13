@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>CLI - Git Scripts Documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Git Scripts Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../installation/" class="nav-link">Installation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../cicd/" class="nav-link">CI/CD</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">CLI</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../LOGGER/" class="nav-link">Logger</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../agent_capabilities/" class="nav-link">Agent Capabilities</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../development_guidelines/" class="nav-link">Development Guidelines</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Specs <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../specs/create_command_spec/" class="dropdown-item">Create Command Spec</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Scripts <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../scripts/utils/setup-git-ssh/" class="dropdown-item">Setup SSH</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/init-repository/" class="dropdown-item">Initialize Repository</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/commit-push/" class="dropdown-item">Commit and Push</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/sync-remote/" class="dropdown-item">Sync Remote</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/release-version/" class="dropdown-item">Release Version</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils/documentation_scripts_git/" class="dropdown-item">Git Scripts Documentation</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="navitem">
+                                <a href="../ssh-manager-v3/" class="nav-link">SSH Manager v3</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../cicd/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../LOGGER/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#git-workflow-tool-interface-en-ligne-de-commande" class="nav-link">Git Workflow Tool - Interface en Ligne de Commande</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#table-des-matieres" class="nav-link">Table des matières</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#introduction" class="nav-link">Introduction</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#installation" class="nav-link">Installation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#utilisation-de-base" class="nav-link">Utilisation de base</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#options-globales" class="nav-link">Options globales</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#commandes-disponibles" class="nav-link">Commandes disponibles</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mode-interactif" class="nav-link">Mode interactif</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#exemples-dutilisation" class="nav-link">Exemples d'utilisation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#variables-denvironnement" class="nav-link">Variables d'environnement</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#integration-cicd" class="nav-link">Intégration CI/CD</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#developpement-et-extension" class="nav-link">Développement et extension</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#resolution-des-problemes" class="nav-link">Résolution des problèmes</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#changelog" class="nav-link">Changelog</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#licence" class="nav-link">Licence</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="git-workflow-tool-interface-en-ligne-de-commande">Git Workflow Tool - Interface en Ligne de Commande</h1>
+<h2 id="table-des-matieres">Table des matières</h2>
+<ol>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#utilisation-de-base">Utilisation de base</a></li>
+<li><a href="#options-globales">Options globales</a></li>
+<li><a href="#commandes-disponibles">Commandes disponibles</a></li>
+<li><a href="#commit">commit</a></li>
+<li><a href="#release">release</a></li>
+<li><a href="#sync">sync</a></li>
+<li><a href="#tag">tag</a></li>
+<li><a href="#mode-interactif">Mode interactif</a></li>
+<li><a href="#exemples-dutilisation">Exemples d'utilisation</a></li>
+<li><a href="#variables-denvironnement">Variables d'environnement</a></li>
+<li><a href="#intégration-cicd">Intégration CI/CD</a></li>
+<li><a href="#développement-et-extension">Développement et extension</a></li>
+</ol>
+<hr />
+<h2 id="introduction">Introduction</h2>
+<p><code>git_tools/cli.py</code> est le <strong>point d'entrée principal</strong> de Git Workflow Tool. Il offre :
+- Une <strong>interface en ligne de commande</strong> complète
+- Un <strong>menu interactif</strong> pour les utilisateurs débutants
+- Un <strong>mode non-interactif</strong> pour les scripts et CI/CD
+- Une <strong>architecture modulaire</strong> facile à étendre</p>
+<hr />
+<h2 id="installation">Installation</h2>
+<h3 id="via-pip-recommande">Via pip (recommandé)</h3>
+<pre><code class="language-bash">pip install git-tools
+</code></pre>
+<h3 id="en-developpement">En développement</h3>
+<pre><code class="language-bash">git clone https://github.com/votre-repo/git-tools.git
+cd git-tools
+pip install -e .
+</code></pre>
+<h2 id="utilisation-de-base">Utilisation de base</h2>
+<pre><code class="language-bash"># Lancer le menu interactif
+git-tools
+
+# Exécuter une commande spécifique
+git-tools commit -m &quot;Mon message de commit&quot;
+
+# Afficher l'aide
+git-tools --help
+
+# Afficher la version
+git-tools --version
+</code></pre>
+<h2 id="options-globales">Options globales</h2>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--version</code></td>
+<td>Affiche la version et quitte</td>
+</tr>
+<tr>
+<td><code>--non-interactive</code></td>
+<td>Désactive les prompts interactifs (pour les scripts/CI)</td>
+</tr>
+<tr>
+<td><code>--debug</code></td>
+<td>Active les messages de debug</td>
+</tr>
+<tr>
+<td><code>--force-color</code></td>
+<td>Force l'affichage des couleurs même si stdout n'est pas un TTY</td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>Affiche l'aide et quitte</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exemple :</strong></p>
+<pre><code class="language-bash">git-tools --non-interactive --debug commit -m &quot;Fix bug&quot;
+</code></pre>
+<h2 id="commandes-disponibles">Commandes disponibles</h2>
+<h3 id="commit">commit</h3>
+<p>Effectue un commit et push vers le dépôt distant.</p>
+<p><strong>Usage :</strong></p>
+<pre><code class="language-bash">git-tools commit [OPTIONS]
+</code></pre>
+<p><strong>Options :</strong></p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-m</code>, <code>--message</code></td>
+<td>Message de commit (désactive le prompt)</td>
+</tr>
+<tr>
+<td><code>--amend</code></td>
+<td>Modifie le dernier commit au lieu d'en créer un nouveau</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exemples :</strong></p>
+<pre><code class="language-bash"># Mode interactif
+git-tools commit
+
+# Mode non-interactif avec message
+git-tools --non-interactive commit -m &quot;Fix critical bug&quot;
+</code></pre>
+<h3 id="release">release</h3>
+<p>Crée une nouvelle release (tag + push).</p>
+<p><strong>Usage :</strong></p>
+<pre><code class="language-bash">git-tools release [OPTIONS]
+</code></pre>
+<p><strong>Options :</strong></p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--type</code></td>
+<td>Type de release (major/minor/patch)</td>
+</tr>
+<tr>
+<td><code>--dry-run</code></td>
+<td>Simule la création sans appliquer les changements</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exemples :</strong></p>
+<pre><code class="language-bash"># Créer une release patch
+git-tools release --type patch
+
+# Simulation
+git-tools release --type minor --dry-run
+</code></pre>
+<h3 id="sync">sync</h3>
+<p>Synchronise le dépôt local avec le dépôt distant.</p>
+<p><strong>Usage :</strong></p>
+<pre><code class="language-bash">git-tools sync
+</code></pre>
+<p><strong>Exemple :</strong></p>
+<pre><code class="language-bash">git-tools --non-interactive sync
+</code></pre>
+<h3 id="tag">tag</h3>
+<p>Gère les tags Git (liste, création, suppression).</p>
+<p><strong>Usage :</strong></p>
+<pre><code class="language-bash">git-tools tag ACTION [OPTIONS]
+</code></pre>
+<p><strong>Actions disponibles :</strong></p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list</code></td>
+<td>Liste tous les tags</td>
+</tr>
+<tr>
+<td><code>create</code></td>
+<td>Crée un nouveau tag</td>
+</tr>
+<tr>
+<td><code>delete</code></td>
+<td>Supprime un tag existant</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Options :</strong></p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--name</code></td>
+<td>Nom du tag (pour create/delete)</td>
+</tr>
+<tr>
+<td><code>--message</code></td>
+<td>Message du tag (pour create)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exemples :</strong></p>
+<pre><code class="language-bash"># Lister les tags
+git-tools tag list
+
+# Créer un tag
+git-tools tag create --name v1.0.0 --message &quot;Version 1.0.0&quot;
+
+# Supprimer un tag
+git-tools tag delete --name v1.0.0
+</code></pre>
+<h2 id="mode-interactif">Mode interactif</h2>
+<p>Si aucune commande n'est spécifiée, l'outil lance un menu interactif :</p>
+<pre><code>🐙 Git Workflow Tool - Menu Principal
+==================================================
+1. Commit &amp; Push
+2. Créer une Release
+3. Synchroniser avec le dépôt distant
+4. Gérer les Tags
+5. Quitter
+</code></pre>
+<p><strong>Navigation :</strong>
+- Utilisez les numéros pour sélectionner une option
+- Suivez les instructions à l'écran</p>
+<p><strong>Exemple :</strong></p>
+<pre><code class="language-bash">git-tools  # Lance le menu interactif
+</code></pre>
+<h2 id="exemples-dutilisation">Exemples d'utilisation</h2>
+<h3 id="1-workflow-de-commit-complet">1. Workflow de commit complet</h3>
+<pre><code class="language-bash"># Mode interactif
+git-tools commit
+
+# Mode non-interactif (pour CI)
+git-tools --non-interactive commit -m &quot;Update README [skip ci]&quot;
+</code></pre>
+<h3 id="2-creation-dune-release">2. Création d'une release</h3>
+<pre><code class="language-bash"># Avec confirmation interactive
+git-tools release --type minor
+
+# Sans interaction (pour scripts)
+git-tools --non-interactive release --type patch
+</code></pre>
+<h3 id="3-synchronisation">3. Synchronisation</h3>
+<pre><code class="language-bash"># Mode interactif
+git-tools sync
+
+# Mode silencieux
+git-tools --non-interactive sync
+</code></pre>
+<h3 id="4-gestion-des-tags">4. Gestion des tags</h3>
+<pre><code class="language-bash"># Lister les tags
+git-tools tag list
+
+# Créer un tag annoté
+git-tools tag create --name v2.0.0 --message &quot;Version 2.0.0&quot;
+
+# Supprimer un tag
+git-tools --non-interactive tag delete --name v2.0.0
+</code></pre>
+<h2 id="variables-denvironnement">Variables d'environnement</h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+<th>Valeurs possibles</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DEBUG</code></td>
+<td>Active les messages de debug</td>
+<td><code>1</code>, <code>true</code>, <code>yes</code></td>
+</tr>
+<tr>
+<td><code>FORCE_COLOR</code></td>
+<td>Force l'affichage des couleurs</td>
+<td><code>1</code>, <code>true</code>, <code>yes</code></td>
+</tr>
+<tr>
+<td><code>NO_COLOR</code></td>
+<td>Désactive complètement les couleurs</td>
+<td>Toute valeur</td>
+</tr>
+<tr>
+<td><code>GIT_TOOLS_NON_INTERACTIVE</code></td>
+<td>Désactive le mode interactif (alternative à <code>--non-interactive</code>)</td>
+<td>Toute valeur</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exemple :</strong></p>
+<pre><code class="language-bash">DEBUG=1 git-tools commit
+</code></pre>
+<h2 id="integration-cicd">Intégration CI/CD</h2>
+<p>Pour utiliser Git Workflow Tool dans vos pipelines CI/CD :</p>
+<h3 id="github-actions">GitHub Actions</h3>
+<pre><code class="language-yaml">- name: Commit changes
+  run: |
+    git-tools --non-interactive commit -m &quot;Auto-commit from CI [skip ci]&quot;
+    git-tools --non-interactive sync
+</code></pre>
+<h3 id="gitlab-ci">GitLab CI</h3>
+<pre><code class="language-yaml">script:
+  - git-tools --non-interactive release --type patch
+</code></pre>
+<h3 id="jenkins">Jenkins</h3>
+<pre><code class="language-groovy">sh 'git-tools --non-interactive --debug sync'
+</code></pre>
+<h2 id="developpement-et-extension">Développement et extension</h2>
+<h3 id="ajouter-une-nouvelle-commande">Ajouter une nouvelle commande</h3>
+<ol>
+<li>
+<p><strong>Créer une fonction workflow</strong> dans <code>git_tools/workflows.py</code> :
+    <code>python
+    def ma_nouvelle_commande(logger: Logger, args: argparse.Namespace) -&gt; None:
+        logger.info("Exécution de ma nouvelle commande...")
+        # ... logique métier</code></p>
+</li>
+<li>
+<p><strong>Mettre à jour <code>COMMAND_MAPPING</code></strong> dans <code>cli.py</code> :
+    <code>python
+    COMMAND_MAPPING = {
+        # ... commandes existantes ...
+        "ma-commande": ma_nouvelle_commande,
+    }</code></p>
+</li>
+<li>
+<p><strong>Ajouter le parser de commande</strong> dans <code>parse_args()</code> :
+    <code>python
+    ma_commande_parser = subparsers.add_parser(
+        "ma-commande",
+        help="Description de ma commande",
+    )
+    ma_commande_parser.add_argument(
+        "--option",
+        help="Description de l'option",
+    )</code></p>
+</li>
+</ol>
+<h3 id="structure-du-projet">Structure du projet</h3>
+<pre><code>git_tools/
+├── __init__.py
+├── cli.py          # Point d'entrée (ce fichier)
+├── logger.py       # Gestion des logs et interactions
+├── workflows.py    # Logique métier des commandes
+└── utils/          # Fonctions utilitaires
+</code></pre>
+<h3 id="bonnes-pratiques">Bonnes pratiques</h3>
+<ul>
+<li><strong>Toujours utiliser le <code>logger</code></strong> pour les interactions utilisateur.</li>
+<li><strong>Gérer les erreurs proprement</strong>.</li>
+<li><strong>Documenter les nouvelles commandes</strong> dans le <code>__doc__</code> du module.</li>
+<li><strong>Respecter le typage</strong> pour une meilleure maintenabilité.</li>
+</ul>
+<h2 id="resolution-des-problemes">Résolution des problèmes</h2>
+<ul>
+<li><strong>Problème : Commande non trouvée</strong></li>
+<li>
+<p><strong>Solutions :</strong> Vérifier <code>COMMAND_MAPPING</code>, le parser, et la casse.</p>
+</li>
+<li>
+<p><strong>Problème : L'outil plante en mode non-interactif</strong></p>
+</li>
+<li>
+<p><strong>Solutions :</strong> Vérifier le flag <code>--non-interactive</code>, s'assurer que les <code>prompt</code>/<code>confirm</code> ont des valeurs par défaut.</p>
+</li>
+<li>
+<p><strong>Problème : Les couleurs ne s'affichent pas</strong></p>
+</li>
+<li>
+<p><strong>Solutions :</strong> Forcer avec <code>--force-color</code>, vérifier <code>NO_COLOR</code>.</p>
+</li>
+<li>
+<p><strong>Problème : Erreur de permission</strong></p>
+</li>
+<li><strong>Solutions :</strong> Configurer la clé SSH avec <code>ssh-add</code>, utiliser le workflow de setup SSH.</li>
+</ul>
+<h2 id="changelog">Changelog</h2>
+<ul>
+<li><strong>v1.0.0 (2023-11-20):</strong> Première version stable.</li>
+<li><strong>v1.1.0 (2023-11-25):</strong> Ajout du support des variables d'environnement.</li>
+</ul>
+<h2 id="licence">Licence</h2>
+<p>Ce projet est sous licence MIT. Voir le fichier LICENSE pour plus de détails.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
