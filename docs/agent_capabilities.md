@@ -10,8 +10,6 @@ This document outlines the tools and capabilities available to the agent, along 
 
 ## Available Tools
 
-The agent has access to a set of powerful tools to interact with the filesystem, execute shell commands, perform web searches, and manage memory. These tools are exposed via the `default_api`.
-
 ### 1. Filesystem Interaction
 
 *   **`default_api.list_directory(path, file_filtering_options, ignore)`**
@@ -81,5 +79,22 @@ The agent has access to a set of powerful tools to interact with the filesystem,
 *   **Git Operations:** Use `run_shell_command` for `git status`, `git add`, `git commit`, `git push`, etc. Always check `git status` before committing.
 *   **Python Development:** Leverage `run_shell_command` for `pip install`, `poetry install`, `pytest`, `ruff check`, `black`, etc. Always work within virtual environments.
 *   **Problem Solving:** Use `search_file_content` and `glob` to understand the codebase. Use `google_web_search` for external knowledge.
+
+### 5. Orchestration of External Python Development Tools
+
+The agent is capable of orchestrating a wide range of external Python development tools by executing them via `default_api.run_shell_command`. This allows the agent to leverage industry-standard tools for various development tasks.
+
+*   **Formatage de Code :** Black, Autopep8
+*   **Linting :** Pylint, Flake8, Ruff
+*   **Gestion des Dépendances :** Pipenv, Poetry
+*   **Tests :** Pytest, Unittest
+*   **Environnements Virtuels :** Virtualenv, Conda
+*   **Documentation :** Sphinx, MkDocs
+*   **Gestion de Version :** Git, GitPython
+*   **Construction et Déploiement :** Setuptools, Twine
+*   **Profiling et Performance :** cProfile, Py-Spy
+*   **Gestion des Erreurs et Logging :** Logging, Sentry
+*   **Gestion des Données :** Pandas, SQLAlchemy
+*   **Sécurité :** Bandit, Safety
 
 This document will be updated as new tools and capabilities are introduced or refined.

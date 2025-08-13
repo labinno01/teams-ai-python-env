@@ -55,6 +55,19 @@ Ces règles complètent les principes généraux et s'appliquent aux particulari
 *   **Indentation :** Toujours conserver l'indentation exacte lors des modifications. Utiliser des outils qui préservent l'indentation (comme les formatteurs de code).
 *   **Gestion des Fichiers :** Spécifier explicitement l'encodage `UTF-8` lors de la lecture et de l'écriture de fichiers. Utiliser `pathlib` pour une gestion robuste des chemins.
 *   **Environnements Virtuels :** Tester les modifications dans un environnement virtuel pour s'assurer qu'elles ne cassent pas les dépendances et pour isoler le projet.
+*   **Outils Recommandés pour Python :**
+    *   **Formatage :** Black, Autopep8
+    *   **Linting :** Pylint, Flake8, Ruff
+    *   **Gestion des Dépendances :** Pipenv, Poetry
+    *   **Tests :** Pytest, Unittest
+    *   **Environnements Virtuels :** Virtualenv, Conda
+    *   **Documentation :** Sphinx, MkDocs
+    *   **Gestion de Version :** Git, GitPython
+    *   **Construction et Déploiement :** Setuptools, Twine
+    *   **Profiling et Performance :** cProfile, Py-Spy
+    *   **Gestion des Erreurs et Logging :** Logging, Sentry
+    *   **Gestion des Données :** Pandas, SQLAlchemy
+    *   **Sécurité :** Bandit, Safety
 
 ### Bash
 
@@ -89,3 +102,16 @@ Pour faciliter l'adhérence à ces règles, les outils suivants devraient être 
 *   **Outils de Test et Validation :** Linters, formatteurs, frameworks de test.
 *   **Outils de Journalisation et Suivi :** Pour suivre les changements et les sauvegardes.
 *   **Outils d'Automatisation :** Pour les tâches répétitives et les modifications complexes.
+*   **Outils Spécifiques au Développement Python :**
+    *   **Formatage :** Black, Autopep8
+    *   **Linting :** Pylint, Flake8, Ruff
+    *   **Gestion des Dépendances :** Pipenv, Poetry
+    *   **Tests :** Pytest, Unittest
+    *   **Environnements Virtuels :** Virtualenv, Conda
+    *   **Documentation :** Sphinx, MkDocs
+    *   **Gestion de Version :** Git, GitPython
+    *   **Construction et Déploiement :** Setuptools, Twine
+    *   **Profiling et Performance :** cProfile, Py-Spy
+    *   **Gestion des Erreurs et Logging :** Logging, Sentry
+    *   **Gestion des Données :** Pandas, SQLAlchemy
+    *   **Sécurité :** Bandit, Safety
