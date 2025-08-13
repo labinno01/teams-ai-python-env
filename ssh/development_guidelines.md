@@ -52,22 +52,13 @@ Ces règles complètent les principes généraux et s'appliquent aux particulari
 
 ### Python
 
-*   **Indentation :** Toujours conserver l'indentation exacte lors des modifications. Utiliser des outils qui préservent l'indentation (comme les formatteurs de code).
+*   **Indentation :** Toujours conserver l'indentation exacte lors des modifications. Utiliser des outils de formatage (tels que Black ou Autopep8) pour garantir la cohérence.
 *   **Gestion des Fichiers :** Spécifier explicitement l'encodage `UTF-8` lors de la lecture et de l'écriture de fichiers. Utiliser `pathlib` pour une gestion robuste des chemins.
-*   **Environnements Virtuels :** Tester les modifications dans un environnement virtuel pour s'assurer qu'elles ne cassent pas les dépendances et pour isoler le projet.
-*   **Outils Recommandés pour Python :**
-    *   **Formatage :** Black, Autopep8
-    *   **Linting :** Pylint, Flake8, Ruff
-    *   **Gestion des Dépendances :** Pipenv, Poetry
-    *   **Tests :** Pytest, Unittest
-    *   **Environnements Virtuels :** Virtualenv, Conda
-    *   **Documentation :** Sphinx, MkDocs
-    *   **Gestion de Version :** Git, GitPython
-    *   **Construction et Déploiement :** Setuptools, Twine
-    *   **Profiling et Performance :** cProfile, Py-Spy
-    *   **Gestion des Erreurs et Logging :** Logging, Sentry
-    *   **Gestion des Données :** Pandas, SQLAlchemy
-    *   **Sécurité :** Bandit, Safety
+*   **Environnements Virtuels :** Tester les modifications dans un environnement virtuel pour s'assurer qu'elles ne cassent pas les dépendances et pour isoler le projet. Utiliser des outils de gestion d'environnement (tels que Virtualenv ou Conda).
+*   **Qualité de Code :** Appliquer des outils de linting (comme Pylint, Flake8, ou Ruff) et des frameworks de test (comme Pytest ou Unittest) pour valider le code.
+*   **Gestion de Projet :** Utiliser des outils de gestion de dépendances (comme Pipenv ou Poetry) et des systèmes de gestion de version (comme Git ou GitPython).
+*   **Documentation :** Générer et maintenir la documentation avec des outils dédiés (comme Sphinx ou MkDocs).
+*   **Performance et Sécurité :** Utiliser des profileurs (comme cProfile ou Py-Spy) et des outils d'analyse de sécurité (comme Bandit ou Safety) pour optimiser et sécuriser le code.
 
 ### Bash
 
@@ -102,16 +93,3 @@ Pour faciliter l'adhérence à ces règles, les outils suivants devraient être 
 *   **Outils de Test et Validation :** Linters, formatteurs, frameworks de test.
 *   **Outils de Journalisation et Suivi :** Pour suivre les changements et les sauvegardes.
 *   **Outils d'Automatisation :** Pour les tâches répétitives et les modifications complexes.
-*   **Outils Spécifiques au Développement Python :**
-    *   **Formatage :** Black, Autopep8
-    *   **Linting :** Pylint, Flake8, Ruff
-    *   **Gestion des Dépendances :** Pipenv, Poetry
-    *   **Tests :** Pytest, Unittest
-    *   **Environnements Virtuels :** Virtualenv, Conda
-    *   **Documentation :** Sphinx, MkDocs
-    *   **Gestion de Version :** Git, GitPython
-    *   **Construction et Déploiement :** Setuptools, Twine
-    *   **Profiling et Performance :** cProfile, Py-Spy
-    *   **Gestion des Erreurs et Logging :** Logging, Sentry
-    *   **Gestion des Données :** Pandas, SQLAlchemy
-    *   **Sécurité :** Bandit, Safety

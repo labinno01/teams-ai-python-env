@@ -10,6 +10,8 @@ This document outlines the tools and capabilities available to the agent, along 
 
 ## Available Tools
 
+The agent has access to a set of powerful tools to interact with the filesystem, execute shell commands, perform web searches, and manage memory. These tools are exposed via the `default_api`.
+
 ### 1. Filesystem Interaction
 
 *   **`default_api.list_directory(path, file_filtering_options, ignore)`**
