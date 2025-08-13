@@ -1,6 +1,5 @@
 import subprocess
 from pathlib import Path
-from typing import Optional
 import os
 import requests # Import requests
 
@@ -13,12 +12,17 @@ def generate_ssh_key(host: HostConfig, overwrite: bool = False) -> Path:
         raise FileExistsError(f"Clé existante : {key_path}")
 
     # Génère la clé
-    subprocess.run([
+    command = [
         "ssh-keygen", "-t", host.key_type,
         "-f", str(key_path),
-        "-N", "",  # Pas de passphrase
-        "-C", f"{host.user}@{host.alias}"
-    ], check=True)
+        "-C", host.comment if host.comment else f"{host.user}@{host.alias}" # Use host.comment if available
+    ]
+
+    # Add -N "" if no passphrase is required
+    if not host.passphrase_flag: # Use host.passphrase_flag
+        command.extend(["-N", ""])
+
+    subprocess.run(command, check=True) # THIS LINE WAS MISSING!
 
     # Ajoute la clé à ssh-agent
     subprocess.run(["ssh-add", str(key_path)], check=True)

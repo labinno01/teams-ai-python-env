@@ -12,3 +12,5 @@ class HostConfig(BaseModel):
     key_path: Optional[str]     # Chemin vers la clé privée (ex: ~/.ssh/id_ed25519)
     identity_file: Optional[Path] = None
     key_type: str = "ed25519"   # Type de clé (ed25519, rsa, etc.)
+    comment: Optional[str] = None # Commentaire pour la clé SSH
+    passphrase_flag: bool = False # Indique si une passphrase est requise
