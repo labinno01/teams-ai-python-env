@@ -43,7 +43,7 @@ def assist(url: str, default_user: str, overwrite: bool):
         click.echo(f"❌ Erreur : {e}", err=True)
 
 @cli.command()
-def list():
+def config_list():
     """Liste les hôtes configurés dans ~/.ssh/config."""
     hosts = list_ssh_configs()
     if not hosts:
@@ -115,8 +115,20 @@ def check():
 @click.option("--dry-run", is_flag=True, default=True, help="Simule sans modifier.")
 def migrate(dry_run: bool):
     """Migre known_hosts vers SHA256 et nettoie les entrées."""
-    if not migrate_known_hosts(dry_run=dry_run):
-        click.echo("❌ Échec de la migration.", err=True)
+    migrated_hosts = migrate_known_hosts(dry_run=dry_run)
+    if dry_run:
+        click.echo("\n--- Résultat de la simulation ---")
+        if migrated_hosts:
+            for host, fps in migrated_hosts.items():
+                click.echo(f"  - {host}:")
+                for fp in fps:
+                    click.echo(f"    - {fp}")
+        else:
+            click.echo("Aucun hôte à migrer ou aucune modification.")
+    else:
+        if not migrated_hosts:
+            click.echo("❌ Échec de la migration.", err=True)
+
 
 if __name__ == "__main__":
     cli()
