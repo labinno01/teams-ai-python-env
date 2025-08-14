@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: super_replace
+Version: 0.1.0
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Requires-Dist: click
+Requires-Dist: astor
+Dynamic: classifier
+Dynamic: requires-dist
+Dynamic: requires-python

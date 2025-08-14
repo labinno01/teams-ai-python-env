@@ -1,0 +1,14 @@
+# Byte-code files
+*.pyc
+__pycache__/
+
+# Distribution / build
+/dist/
+/.eggs/
+*.egg-info/
+/build/
+
+# PyInstaller
+*.spec
+/build/
+/dist/

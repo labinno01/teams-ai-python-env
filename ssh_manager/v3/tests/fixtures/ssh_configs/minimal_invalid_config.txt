@@ -1,0 +1,4 @@
+Host my_test_host
+    HostName example.com
+    User testuser
+    Port 22

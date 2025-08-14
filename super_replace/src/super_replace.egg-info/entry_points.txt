@@ -1,0 +1,2 @@
+[console_scripts]
+super_replace = super_replace.cli:cli

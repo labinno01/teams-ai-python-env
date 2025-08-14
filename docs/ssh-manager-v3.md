@@ -1,4 +1,6 @@
-# Gestionnaire de Clés SSH v3
+# Gestionnaire de Clés SSH v3.0.5
+
+Cette documentation concerne la version 3.0.5 du gestionnaire de clés SSH.
 
 Ceci est la documentation pour le nouveau gestionnaire de clés SSH basé sur Python.
 

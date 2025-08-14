@@ -240,7 +240,7 @@ Si l'objectif de la version 2.0.0 est de fournir une **interface Python fonction
 #### Idées futures / Backlog pour les évolutions mineures (Phase 1 & 2) :
 
 1.  **Tests approfondis du workflow Sync :**
-    -   **Objectif :** Tester les scénarios "en retard" et "divergent" du workflow `sync` pour assurer une robustesse complète.
+    -   **Objectif :** Tester les scénarios "en retard" et "divergent" du workflow `sync` pour assurer une robustes se complète.
     -   **Action :** Simuler des commits distants et des divergences pour valider le comportement du script.
 
 2.  **Intégration de la stratégie de branchement Git :**
@@ -294,7 +294,7 @@ Si l'objectif de la version 2.0.0 est de fournir une **interface Python fonction
     - Des fichiers de log factices ont été créés avec différentes dates.
     - La commande `compress` a été exécutée avec succès, compressant les fichiers `.jsonl` plus anciens que 7 jours.
     - La commande `cleanup` a été exécutée avec succès, supprimant les archives `.zip` plus anciennes que 30 jours.
-    - Le contenu du répertoire `logs` a été vérifié, confirmant le bon fonctionnement des opérations.
+    - Le contenu du répertoire `logs` a été vérifié, confirming le bon fonctionnement des opérations.
   - **Conclusion :** Le système de gestion des logs est pleinement opérationnel et validé.
 
 ### Problèmes rencontrés et leçons apprises
@@ -314,7 +314,7 @@ Si l'objectif de la version 2.0.0 est de fournir une **interface Python fonction
   - **Stratégie de débogage :**
     - Des instructions `print` temporaires ont été ajoutées à la fonction `_run_command` (dirigées vers `sys.stderr`) pour capturer la sortie.
     - Un script Python temporaire (`temp_debug_commit.py`) a été créé pour appeler directement `commit_and_push_workflow`, contournant ainsi l'interface `Typer` et les problèmes potentiels de redirection de sortie.
-  - **Résultat :** L'exécution directe du script temporaire a révélé l'erreur `La clé SSH pour l'agent test_agent est introuvable`, confirmant que le problème était lié au chemin de la clé SSH.
+  - **Résultat :** L'exécution directe du script temporaire a révélé l'erreur `La clé SSH pour l'agent test_agent est introuvable`, confirming que le problème était lié au chemin de la clé SSH.
   - **Validation finale :** Après la correction dans `config.py`, le script temporaire a été réexécuté avec succès, confirmant que le `git push` s'effectue correctement.
   - **Nettoyage :** Toutes les instructions `print` de débogage ont été supprimées de `_run_command`, et le script `temp_debug_commit.py` a été supprimé.
   - **Validation :** Les vérifications `ruff` ont été exécutées avec succès après le nettoyage, confirmant l'absence d'erreurs.
@@ -341,3 +341,33 @@ git push -u origin main
 (Remplacer `votre_nom_utilisateur` par votre nom d'utilisateur GitHub réel).
 
 Une fois le push initial confirmé, l'étape suivante sera de faire un commit directement sur le dépôt GitHub pour simuler le retard.
+
+## 2025-08-14
+
+### Documentation
+- **Langue :** La documentation est désormais principalement en français, avec `index.md` en anglais.
+- **Traduction :** Le fichier `docs/ssh-manager-v3.md` a été traduit en français.
+- **Mise à jour MkDocs :** Le fichier `mkdocs.yml` a été mis à jour pour inclure tous les fichiers de documentation dans la navigation.
+- **Nettoyage :** Le répertoire `docs/docs` a été fusionné dans `docs` et supprimé.
+
+### `sshkeys` (Gestionnaire de Clés SSH Python)
+- **Version :** La version de `sshkeys` a été mise à jour à `3.0.5`.
+- **`README.md` :** Un fichier `README.md` a été créé dans `ssh_manager/v3` pour expliquer l'outil et son installation.
+- **Exécutable Standalone :** Un exécutable standalone pour Linux a été créé en utilisant PyInstaller, situé dans `ssh_manager/v3/dist/linux/sshkeys`.
+- **Wrapper Script :** Un script `run_sshkeys.sh` a été créé dans `ssh_manager/v3/src` pour permettre l'exécution de `sshkeys` depuis `.bashrc` ou des environnements sans activation de venv.
+- **Restructuration du Répertoire `ssh_manager/v3` :**
+    - Le code source Python a été déplacé dans `ssh_manager/v3/src/sshkeys`.
+    - Les exécutables et packages de distribution sont maintenant dans `ssh_manager/v3/dist` (avec `linux/` et `wheel/` pour les différentes distributions).
+    - Un fichier `.gitignore` a été ajouté à `ssh_manager/v3` pour ignorer les artefacts de build (`*.egg-info/`).
+- **Package de Distribution :** Des packages `sdist` (`.tar.gz`) et `bdist_wheel` (`.whl`) ont été créés dans `ssh_manager/v3/dist/wheel/` pour une installation facile via `pip` depuis GitHub.
+- **Documentation de Distribution :** Un `README.md` a été ajouté à `ssh_manager/v3/dist/` et `ssh_manager/v3/dist/linux/` avec des instructions d'installation détaillées.
+- **Nettoyage :** Le répertoire `ssh_manager/ssh` (ancien doublon) a été supprimé.
+- **Correction d'Installation :** Le problème d'installation lié à l'argument `options` dans `setup.py` a été résolu.
+- **Traduction de l'Aide CLI :** Le message d'aide de la CLI `sshkeys --help` a été traduit en français.
+
+### Git
+- **Commit :** Un commit détaillé a été effectué pour encapsuler toutes les modifications récentes.
+- **Push :** Les modifications ont été poussées avec succès sur GitHub.
+
+### Directives de Développement
+- **Intégration :** Les règles de développement (`docs/development_guidelines.md`) ont été lues et intégrées pour guider les futures actions de l'agent.

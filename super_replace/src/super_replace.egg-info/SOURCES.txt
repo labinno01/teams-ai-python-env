@@ -1,0 +1,17 @@
+README.md
+setup.py
+src/super_replace/__init__.py
+src/super_replace/cli.py
+src/super_replace.egg-info/PKG-INFO
+src/super_replace.egg-info/SOURCES.txt
+src/super_replace.egg-info/dependency_links.txt
+src/super_replace.egg-info/entry_points.txt
+src/super_replace.egg-info/requires.txt
+src/super_replace.egg-info/top_level.txt
+src/super_replace/core/__init__.py
+src/super_replace/core/autonomous_replacer.py
+src/super_replace/core/context_analyzer.py
+src/super_replace/core/llm_integrator.py
+src/super_replace/utils/__init__.py
+src/super_replace/utils/formatter.py
+tests/test_autonomous_replacer.py
